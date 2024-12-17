@@ -1,11 +1,11 @@
 esphome:
-  name: "${name}"
+  name: ${device}
   # name_add_mac_suffix: true
   comment: $comment
-  build_path: ./.build/$name
+  build_path: ./.build/$device
   project:
-    name: "${project_name}"
-    version: "${project_version}"
+    name: ${project_name}
+    version: ${project_version}
 
 api:
   reboot_timeout: 0s
