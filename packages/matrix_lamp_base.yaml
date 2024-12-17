@@ -31,10 +31,11 @@ esphome:
 
 # Over The Air Update Component
 ota:
-  on_begin:
-    then:
-      - lambda: |-
-          matrix_lamp.~GyverLamp();
+  - platform: esphome
+    on_begin:
+      then:
+        - lambda: |-
+            matrix_lamp.~GyverLamp();
 
 number:
   # Matrix Orientation
