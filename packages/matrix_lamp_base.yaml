@@ -67,7 +67,7 @@ number:
     id: fastled_speed
     initial_value: 128
     mode: slider
-    entity_category: config  
+    entity_category: config
 
   - platform: template
     name: ${name} Effect Scale
