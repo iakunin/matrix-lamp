@@ -12,3 +12,8 @@ A compilation of firmware adaptations based on the original idea of ​​Gyver 
 
 ## Firmware
 You can install the firmware using [ESPHome](https://esphome.io/) using one of the ready-made configuration files or use [**MatrixLamp - ESP Web Tools**](https://andrewjswan.github.io/matrix-lamp/) - a convenient tool for installing and updating the firmware of ESP32 devices in the browser.
+
+<br />
+
+> [!TIP]
+> ESPHome [configuration](https://github.com/andrewjswan/esphome-config)
