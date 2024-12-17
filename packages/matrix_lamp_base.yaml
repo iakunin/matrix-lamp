@@ -17,6 +17,17 @@ esphome:
     - includes/matrix_lamp/effect_ticker.h
     - includes/matrix_lamp/utility.h
     - includes/matrix_lamp/matrix_lamp.h
+  on_boot:
+    priority: -100
+    then:
+      # - light.turn_off:
+      #     id: neopixel_led
+      - delay: 5s
+      - logger.log:
+          format: "${name} started, LED: ${type_leds}:${num_leds}:${pin_leds}, Effects: %d Reboot: ${reboot_timeout}"
+          args: ['id(neopixel_led)->get_effects().size()']
+          level: INFO
+          tag: start
 
 # Over The Air Update Component
 ota:
