@@ -1,3 +1,6 @@
+substitutions:
+  reboot_timeout: 0s
+
 esphome:
   name: ${device}
   # name_add_mac_suffix: true
@@ -8,7 +11,7 @@ esphome:
     version: ${project_version}
 
 api:
-  reboot_timeout: 0s
+  reboot_timeout: ${reboot_timeout}
 
 ota:
   - platform: esphome
