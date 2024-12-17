@@ -1,5 +1,6 @@
 substitutions:
   pin_button: "GPIO35"
+  pin_pullup: "true"
 
 binary_sensor:
   - platform: gpio
@@ -9,6 +10,7 @@ binary_sensor:
       number: ${pin_button}
       mode:
         input: true
+        pullup: ${pin_pullup}
     filters:
       - delayed_on: 32ms
     on_release:

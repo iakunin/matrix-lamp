@@ -1,6 +1,7 @@
 substitutions:
   device: esp-matrix-lamp
   name: ESPHome Matrix Lamp
+  pin_pullup: "false"
 
 esp32:
   board: nodemcu-32s

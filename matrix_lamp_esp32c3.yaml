@@ -1,6 +1,7 @@
 substitutions:
   device: esp-matrix-lamp
   name: ESPHome Matrix Lamp
+  pin_button: "GPIO10"
 
 esp32:
   board: esp32-c3-devkitm-1

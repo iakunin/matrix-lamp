@@ -29,14 +29,6 @@ esphome:
           level: INFO
           tag: start
 
-# Over The Air Update Component
-ota:
-  - platform: esphome
-    on_begin:
-      then:
-        - lambda: |-
-            matrix_lamp.~GyverLamp();
-
 number:
   # Matrix Orientation
   - platform: template
