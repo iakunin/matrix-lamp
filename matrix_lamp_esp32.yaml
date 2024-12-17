@@ -1,0 +1,16 @@
+substitutions:
+  device: esp-matrix-lamp
+  name: ESPHome Matrix Lamp
+  pin_pullup: "false"
+
+esp32:
+  board: nodemcu-32s
+
+dashboard_import:
+  package_import_url: github://andrewjswan/matrix-lamp/matrix_lamp_esp32.yaml@main
+
+packages:
+  common: !include packages/common.yaml
+  base: !include packages/matrix_lamp_base.yaml
+  light: !include packages/matrix_lamp_light.yaml
+  button: !include packages/matrix_lamp_button.yaml

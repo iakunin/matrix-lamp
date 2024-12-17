@@ -1,0 +1,18 @@
+substitutions:
+  pin_button: "GPIO35"
+  pin_pullup: "true"
+
+binary_sensor:
+  - platform: gpio
+    name: ${name} Button
+    internal: true
+    pin:
+      number: ${pin_button}
+      mode:
+        input: true
+        pullup: ${pin_pullup}
+    filters:
+      - delayed_on: 32ms
+    on_release:
+      then:
+        - light.toggle: neopixel_led
