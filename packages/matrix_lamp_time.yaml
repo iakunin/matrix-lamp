@@ -28,8 +28,8 @@ font:
   - file: https://github.com/trip5/Matrix-Fonts/raw/refs/heads/main/8-series/MatrixChunky8.ttf
     id: px8_font
     size: 8
-    glyphs:  |-
-      0123456789:
+    glyphs: |-
+      01234:56789
 
 display:
   - platform: addressable_light
