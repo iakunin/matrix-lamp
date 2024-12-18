@@ -1,0 +1,45 @@
+# Time from SNTP
+time:
+  - platform: sntp
+    id: esp_time
+    update_interval: 1h
+    on_time_sync:
+      then:
+        - if:
+            condition:
+              time.has_time:
+            then:
+              - logger.log: Time has been set and is valid!
+    on_time:
+      - seconds: '*'
+        then:
+          - if:
+              condition:
+                - time.has_time:
+                - light.is_off: neopixel_display
+            then:
+              - lambda: |-
+                  id(neopixel_display).set_enabled(true);
+            else:
+              - lambda: |-
+                  id(neopixel_display).set_enabled(false);
+
+font:
+  - file: https://github.com/trip5/Matrix-Fonts/raw/refs/heads/main/8-series/MatrixChunky8.ttf
+    id: px8_font
+    size: 8
+    glyphs:  |-
+      0123456789:
+
+display:
+  - platform: addressable_light
+    id: neopixel_display
+    addressable_light_id: neopixel_led
+    width: 16
+    height: 16
+    pixel_mapper: |-
+      return  XY(x, y);
+    rotation: 0°
+    update_interval: 16ms
+    lambda: |-
+      it.strftime(0, 0, id(px8_font), "%H:%M", id(esp_time).now());
