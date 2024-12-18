@@ -1,7 +1,7 @@
 # Time from SNTP
 time:
   - platform: sntp
-    id: esp_time
+    id: matrix_lamp_time
     update_interval: 1h
     on_time_sync:
       then:
@@ -16,13 +16,13 @@ time:
           - if:
               condition:
                 - time.has_time:
-                - light.is_off: neopixel_display
-            then:
-              - lambda: |-
-                  id(neopixel_display).set_enabled(true);
-            else:
-              - lambda: |-
-                  id(neopixel_display).set_enabled(false);
+                - light.is_off: neopixel_led
+              then:
+                - lambda: |-
+                    id(neopixel_display).set_enabled(true);
+              else:
+                - lambda: |-
+                    id(neopixel_display).set_enabled(false);
 
 font:
   - file: https://github.com/trip5/Matrix-Fonts/raw/refs/heads/main/8-series/MatrixChunky8.ttf
@@ -38,8 +38,9 @@ display:
     width: 16
     height: 16
     pixel_mapper: |-
-      return  XY(x, y);
+      return XY(x, y);
     rotation: 0°
     update_interval: 16ms
     lambda: |-
-      it.strftime(0, 0, id(px8_font), "%H:%M", id(esp_time).now());
+      it.strftime(4, 0, id(px8_font), "%H", id(matrix_lamp_time).now());
+      it.strftime(4, 8, id(px8_font), "%M", id(matrix_lamp_time).now());
