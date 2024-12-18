@@ -1,0 +1,30 @@
+button:
+  - platform: template
+    name: "${name} Firmware Update"
+    icon: mdi:progress-upload
+    disabled_by_default: true
+    entity_category: config
+    on_press:
+      - update.perform:
+          id: new_firmware
+
+update:
+  - platform: http_request
+    id: new_firmware
+    name: "${name} Firmware Update"
+    source: https://andrewjswan.github.io/matrix-lamp/manifest.json
+    icon: mdi:update
+    web_server:
+      sorting_weight: 15
+
+ota:
+  - platform: http_request
+    on_begin:
+      then:
+        - lambda: |-
+            matrix_lamp.~MatrixLamp();
+
+http_request:
+  useragent: "esphome/${device} (${project_version})"
+  verify_ssl: false
+  timeout: 10s
