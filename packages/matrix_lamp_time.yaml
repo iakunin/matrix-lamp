@@ -10,19 +10,19 @@ time:
               time.has_time:
             then:
               - logger.log: Time has been set and is valid!
-          - if:
-              condition:
-                - time.has_time:
-                - light.is_off: neopixel_led
-              then:
-                - lambda: |-
-                    id(neopixel_display).set_enabled(true);
+        - if:
+            condition:
+              - time.has_time:
+              - light.is_off: neopixel_led
+            then:
+              - lambda: |-
+                  id(neopixel_display).set_enabled(true);
 
 light:
   - platform: !extend neopixelbus
     on_turn_on:
-       - lambda: |-
-           id(neopixel_display).set_enabled(false);
+      - lambda: |-
+          id(neopixel_display).set_enabled(false);
     on_turn_off:
       - if:
           condition:
