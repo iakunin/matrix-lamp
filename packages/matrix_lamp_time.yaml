@@ -19,7 +19,7 @@ time:
                   id(neopixel_display).set_enabled(true);
 
 light:
-  - platform: !extend neopixelbus
+  - id: !extend neopixel_led
     on_turn_on:
       - lambda: |-
           id(neopixel_display).set_enabled(false);
@@ -46,8 +46,8 @@ display:
     height: 16
     pixel_mapper: |-
       return XY(x, y);
-    rotation: 0°
-    update_interval: 16ms
+    rotation: 180°
+    update_interval: 1s
     lambda: |-
-      it.strftime(4, 0, id(px8_font), "%H", id(matrix_lamp_time).now());
-      it.strftime(4, 8, id(px8_font), "%M", id(matrix_lamp_time).now());
+      it.strftime(4, 1, id(px8_font), "%H", id(matrix_lamp_time).now());
+      it.strftime(4, 9, id(px8_font), "%M", id(matrix_lamp_time).now());
