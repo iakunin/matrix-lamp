@@ -10,9 +10,6 @@ time:
               time.has_time:
             then:
               - logger.log: Time has been set and is valid!
-    on_time:
-      - seconds: '*'
-        then:
           - if:
               condition:
                 - time.has_time:
@@ -20,9 +17,19 @@ time:
               then:
                 - lambda: |-
                     id(neopixel_display).set_enabled(true);
-              else:
-                - lambda: |-
-                    id(neopixel_display).set_enabled(false);
+
+light:
+  - platform: !extend neopixelbus
+    on_turn_on:
+       - lambda: |-
+           id(neopixel_display).set_enabled(false);
+    on_turn_off:
+      - if:
+          condition:
+            - time.has_time:
+          then:
+            - lambda: |-
+                id(neopixel_display).set_enabled(true);
 
 font:
   - file: https://github.com/trip5/Matrix-Fonts/raw/refs/heads/main/8-series/MatrixChunky8.ttf
