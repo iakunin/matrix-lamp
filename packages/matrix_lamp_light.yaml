@@ -2,15 +2,7 @@ substitutions:
   num_leds: "256"
   type_leds: "GRB"
   pin_leds: "GPIO3"
-  color_correct_bright: "70%"
-
-external_components:
-  - source:
-      type: git
-      url: https://github.com/KaufHA/common
-    components: [ddp]
-
-ddp:
+  color_correct_bright: "100%"
 
 light:
   # Neopixel with Matrix Lamp
@@ -1247,8 +1239,3 @@ light:
               int h = leds[i].current / 100;
               it[i] = ESPHSVColor(_hue + scale8_video(h, 8), 255, gamma8[qadd8(h, _ambient)]);
             }
-
-      - addressable_ddp:
-          name: WLED / DDP
-          timeout: 10s
-          disable_gamma: true
