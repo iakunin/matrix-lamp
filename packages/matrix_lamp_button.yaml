@@ -12,14 +12,11 @@ binary_sensor:
         input: true
         pullup: ${pin_pullup}
     filters:
-      - delayed_on: 25ms
-    on_release:
-      then:
-        - light.toggle: neopixel_led
+      - delayed_on: 50ms
     on_multi_click:
       # Short click
       - timing:
-          - ON for at most 500ms
+          - ON for at most 1000ms
           - OFF for at least 500ms
         then:
           - light.toggle: neopixel_led
@@ -106,7 +103,7 @@ binary_sensor:
 
       # Long click
       - timing:
-          - ON for at least 1000ms
+          - ON for at least 3000ms
         then:
           - lambda: |-
               ESP_LOGD("button", "Long Click");
