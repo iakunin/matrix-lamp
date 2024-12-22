@@ -20,6 +20,16 @@ You can install the firmware using [ESPHome](https://esphome.io/) using one of t
 |LED    |GPIO3  |GPIO3   |GPIO3   |GPIO3    |
 |Button |GPIO35 |GPIO10  |GPIO35  |GPIO35   |
 
+### Settings override
+
+If you need to change any settings, you can override them using `substitutions`, for example:
+```Yaml
+substitutions:
+  pin_pullup: "false"
+  pin_leds: "GPIO32"
+  color_correct_bright: "70%"
+```
+
 <br />
 
 > [!TIP]
