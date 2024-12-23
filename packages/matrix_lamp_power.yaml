@@ -1,5 +1,5 @@
 substitutions:
-  energy_method: left
+  energy_method: trapezoid
 
 esphome:
   on_boot:
@@ -10,9 +10,6 @@ esphome:
           args: ['id(power_supply).state']
           level: INFO
           tag: power
-
-time:
-  - platform: sntp
 
 number:
   # Power Supply
@@ -93,18 +90,20 @@ sensor:
     web_server:
       sorting_weight: 15
 
-  # Energy Today Usage
-  - platform: total_daily_energy
+  # Energy
+  - platform: integration
     name: "${name} Energy"
     icon: mdi:lightning-bolt
-    power_id: power
+    sensor: power
+    time_unit: h
+    integration_method: ${energy_method}
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    restore: false
+    device_class: energy
+    state_class: total_increasing
     filters:
       # Multiplication factor from W to kW is 0.001
       - multiply: 0.001
-    unit_of_measurement: kWh
-    # icon: mdi:calendar-clock
-    device_class: energy
-    state_class: total_increasing
-    method: ${energy_method}
     web_server:
       sorting_weight: 25
