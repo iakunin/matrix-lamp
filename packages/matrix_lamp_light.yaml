@@ -1307,3 +1307,25 @@ light:
               int h = leds[i].current / 100;
               it[i] = ESPHSVColor(_hue + scale8_video(h, 8), 255, gamma8[qadd8(h, _ambient)]);
             }
+
+      - addressable_lambda:
+          name: Kaleidoscope
+          update_interval: 15ms
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Kaleidoscope");
+
+              it.all() = Color::BLACK;
+            }
+
+            static int counter = 0;
+            for (uint8_t row = 0; row < WIDTH; row++)
+            {
+              for (uint8_t col = 0; col < HEIGHT; col++)
+              {
+                int delta = abs((int)(WIDTH - row * 2)) + abs((int)(HEIGHT - col * 2));
+                it[row * HEIGHT + col] = ESPHSVColor(delta * 4 + counter, 255, 255);
+              }
+            }
+            counter++;
