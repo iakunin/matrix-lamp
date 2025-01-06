@@ -1283,6 +1283,12 @@ light:
             if (initial_run)
             {
               ESP_LOGD("effect", "Scanner");
+
+              int hue;
+              float saturation, value;
+              rgb_to_hsv(current_color.red / 255, current_color.green / 255, current_color.blue / 255, hue, saturation, value);
+
+              modes[EFF_SCANNER].Scale = remap(hue, 0, 360, 1, 100);;
             }
             matrix_lamp.ShowFrame(EFF_SCANNER, current_color, &it);
 
