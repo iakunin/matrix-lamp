@@ -111,7 +111,7 @@ void effectsTick()
     case EFF_FIREWORK:            SOFT_DELAY_TICK    { effTimer = millis(); Firework();                        }  break;  // ( 90U) Феєрверк
     case EFF_FIREWORK_2:          DYNAMIC_DELAY_TICK { effTimer = millis(); fireworksRoutine();                }  break;  // ( 91U) Феєрверк 2
     case EFF_HOURGLASS:           DYNAMIC_DELAY_TICK { effTimer = millis(); Hourglass();                       }  break;  // ( 92U) Пісочний годинник
-    case EFF_LOTUS:               DYNAMIC_DELAY_TICK { effTimer = millis(); FlowerRuta();                      }  break;  // ( 93U) Квітка лотоса (Червона рута)
+    case EFF_FLOWERRUTA:          DYNAMIC_DELAY_TICK { effTimer = millis(); FlowerRuta();                      }  break;  // ( 93U) Червона рута (Аленький цветочек)
     case EFF_MAGIC_LANTERN :      DYNAMIC_DELAY_TICK { effTimer = millis(); MagicLantern();                    }  break;  // ( 94U) Чарівний ліхтарик
     case EFF_MOSAIC:              DYNAMIC_DELAY_TICK { effTimer = millis(); squaresNdotsRoutine();             }  break;  // ( 95U) Мозайка
     case EFF_OCTOPUS:             DYNAMIC_DELAY_TICK { effTimer = millis(); Octopus();                         }  break;  // ( 96U) Восьминіг
@@ -134,6 +134,20 @@ void effectsTick()
     case EFF_DANDELIONS:          SOFT_DELAY_TICK    { effTimer = millis(); Dandelions();                      }  break;  // (113U) Разноцветные одуванчики
     case EFF_SERPENTINE:          HIGH_DELAY_TICK    { effTimer = millis(); Serpentine();                      }  break;  // (114U) Серпантин
     case EFF_TURBULENCE:          DYNAMIC_DELAY_TICK { effTimer = millis(); Turbulence();                      }  break;  // (115U) Цифровая турбулентность
-    case EFF_UKRAINE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Ukraine();                         }  break;  // (116U) Україна
+    case EFF_ARROWS:              DYNAMIC_DELAY_TICK { effTimer = millis(); arrowsRoutine();                   }  break;  // (116U) Стрелки
+    case EFF_AVRORA:              HIGH_DELAY_TICK    { effTimer = millis(); Avrora();                          }  break;  // (117U) Аврора
+    case EFF_LOTUS:               DYNAMIC_DELAY_TICK { effTimer = millis(); LotusFlower();                     }  break;  // (118U) Цветок лотоса
+    case EFF_FONTAN:              DYNAMIC_DELAY_TICK { effTimer = millis(); Fountain();                        }  break;  // (119U) Фонтан
+    case EFF_NIGHTCITY:           HIGH_DELAY_TICK    { effTimer = millis(); NightCity();                       }  break;  // (120U) Ночной Город
+    case EFF_RAIN:                DYNAMIC_DELAY_TICK { effTimer = millis(); RainRoutine();                     }  break;  // (121U) Разноцветный дождь
+    case EFF_SCANNER:             DYNAMIC_DELAY_TICK { effTimer = millis(); Scanner();                         }  break;  // (122U) Сканер
+    case EFF_MIRAGE:              DYNAMIC_DELAY_TICK { effTimer = millis(); Mirage();                          }  break;  // (123U) Міраж
+    case EFF_HANDFAN:             DYNAMIC_DELAY_TICK { effTimer = millis(); HandFan();                         }  break;  // (124U) Опахало
+    case EFF_LIGHTFILTER:         DYNAMIC_DELAY_TICK { effTimer = millis(); LightFilter();                     }  break;  // (125U) Cвітлофільтр
+    case EFF_TASTEHONEY:          DYNAMIC_DELAY_TICK { effTimer = millis(); TasteHoney();                      }  break;  // (126U) Смак Меду
+    case EFF_SPINDLE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Spindle();                         }  break;  // (127U) Веретено
+    case EFF_POPURI:              HIGH_DELAY_TICK    { effTimer = millis(); Popuri();                          }  break;  // (128U) Попурі
+    case EFF_RAINBOW_SPOT:        DYNAMIC_DELAY_TICK { effTimer = millis(); RainbowSpot();                     }  break;  // (129U) Веселкова Пляма
+    case EFF_UKRAINE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Ukraine();                         }  break;  // (130U) Україна
   }
 }
