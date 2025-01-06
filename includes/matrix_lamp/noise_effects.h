@@ -312,3 +312,187 @@ void fillnoise8()
   }
   z += speed;
 }
+
+// ========== Taste of Honey ============
+//         SRS code by © Stepko
+//        Adaptation © SlingMaster
+//               Смак Меду
+// --------------------------------------
+
+void TasteHoney() {
+  byte index;
+  if (loadingFlag) {
+    #if defined(USE_RANDOM_SETS_IN_APP) || defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    if (selectedSettings) {
+      // scale | speed
+      setModeSettings(random8(1U, 255U), random8(150U, 255U));
+    }
+    #endif
+
+    loadingFlag = false;
+    hue = modes[currentMode].Scale * 2.55;
+    index = modes[currentMode].Scale / 10;
+    clearNoiseArr();
+    switch (index) {
+      case 0:
+        currentPalette = PartyColors_p;
+        break;
+      case 1:
+        currentPalette = LavaColors_p;
+        break;
+      case 2:
+      case 3:
+        currentPalette = ForestColors_p;
+        break;
+      case 4:
+        currentPalette = CloudColors_p;
+        break;
+      default :
+        currentPalette = AlcoholFireColors_p;
+        break;
+    }
+    ledsClear(); // esphome: FastLED.clear();
+  }
+
+  fillNoiseLED();
+  memset8(&noise2[1][0][0], 255, (WIDTH + 1) * (HEIGHT + 1));
+  for (byte x = 0; x < WIDTH; x++) {
+    for (byte y = 0; y < HEIGHT; y++) {
+      uint8_t n0 = noise2[0][x][y];
+      uint8_t n1 = noise2[0][x + 1][y];
+      uint8_t n2 = noise2[0][x][y + 1];
+      int8_t xl = n0 - n1;
+      int8_t yl = n0 - n2;
+      int16_t xa = (x * 255) + ((xl * ((n0 + n1) << 1)) >> 3);
+      int16_t ya = (y * 255) + ((yl * ((n0 + n2) << 1)) >> 3);
+      CRGB col = CHSV(hue, 255U, 255U);
+      wu_pixel(xa, ya, &col);
+    }
+  }
+}
+
+// ============== Popuri ===============
+//             © SlingMaster
+//                Попурі
+// =====================================
+void Popuri() {
+  const byte PADDING = HEIGHT * 0.25;
+  const byte step1 = WIDTH;
+  const double freq = 3000;
+  static int64_t frameCount;
+  static byte index;
+  // ---------------------
+
+  if (loadingFlag) {
+    #if defined(USE_RANDOM_SETS_IN_APP) || defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    if (selectedSettings) {
+      setModeSettings(128, random8(4, 254U));
+    }
+    #endif
+
+    loadingFlag = false;
+    hue = 0;
+    frameCount = 0;
+    currentPalette = LavaColors_p;
+    index = modes[currentMode].Scale / 25;
+
+    // ---------------------
+    clearNoiseArr();
+    if (index < 1) {
+      currentPalette = LavaColors_p;
+      currentPalette[8] = CRGB::DarkRed;
+    } else {
+      if (custom_eff) {
+        currentPalette = PartyColors_p;
+      } else {
+        currentPalette = AlcoholFireColors_p;
+      }
+    }
+    FastLED.clear();
+  }
+
+  // change color --------
+  frameCount++;
+  uint8_t t1 = cos8((42 * frameCount) / 30);
+  uint8_t t2 = cos8((35 * frameCount) / 30);
+  uint8_t t3 = cos8((38 * frameCount) / 30);
+  uint8_t r = 0;
+  uint8_t g = 0;
+  uint8_t b = 0;
+  // ---------------------
+
+  uint16_t ms = millis();
+
+  // float mn = 255.0 / 13.8;
+  float mn = 255.0 / WIDTH; // 27.6;
+
+  if (modes[currentMode].Scale < 50) {
+    fillNoiseLED();
+    memset8(&noise2[1][0][0], 255, (WIDTH + 1) * (HEIGHT + 1));
+  } else {
+    fadeToBlackBy(leds, NUM_LEDS, step1);
+  }
+  // body if big height matrix ---------
+  for (uint16_t y = 0; y < HEIGHT; y++) {
+    for (uint16_t x = 0; x < WIDTH; x++) {
+
+      if ( (y <= PADDING - 1) | (y >=  HEIGHT - PADDING) ) {
+        r = sin8((x - 8) * cos8((y + 20) * 4) / 4);
+        g = cos8((y << 3) + t1 + cos8((t3 >> 2) + (x << 3)));
+        b = cos8((y << 3) + t2 + cos8(t1 + x + (g >> 2)));
+
+        g = exp_gamma[g];
+        b = exp_gamma[b];
+
+        // if (modes[currentMode].Scale < 50) {
+        if (index % 2U == 0) {
+          // green blue magenta --
+          if (b < 20) b = exp_gamma[r];
+          r = (g < 128) ? exp_gamma[b] / 3 : 0;
+        } else {
+          // green blue yellow ---
+          if (g < 20) g = exp_gamma[r];
+          r = (b < 128) ? exp_gamma[g] / 2 : 0;
+        }
+        if ( (y == PADDING - 1) | (y ==  HEIGHT - PADDING) ) {
+          r = 0;
+          g = 0;
+          b = 0;
+        }
+        leds[XY(x, y)] = CRGB(r, g, b);
+      } else {
+        // ---------------------
+        CRGB col;
+        if (modes[currentMode].Scale < 50) {
+          uint8_t n0 = noise2[0][x][y];
+          uint8_t n1 = noise2[0][x + 1][y];
+          uint8_t n2 = noise2[0][x][y + 1];
+          int8_t xl = n0 - n1;
+          int8_t yl = n0 - n2;
+          int16_t xa = (x * 255) + ((xl * ((n0 + n1) << 1)) >> 3);
+          int16_t ya = (y * 255) + ((yl * ((n0 + n2) << 1)) >> 3);
+
+          col = CHSV(hue, 255U, 255U);
+          wu_pixel(xa, ya, &col);
+          // ---------------------
+        } else {
+          uint32_t xx = beatsin16(step1, 0, (HEIGHT - PADDING * 2 - 1) * 256, 0, x * freq);
+          uint32_t yy = x * 256;
+
+          if (hue < 80) {
+            col = CHSV(0, 255U, 255U);
+          } else {
+            col = CHSV(hue, 255U, 255U);
+          }
+          wu_pixel (yy, xx + PADDING * 256, &col);
+        }
+      }
+    }
+    if (modes[currentMode].Scale > 50) {
+      if (step % WIDTH == 0U) hue++;
+    }
+  }
+
+  // -----------------
+  step++;
+}

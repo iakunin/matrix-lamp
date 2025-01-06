@@ -917,14 +917,14 @@ light:
             matrix_lamp.ShowFrame(EFF_HOURGLASS, current_color, &it);
 
       - addressable_lambda:
-          name: Lotus
+          name: Flower Ruta
           update_interval: 0s
           lambda: |-
             if (initial_run)
             {
-              ESP_LOGD("effect", "Lotus");
+              ESP_LOGD("effect", "Flower Ruta");
             }
-            matrix_lamp.ShowFrame(EFF_LOTUS, current_color, &it);
+            matrix_lamp.ShowFrame(EFF_FLOWERRUTA, current_color, &it);
 
       - addressable_lambda:
           name: Magic Lantern
@@ -1145,6 +1145,159 @@ light:
               ESP_LOGD("effect", "Turbulence");
             }
             matrix_lamp.ShowFrame(EFF_TURBULENCE, current_color, &it);
+
+      - addressable_lambda:
+          name: Arrows
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Arrows");
+            }
+            matrix_lamp.ShowFrame(EFF_ARROWS, current_color, &it);
+
+      - addressable_lambda:
+          name: Avrora
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Avrora");
+            }
+            matrix_lamp.ShowFrame(EFF_AVRORA, current_color, &it);
+
+      - addressable_lambda:
+          name: Lotus
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Lotus");
+            }
+            matrix_lamp.ShowFrame(EFF_LOTUS, current_color, &it);
+
+      - addressable_lambda:
+          name: Fontan
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Fontan");
+            }
+            matrix_lamp.ShowFrame(EFF_FONTAN, current_color, &it);
+
+      - addressable_lambda:
+          name: Night City
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Night City");
+            }
+            matrix_lamp.ShowFrame(EFF_NIGHTCITY, current_color, &it);
+
+      - addressable_lambda:
+          name: Rain
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Rain");
+            }
+            matrix_lamp.ShowFrame(EFF_RAIN, current_color, &it);
+
+      - addressable_lambda:
+          name: Mirage
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Mirage");
+            }
+            matrix_lamp.ShowFrame(EFF_MIRAGE, current_color, &it);
+
+      - addressable_lambda:
+          name: Hand Fan
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Hand Fan");
+            }
+            matrix_lamp.ShowFrame(EFF_HANDFAN, current_color, &it);
+
+      - addressable_lambda:
+          name: Light Filter
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Light Filter");
+            }
+            matrix_lamp.ShowFrame(EFF_LIGHTFILTER, current_color, &it);
+
+      - addressable_lambda:
+          name: A Taste of Honey
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "A Taste of Honey");
+            }
+            matrix_lamp.ShowFrame(EFF_TASTEHONEY, current_color, &it);
+
+      - addressable_lambda:
+          name: Spindle
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Spindle");
+            }
+            matrix_lamp.ShowFrame(EFF_SPINDLE, current_color, &it);
+
+      - addressable_lambda:
+          name: Popuri
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Popuri");
+            }
+            matrix_lamp.ShowFrame(EFF_POPURI, current_color, &it);
+
+      - addressable_lambda:
+          name: Rainbow Spot
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Rainbow Spot");
+            }
+            matrix_lamp.ShowFrame(EFF_RAINBOW_SPOT, current_color, &it);
+
+      - addressable_lambda:
+          name: Scanner
+          update_interval: 0s
+          lambda: |-
+            if (initial_run)
+            {
+              ESP_LOGD("effect", "Scanner");
+
+              if (current_color.red == 255 && current_color.green == 255 && current_color.blue == 255)
+              {
+                modes[EFF_SCANNER].Scale = 0;
+              }
+              else
+              {
+                int hue;
+                float saturation, value;
+                rgb_to_hsv(current_color.red / 255, current_color.green / 255, current_color.blue / 255, hue, saturation, value);
+
+                modes[EFF_SCANNER].Scale = remap(hue, 0, 360, 1, 100);;
+              }
+            }
+            matrix_lamp.ShowFrame(EFF_SCANNER, current_color, &it);
 
       - addressable_lambda:
           name: White Color
