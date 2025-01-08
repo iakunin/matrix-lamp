@@ -73,17 +73,3 @@ number:
     initial_value: 50
     mode: slider
     entity_category: config
-
-switch:
-  # Random Mode Settings
-  - platform: template
-    name: ${name} Random Mode
-    icon: mdi:shuffle
-    lambda: |-
-      return matrix_lamp.GetRandomSettings();
-    turn_on_action:
-      - lambda: |-
-          matrix_lamp.SetRandomSettings(true);
-    turn_off_action:
-      - lambda: |-
-          matrix_lamp.SetRandomSettings(false);
