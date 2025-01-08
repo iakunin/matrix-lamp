@@ -1,3 +1,3 @@
 GUI Dark                   |  GUI Light
 :-------------------------:|:-------------------------:
-![](img/black.png)         |  ![](img/white.png)
+![](/img/black.png)         |  ![](/img/white.png)
