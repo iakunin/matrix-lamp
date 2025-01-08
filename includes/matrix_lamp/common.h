@@ -31,7 +31,7 @@ uint8_t MATRIX_TYPE = 0;                                    // Тип матри
 // --- Common -------------------------------------------------------------------------------------------------------------------------------------------
 uint8_t FPSdelay = DYNAMIC;
 
-uint8_t currentMode = 0;
+uint8_t currentMode = MODE_AMOUNT;
 bool loadingFlag = true;
 
 struct ModeType
@@ -43,9 +43,9 @@ struct ModeType
 
 ModeType modes[MODE_AMOUNT];
 
-#if defined(USE_RANDOM_SETS_IN_APP) || defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 uint8_t selectedSettings = 0U;
-#endif //#if defined(USE_RANDOM_SETS_IN_APP) || defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+#endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
 
 // --- Effects ------------------------------------------------------------------------------------------------------------------------------------------
