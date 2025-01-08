@@ -16,3 +16,4 @@ packages:
   ddp: !include packages/matrix_lamp_ddp.yaml
   button: !include packages/matrix_lamp_button.yaml
   power: !include packages/matrix_lamp_power.yaml
+  random: !include packages/matrix_lamp_random.yaml
