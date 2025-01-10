@@ -1,17 +1,27 @@
 #pragma once
 
+#define FASTLED_INTERNAL // remove annoying pragma messages
+
+#include "FastLED.h"
+#include "esphome.h"
+#include "common.h"
+#include "fastled_helper.h"
+
 #define WU_WEIGHT(a, b) ((uint8_t)(((a) * (b) + (a) + (b)) >> 8))
+
+namespace esphome {
+namespace matrix_lamp {
 
 // ------------------------------------------------
 // получить номер пикселя в ленте по координатам
 // библиотека FastLED тоже использует эту функцию
-uint16_t XY(uint8_t x, uint8_t y)
+static uint16_t XY(uint8_t x, uint8_t y)
 {
   uint8_t THIS_X;
   uint8_t THIS_Y;
   uint8_t _WIDTH = WIDTH;
  
-  switch (ORIENTATION)
+  switch (esphome::matrix_lamp::ORIENTATION)
   {
     case 0: 
       THIS_X = x;
@@ -55,27 +65,14 @@ uint16_t XY(uint8_t x, uint8_t y)
       break;
    }
  
-   if (!(THIS_Y & 0x01) || MATRIX_TYPE)               // Even rows run forwards
+   if (!(THIS_Y & 0x01) || esphome::matrix_lamp::MATRIX_TYPE)               // Even rows run forwards
      return (THIS_Y * _WIDTH + THIS_X);
    else                                                  
      return (THIS_Y * _WIDTH + _WIDTH - THIS_X - 1);  // Odd rows run backwards
 }
 
-
 // ------------------------------------------------
-void restoreSettings()
-{
-  for (uint8_t i = 0; i < MODE_AMOUNT; i++)
-  {
-    modes[i].Brightness = pgm_read_byte(&defaultSettings[i][0]);
-    modes[i].Speed      = pgm_read_byte(&defaultSettings[i][1]);
-    modes[i].Scale      = pgm_read_byte(&defaultSettings[i][2]);
-  }
-}
-
-
-// ------------------------------------------------
-uint8_t SpeedFactor(uint8_t spd)
+static uint8_t SpeedFactor(uint8_t spd)
 {
   uint8_t result = spd * NUM_LEDS / 1024.0;
   return result;
@@ -84,7 +81,7 @@ uint8_t SpeedFactor(uint8_t spd)
 
 // ------------------------------------------------
 // неточный, зато более быстрый квадратный корень
-float sqrt3(const float x)
+static float sqrt3(const float x)
 {
   union
   {
@@ -101,9 +98,9 @@ float sqrt3(const float x)
 // ------------------------------------------------
 // функция отрисовки точки по координатам X Y
 #if (WIDTH > 127) || (HEIGHT > 127)
-void drawPixelXY(int16_t x, int16_t y, CRGB color)
+static void drawPixelXY(int16_t x, int16_t y, CRGB color)
 #else
-void drawPixelXY(int8_t x, int8_t y, CRGB color)
+static void drawPixelXY(int8_t x, int8_t y, CRGB color)
 #endif
 {
   if (x < 0 || x > (WIDTH - 1) || y < 0 || y > (HEIGHT - 1)) return;
@@ -118,7 +115,7 @@ void drawPixelXY(int8_t x, int8_t y, CRGB color)
 
 // ------------------------------------------------
 // функция получения цвета пикселя по его номеру
-uint32_t getPixColor(uint16_t thisPixel)
+static uint32_t getPixColor(uint16_t thisPixel)
 {
   if (thisPixel >= NUM_LEDS) return 0;
   return (((uint32_t)leds[thisPixel].r << 16) | ((uint32_t)leds[thisPixel].g << 8 ) | (uint32_t)leds[thisPixel].b); // а почему не просто return (leds[thisPixel])?
@@ -127,42 +124,129 @@ uint32_t getPixColor(uint16_t thisPixel)
 
 // ------------------------------------------------
 // функция получения цвета пикселя в матрице по его координатам
-uint32_t getPixColorXY(uint8_t x, uint8_t y)
+static uint32_t getPixColorXY(uint8_t x, uint8_t y)
 {
   return getPixColor(XY(x, y));
 }
 
 
+// blur1d: one-dimensional blur filter. Spreads light to 2 line neighbors.
+// blur2d: two-dimensional blur filter. Spreads light to 8 XY neighbors.
+//
+//           0 = no spread at all
+//          64 = moderate spreading
+//         172 = maximum smooth, even spreading
+//
+//         173..255 = wider spreading, but increasing flicker
+//
+//         Total light is NOT entirely conserved, so many repeated
+//         calls to 'blur' will also result in the light fading,
+//         eventually all the way to black; this is by design so that
+//         it can be used to (slowly) clear the LEDs to black.
+static void blur1d(uint16_t numLeds, fract8 blur_amount)
+{
+    uint8_t keep = 255 - blur_amount;
+    uint8_t seep = blur_amount >> 1;
+    CRGB carryover = CRGB::Black;
+    for( uint16_t i = 0; i < numLeds; ++i) {
+        CRGB cur = leds[i];
+        CRGB part = cur;
+        part.nscale8( seep);
+        cur.nscale8( keep);
+        cur += carryover;
+        if( i) leds[i-1] += part;
+        leds[i] = cur;
+        carryover = part;
+    }
+}
+
+static void blurRows(uint8_t width, uint8_t height, fract8 blur_amount)
+{
+    // blur rows same as columns, for irregular matrix
+    uint8_t keep = 255 - blur_amount;
+    uint8_t seep = blur_amount >> 1;
+    for( uint8_t row = 0; row < height; row++) {
+        CRGB carryover = CRGB::Black;
+        for( uint8_t i = 0; i < width; i++) {
+            CRGB cur = leds[XY(i,row)];
+            CRGB part = cur;
+            part.nscale8( seep);
+            cur.nscale8( keep);
+            cur += carryover;
+            if( i) leds[XY(i-1,row)] += part;
+            leds[XY(i,row)] = cur;
+            carryover = part;
+        }
+    }
+}
+
+// blurColumns: perform a blur1d on each column of a rectangular matrix
+static void blurColumns(uint8_t width, uint8_t height, fract8 blur_amount)
+{
+    // blur columns
+    uint8_t keep = 255 - blur_amount;
+    uint8_t seep = blur_amount >> 1;
+    for( uint8_t col = 0; col < width; ++col) {
+        CRGB carryover = CRGB::Black;
+        for( uint8_t i = 0; i < height; ++i) {
+            CRGB cur = leds[XY(col,i)];
+            CRGB part = cur;
+            part.nscale8( seep);
+            cur.nscale8( keep);
+            cur += carryover;
+            if( i) leds[XY(col,i-1)] += part;
+            leds[XY(col,i)] = cur;
+            carryover = part;
+        }
+    }
+}
+
+static void blur2d(uint8_t width, uint8_t height, fract8 blur_amount)
+{
+    blurRows(width, height, blur_amount);
+    blurColumns(width, height, blur_amount);
+}
+
+
 // ------------------------------------------------
 // залить все
-void fillAll(CRGB color)
+static void fillAll(CRGB color)
 {
   for (uint16_t i = 0; i < NUM_LEDS; i++)
     leds[i] = color;
 }
 
-void ledsClear()
+static void ledsClear()
 {
   fillAll(CRGB(0,0,0));
 }
 
-// ------------------------------------------------
 // стандартные функции библиотеки LEDraw от @Palpalych (для адаптаций его эффектов)
-void blurScreen(fract8 blur_amount, CRGB *LEDarray = leds)
+static void blurScreen(fract8 blur_amount)
 {
-  blur2d(LEDarray, WIDTH, HEIGHT, blur_amount);
+  blur2d(WIDTH, HEIGHT, blur_amount);
 }
 
-void dimAll(uint8_t value, CRGB *LEDarray = leds) {
+static void dimAll(uint8_t value, CRGB *LEDarray = leds) {
   nscale8(LEDarray, NUM_LEDS, value);
   // fadeToBlackBy(LEDarray, NUM_LEDS, 255U - value); // эквивалент  
+}
+
+// kostyamat добавил
+// функция уменьшения яркости
+static CRGB makeDarker(const CRGB& color, fract8 howMuchDarker)
+{
+  CRGB newcolor = color;
+  //newcolor.nscale8( 255 - howMuchDarker);
+  newcolor.fadeToBlackBy(howMuchDarker);//эквивалент
+  return newcolor;
 }
 
 
 // ------------------------------ Дополнительные функции рисования ----------------------
 // по мотивам
 // https://gist.github.com/sutaburosu/32a203c2efa2bb584f4b846a91066583
-void drawPixelXYF(float x, float y, CRGB color) //, uint8_t darklevel = 0U)
+static void drawPixelXYF(float x, float y, CRGB color) //, uint8_t darklevel = 0U)
 {
 //  if (x<0 || y<0) return; //не похоже, чтобы отрицательные значения хоть как-нибудь учитывались тут // зато с этой строчкой пропадает нижний ряд
   // extract the fractional parts and derive their inverses
@@ -185,7 +269,7 @@ void drawPixelXYF(float x, float y, CRGB color) //, uint8_t darklevel = 0U)
 
 
 // ------------------------------------------------
-void DrawLine(int x1, int y1, int x2, int y2, CRGB color)
+static void DrawLine(int x1, int y1, int x2, int y2, CRGB color)
 {
   int deltaX = abs(x2 - x1);
   int deltaY = abs(y2 - y1);
@@ -210,7 +294,7 @@ void DrawLine(int x1, int y1, int x2, int y2, CRGB color)
 
 
 // ------------------------------------------------
-void DrawLineF(float x1, float y1, float x2, float y2, CRGB color)
+static void DrawLineF(float x1, float y1, float x2, float y2, CRGB color)
 {
   float deltaX = std::fabs(x2 - x1);
   float deltaY = std::fabs(y2 - y1);
@@ -237,19 +321,7 @@ void DrawLineF(float x1, float y1, float x2, float y2, CRGB color)
 
 
 // ------------------------------------------------
-// kostyamat добавил
-// функция уменьшения яркости
-CRGB makeDarker( const CRGB& color, fract8 howMuchDarker)
-{
-  CRGB newcolor = color;
-  //newcolor.nscale8( 255 - howMuchDarker);
-  newcolor.fadeToBlackBy(howMuchDarker);//эквивалент
-  return newcolor;
-}
-
-
-// ------------------------------------------------
-void drawCircleF(float x0, float y0, float radius, CRGB color)
+static void drawCircleF(float x0, float y0, float radius, CRGB color)
 {
   float x = 0, y = radius, error = 0;
   float delta = 1. - 2. * radius;
@@ -279,16 +351,16 @@ void drawCircleF(float x0, float y0, float radius, CRGB color)
 
 
 // ------------------------------------------------
-uint8_t wrapX(int8_t x){
+static uint8_t wrapX(int8_t x){
   return (x + WIDTH)%WIDTH;
 }
-uint8_t wrapY(int8_t y){
+static uint8_t wrapY(int8_t y){
   return (y + HEIGHT)%HEIGHT;
 }
 
 
 // ------------------------------------------------
-void drawRec(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint32_t color) {
+static void drawRec(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint32_t color) {
   for (uint8_t y = startY; y < endY; y++) {
     for (uint8_t x = startX; x < endX; x++) {
       drawPixelXY(x, y, color);
@@ -297,7 +369,7 @@ void drawRec(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint32_
 }
 
 // ------------------------------------------------
-void drawRecCHSV(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, CHSV color) {
+static void drawRecCHSV(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, CHSV color) {
   for (uint8_t y = startY; y < endY; y++) {
     for (uint8_t x = startX; x < endX; x++) {
       drawPixelXY(x, y, color);
@@ -306,7 +378,7 @@ void drawRecCHSV(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, CHS
 }
 
 // ------------------------------------------------
-uint8_t validMinMax(float val, uint8_t minV, uint32_t maxV) {
+static uint8_t validMinMax(float val, uint8_t minV, uint32_t maxV) {
   uint8_t result;
   if (val <= minV) {
     result = minV;
@@ -323,7 +395,7 @@ uint8_t validMinMax(float val, uint8_t minV, uint32_t maxV) {
 // ------------------------------------------------
 // альтернативный градиент для ламп собраных из лент с вертикальной компоновкой
 // gradientHorizontal | gradientVertical менее производительный но работает на всех видах ламп
-void gradientHorizontal(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint8_t start_color, uint8_t end_color, uint8_t start_br, uint8_t end_br, uint8_t saturate) {
+static void gradientHorizontal(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint8_t start_color, uint8_t end_color, uint8_t start_br, uint8_t end_br, uint8_t saturate) {
   float step_color = 0;
   float step_br = 0;
   if (startX == endX) {
@@ -358,7 +430,7 @@ void gradientHorizontal(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t en
 
 
 // ------------------------------------------------
-void gradientVertical(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint8_t start_color, uint8_t end_color, uint8_t start_br, uint8_t end_br, uint8_t saturate) {
+static void gradientVertical(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY, uint8_t start_color, uint8_t end_color, uint8_t start_br, uint8_t end_br, uint8_t saturate) {
   float step_color = 0;
   float step_br = 0;
   if (startX == endX) {
@@ -394,12 +466,12 @@ void gradientVertical(uint8_t startX, uint8_t startY, uint8_t endX, uint8_t endY
 // ------------------------------------------------
 // gradientDownTop • более плавный градиент в отличие от gradientVertical
 // но может некоректно работать на лампах собранных на ленточных светодиодах
-void gradientDownTop( uint8_t bottom, CHSV bottom_color, uint8_t top, CHSV top_color ) {
+static void gradientDownTop( uint8_t bottom, CHSV bottom_color, uint8_t top, CHSV top_color ) {
   //  FORWARD_HUES:  hue always goes clockwise
   //  BACKWARD_HUES: hue always goes counter-clockwise
   //  SHORTEST_HUES: hue goes whichever way is shortest
   //  LONGEST_HUES:  hue goes whichever way is longest
-  if (ORIENTATION < 3 || ORIENTATION == 7)
+  if (esphome::matrix_lamp::ORIENTATION < 3 || esphome::matrix_lamp::ORIENTATION == 7)
   {
     // STRIP_DIRECTION to UP ========
     fill_gradient(leds, top * WIDTH, top_color, bottom * WIDTH, bottom_color, SHORTEST_HUES);
@@ -414,7 +486,7 @@ void gradientDownTop( uint8_t bottom, CHSV bottom_color, uint8_t top, CHSV top_c
 
 // ------------------------------------------------
 // новый фейдер
-void fadePixel(uint8_t i, uint8_t j, uint8_t step)
+static void fadePixel(uint8_t i, uint8_t j, uint8_t step)
 {
   int32_t pixelNum = XY(i, j);
   if (getPixColor(pixelNum) == 0U) return;
@@ -430,3 +502,28 @@ void fadePixel(uint8_t i, uint8_t j, uint8_t step)
     leds[pixelNum] = 0U;
   }
 }
+
+// ------------------------------------------------
+// Settings
+static void restoreSettings()
+{
+  for (uint8_t i = 0; i < MODE_AMOUNT; i++)
+  {
+    modes[i].Brightness = pgm_read_byte(&defaultSettings[i][0]);
+    modes[i].Speed      = pgm_read_byte(&defaultSettings[i][1]);
+    modes[i].Scale      = pgm_read_byte(&defaultSettings[i][2]);
+  }
+}
+
+// ------------------------------------------------
+#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+static void setModeSettings(uint8_t Scale = 0U, uint8_t Speed = 0U){
+  selectedSettings = 0U;
+
+  modes[currentMode].Scale = Scale ? Scale : pgm_read_byte(&defaultSettings[currentMode][2]);
+  modes[currentMode].Speed = Speed ? Speed : pgm_read_byte(&defaultSettings[currentMode][1]);
+}
+#endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+
+}  // namespace matrix_lamp
+}  // namespace esphome

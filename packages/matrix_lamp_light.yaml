@@ -24,7 +24,7 @@ light:
             {
               ESP_LOGD("effect", "Madness");
             }
-            matrix_lamp.ShowFrame(EFF_MADNESS, current_color, &it);
+            id(matrix).ShowFrame(EFF_MADNESS, current_color, &it);
 
       - addressable_lambda:
           name: Clouds
@@ -34,7 +34,7 @@ light:
             {
               ESP_LOGD("effect", "Clouds");
             }
-            matrix_lamp.ShowFrame(EFF_CLOUDS, current_color, &it);
+            id(matrix).ShowFrame(EFF_CLOUDS, current_color, &it);
 
       - addressable_lambda:
           name: Lava
@@ -44,7 +44,7 @@ light:
             {
               ESP_LOGD("effect", "Lava");
             }
-            matrix_lamp.ShowFrame(EFF_LAVA, current_color, &it);
+            id(matrix).ShowFrame(EFF_LAVA, current_color, &it);
 
       - addressable_lambda:
           name: Plasma
@@ -54,7 +54,7 @@ light:
             {
               ESP_LOGD("effect", "Plasma");
             }
-            matrix_lamp.ShowFrame(EFF_PLASMA, current_color, &it);
+            id(matrix).ShowFrame(EFF_PLASMA, current_color, &it);
 
       - addressable_lambda:
           name: Rainbow 3D
@@ -64,7 +64,7 @@ light:
             {
               ESP_LOGD("effect", "Rainbow 3D");
             }
-            matrix_lamp.ShowFrame(EFF_RAINBOW, current_color, &it);
+            id(matrix).ShowFrame(EFF_RAINBOW, current_color, &it);
 
       - addressable_lambda:
           name: Peacock
@@ -74,7 +74,7 @@ light:
             {
               ESP_LOGD("effect", "Peacock");
             }
-            matrix_lamp.ShowFrame(EFF_RAINBOW_STRIPE, current_color, &it);
+            id(matrix).ShowFrame(EFF_RAINBOW_STRIPE, current_color, &it);
 
       - addressable_lambda:
           name: Zebra
@@ -84,7 +84,7 @@ light:
             {
               ESP_LOGD("effect", "Zebra");
             }
-            matrix_lamp.ShowFrame(EFF_ZEBRA, current_color, &it);
+            id(matrix).ShowFrame(EFF_ZEBRA, current_color, &it);
 
       - addressable_lambda:
           name: Forest
@@ -94,7 +94,7 @@ light:
             {
               ESP_LOGD("effect", "Forest");
             }
-            matrix_lamp.ShowFrame(EFF_FOREST, current_color, &it);
+            id(matrix).ShowFrame(EFF_FOREST, current_color, &it);
 
       - addressable_lambda:
           name: Ocean
@@ -104,7 +104,7 @@ light:
             {
               ESP_LOGD("effect", "Ocean");
             }
-            matrix_lamp.ShowFrame(EFF_OCEAN, current_color, &it);
+            id(matrix).ShowFrame(EFF_OCEAN, current_color, &it);
 
       - addressable_lambda:
           name: Balls
@@ -114,7 +114,7 @@ light:
             {
               ESP_LOGD("effect", "Balls");
             }
-            matrix_lamp.ShowFrame(EFF_BBALLS, current_color, &it);
+            id(matrix).ShowFrame(EFF_BBALLS, current_color, &it);
 
       - addressable_lambda:
           name: Balls Bounce
@@ -124,7 +124,7 @@ light:
             {
               ESP_LOGD("effect", "Balls Bounce");
             }
-            matrix_lamp.ShowFrame(EFF_BALLS_BOUNCE, current_color, &it);
+            id(matrix).ShowFrame(EFF_BALLS_BOUNCE, current_color, &it);
 
       - addressable_lambda:
           name: Popcorn
@@ -134,7 +134,7 @@ light:
             {
               ESP_LOGD("effect", "Popcorn");
             }
-            matrix_lamp.ShowFrame(EFF_POPCORN, current_color, &it);
+            id(matrix).ShowFrame(EFF_POPCORN, current_color, &it);
 
       - addressable_lambda:
           name: Spiro
@@ -144,7 +144,7 @@ light:
             {
               ESP_LOGD("effect", "Spiro");
             }
-            matrix_lamp.ShowFrame(EFF_SPIRO, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPIRO, current_color, &it);
 
       - addressable_lambda:
           name: Prismata
@@ -154,7 +154,7 @@ light:
             {
               ESP_LOGD("effect", "Prismata");
             }
-            matrix_lamp.ShowFrame(EFF_PRISMATA, current_color, &it);
+            id(matrix).ShowFrame(EFF_PRISMATA, current_color, &it);
 
       - addressable_lambda:
           name: Smokeballs
@@ -164,7 +164,7 @@ light:
             {
               ESP_LOGD("effect", "Smokeballs");
             }
-            matrix_lamp.ShowFrame(EFF_SMOKEBALLS, current_color, &it);
+            id(matrix).ShowFrame(EFF_SMOKEBALLS, current_color, &it);
 
       - addressable_lambda:
           name: Flame
@@ -174,7 +174,7 @@ light:
             {
               ESP_LOGD("effect", "Flame");
             }
-            matrix_lamp.ShowFrame(EFF_FLAME, current_color, &it);
+            id(matrix).ShowFrame(EFF_FLAME, current_color, &it);
 
       - addressable_lambda:
           name: Fire 2021
@@ -184,7 +184,7 @@ light:
             {
               ESP_LOGD("effect", "Fire 2021");
             }
-            matrix_lamp.ShowFrame(EFF_FIRE_2021, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRE_2021, current_color, &it);
 
       - addressable_lambda:
           name: Pacific
@@ -194,7 +194,7 @@ light:
             {
               ESP_LOGD("effect", "Pacific");
             }
-            matrix_lamp.ShowFrame(EFF_PACIFIC, current_color, &it);
+            id(matrix).ShowFrame(EFF_PACIFIC, current_color, &it);
 
       - addressable_lambda:
           name: Shadows
@@ -204,7 +204,7 @@ light:
             {
               ESP_LOGD("effect", "Shadows");
             }
-            matrix_lamp.ShowFrame(EFF_SHADOWS, current_color, &it);
+            id(matrix).ShowFrame(EFF_SHADOWS, current_color, &it);
 
       - addressable_lambda:
           name: DNA
@@ -214,7 +214,7 @@ light:
             {
               ESP_LOGD("effect", "DNA");
             }
-            matrix_lamp.ShowFrame(EFF_DNA, current_color, &it);
+            id(matrix).ShowFrame(EFF_DNA, current_color, &it);
 
       - addressable_lambda:
           name: Flock
@@ -224,7 +224,7 @@ light:
             {
               ESP_LOGD("effect", "Flock");
             }
-            matrix_lamp.ShowFrame(EFF_FLOCK, current_color, &it);
+            id(matrix).ShowFrame(EFF_FLOCK, current_color, &it);
 
       - addressable_lambda:
           name: Flock and Predator
@@ -234,7 +234,7 @@ light:
             {
               ESP_LOGD("effect", "Flock and Predator");
             }
-            matrix_lamp.ShowFrame(EFF_FLOCK_N_PR, current_color, &it);
+            id(matrix).ShowFrame(EFF_FLOCK_N_PR, current_color, &it);
 
       - addressable_lambda:
           name: Butterflys
@@ -244,7 +244,7 @@ light:
             {
               ESP_LOGD("effect", "Butterflys");
             }
-            matrix_lamp.ShowFrame(EFF_BUTTERFLYS, current_color, &it);
+            id(matrix).ShowFrame(EFF_BUTTERFLYS, current_color, &it);
 
       - addressable_lambda:
           name: Butterflys in Lamp
@@ -254,7 +254,7 @@ light:
             {
               ESP_LOGD("effect", "Butterflys in Lamp");
             }
-            matrix_lamp.ShowFrame(EFF_BUTTERFLYS_LAMP, current_color, &it);
+            id(matrix).ShowFrame(EFF_BUTTERFLYS_LAMP, current_color, &it);
 
       - addressable_lambda:
           name: Snakes
@@ -264,7 +264,7 @@ light:
             {
               ESP_LOGD("effect", "Snakes");
             }
-            matrix_lamp.ShowFrame(EFF_SNAKES, current_color, &it);
+            id(matrix).ShowFrame(EFF_SNAKES, current_color, &it);
 
       - addressable_lambda:
           name: Nexus
@@ -274,7 +274,7 @@ light:
             {
               ESP_LOGD("effect", "Nexus");
             }
-            matrix_lamp.ShowFrame(EFF_NEXUS, current_color, &it);
+            id(matrix).ShowFrame(EFF_NEXUS, current_color, &it);
 
       - addressable_lambda:
           name: Spheres
@@ -284,7 +284,7 @@ light:
             {
               ESP_LOGD("effect", "Spheres");
             }
-            matrix_lamp.ShowFrame(EFF_SPHERES, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPHERES, current_color, &it);
 
       - addressable_lambda:
           name: Sinusoid
@@ -294,7 +294,7 @@ light:
             {
               ESP_LOGD("effect", "Sinusoid");
             }
-            matrix_lamp.ShowFrame(EFF_SINUSOID3, current_color, &it);
+            id(matrix).ShowFrame(EFF_SINUSOID3, current_color, &it);
 
       - addressable_lambda:
           name: Metaballs
@@ -304,7 +304,7 @@ light:
             {
               ESP_LOGD("effect", "Metaballs");
             }
-            matrix_lamp.ShowFrame(EFF_METABALLS, current_color, &it);
+            id(matrix).ShowFrame(EFF_METABALLS, current_color, &it);
 
       - addressable_lambda:
           name: Aurora
@@ -314,7 +314,7 @@ light:
             {
               ESP_LOGD("effect", "Aurora");
             }
-            matrix_lamp.ShowFrame(EFF_AURORA, current_color, &it);
+            id(matrix).ShowFrame(EFF_AURORA, current_color, &it);
 
       - addressable_lambda:
           name: Spider
@@ -324,7 +324,7 @@ light:
             {
               ESP_LOGD("effect", "Spider");
             }
-            matrix_lamp.ShowFrame(EFF_SPIDER, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPIDER, current_color, &it);
 
       - addressable_lambda:
           name: Lava Lamp
@@ -334,7 +334,7 @@ light:
             {
               ESP_LOGD("effect", "Lava Lamp");
             }
-            matrix_lamp.ShowFrame(EFF_LAVALAMP, current_color, &it);
+            id(matrix).ShowFrame(EFF_LAVALAMP, current_color, &it);
 
       - addressable_lambda:
           name: Liquid Lamp
@@ -344,7 +344,7 @@ light:
             {
               ESP_LOGD("effect", "Liquid Lamp");
             }
-            matrix_lamp.ShowFrame(EFF_LIQUIDLAMP, current_color, &it);
+            id(matrix).ShowFrame(EFF_LIQUIDLAMP, current_color, &it);
 
       - addressable_lambda:
           name: Liquid Lamp (Auto)
@@ -354,7 +354,7 @@ light:
             {
               ESP_LOGD("effect", "Liquid Lamp (Auto)");
             }
-            matrix_lamp.ShowFrame(EFF_LIQUIDLAMP_AUTO, current_color, &it);
+            id(matrix).ShowFrame(EFF_LIQUIDLAMP_AUTO, current_color, &it);
 
       - addressable_lambda:
           name: Drops
@@ -364,7 +364,7 @@ light:
             {
               ESP_LOGD("effect", "Drops");
             }
-            matrix_lamp.ShowFrame(EFF_DROPS, current_color, &it);
+            id(matrix).ShowFrame(EFF_DROPS, current_color, &it);
 
       - addressable_lambda:
           name: Matrix
@@ -374,7 +374,7 @@ light:
             {
               ESP_LOGD("effect", "Matrix");
             }
-            matrix_lamp.ShowFrame(EFF_MATRIX, current_color, &it);
+            id(matrix).ShowFrame(EFF_MATRIX, current_color, &it);
 
       - addressable_lambda:
           name: Fire 2012
@@ -384,7 +384,7 @@ light:
             {
               ESP_LOGD("effect", "Fire 2012");
             }
-            matrix_lamp.ShowFrame(EFF_FIRE_2012, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRE_2012, current_color, &it);
 
       - addressable_lambda:
           name: Fire 2018
@@ -394,7 +394,7 @@ light:
             {
               ESP_LOGD("effect", "Fire 2018");
             }
-            matrix_lamp.ShowFrame(EFF_FIRE_2018, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRE_2018, current_color, &it);
 
       - addressable_lambda:
           name: Fire 2020
@@ -404,7 +404,7 @@ light:
             {
               ESP_LOGD("effect", "Fire 2020");
             }
-            matrix_lamp.ShowFrame(EFF_FIRE_2020, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRE_2020, current_color, &it);
 
       - addressable_lambda:
           name: Fire
@@ -414,7 +414,7 @@ light:
             {
               ESP_LOGD("effect", "Fire");
             }
-            matrix_lamp.ShowFrame(EFF_FIRE, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRE, current_color, &it);
 
       - addressable_lambda:
           name: Whirl
@@ -424,7 +424,7 @@ light:
             {
               ESP_LOGD("effect", "Whirl");
             }
-            matrix_lamp.ShowFrame(EFF_WHIRL, current_color, &it);
+            id(matrix).ShowFrame(EFF_WHIRL, current_color, &it);
 
       - addressable_lambda:
           name: Whirl (Multi)
@@ -434,7 +434,7 @@ light:
             {
               ESP_LOGD("effect", "Whirl (Multi)");
             }
-            matrix_lamp.ShowFrame(EFF_WHIRL_MULTI, current_color, &it);
+            id(matrix).ShowFrame(EFF_WHIRL_MULTI, current_color, &it);
 
       - addressable_lambda:
           name: Magma
@@ -444,7 +444,7 @@ light:
             {
               ESP_LOGD("effect", "Magma");
             }
-            matrix_lamp.ShowFrame(EFF_MAGMA, current_color, &it);
+            id(matrix).ShowFrame(EFF_MAGMA, current_color, &it);
 
       - addressable_lambda:
           name: Boiling
@@ -454,7 +454,7 @@ light:
             {
               ESP_LOGD("effect", "Boiling");
             }
-            matrix_lamp.ShowFrame(EFF_LLAND, current_color, &it);
+            id(matrix).ShowFrame(EFF_LLAND, current_color, &it);
 
       - addressable_lambda:
           name: Waterfall
@@ -464,7 +464,7 @@ light:
             {
               ESP_LOGD("effect", "Waterfall");
             }
-            matrix_lamp.ShowFrame(EFF_WATERFALL, current_color, &it);
+            id(matrix).ShowFrame(EFF_WATERFALL, current_color, &it);
 
       - addressable_lambda:
           name: Waterfall 4 in 1
@@ -474,7 +474,7 @@ light:
             {
               ESP_LOGD("effect", "Waterfall 4 in 1");
             }
-            matrix_lamp.ShowFrame(EFF_WATERFALL_4IN1, current_color, &it);
+            id(matrix).ShowFrame(EFF_WATERFALL_4IN1, current_color, &it);
 
       - addressable_lambda:
           name: Pool
@@ -484,7 +484,7 @@ light:
             {
               ESP_LOGD("effect", "Pool");
             }
-            matrix_lamp.ShowFrame(EFF_POOL, current_color, &it);
+            id(matrix).ShowFrame(EFF_POOL, current_color, &it);
 
       - addressable_lambda:
           name: Pulse
@@ -494,7 +494,7 @@ light:
             {
               ESP_LOGD("effect", "Pulse");
             }
-            matrix_lamp.ShowFrame(EFF_PULSE, current_color, &it);
+            id(matrix).ShowFrame(EFF_PULSE, current_color, &it);
 
       - addressable_lambda:
           name: Pulse Rainbow
@@ -504,7 +504,7 @@ light:
             {
               ESP_LOGD("effect", "Pulse Rainbow");
             }
-            matrix_lamp.ShowFrame(EFF_PULSE_RAINBOW, current_color, &it);
+            id(matrix).ShowFrame(EFF_PULSE_RAINBOW, current_color, &it);
 
       - addressable_lambda:
           name: Pulse White
@@ -514,7 +514,7 @@ light:
             {
               ESP_LOGD("effect", "Pulse White");
             }
-            matrix_lamp.ShowFrame(EFF_PULSE_WHITE, current_color, &it);
+            id(matrix).ShowFrame(EFF_PULSE_WHITE, current_color, &it);
 
       - addressable_lambda:
           name: Oscilating
@@ -524,7 +524,7 @@ light:
             {
               ESP_LOGD("effect", "Oscilating");
             }
-            matrix_lamp.ShowFrame(EFF_OSCILLATING, current_color, &it);
+            id(matrix).ShowFrame(EFF_OSCILLATING, current_color, &it);
 
       - addressable_lambda:
           name: Fountain
@@ -534,7 +534,7 @@ light:
             {
               ESP_LOGD("effect", "Fountain");
             }
-            matrix_lamp.ShowFrame(EFF_FOUNTAIN, current_color, &it);
+            id(matrix).ShowFrame(EFF_FOUNTAIN, current_color, &it);
 
       - addressable_lambda:
           name: Fairy
@@ -544,7 +544,7 @@ light:
             {
               ESP_LOGD("effect", "Fairy");
             }
-            matrix_lamp.ShowFrame(EFF_FAIRY, current_color, &it);
+            id(matrix).ShowFrame(EFF_FAIRY, current_color, &it);
 
       - addressable_lambda:
           name: Comet
@@ -554,7 +554,7 @@ light:
             {
               ESP_LOGD("effect", "Comet");
             }
-            matrix_lamp.ShowFrame(EFF_COMET, current_color, &it);
+            id(matrix).ShowFrame(EFF_COMET, current_color, &it);
 
       - addressable_lambda:
           name: Comet One
@@ -564,7 +564,7 @@ light:
             {
               ESP_LOGD("effect", "Comet One");
             }
-            matrix_lamp.ShowFrame(EFF_COMET_COLOR, current_color, &it);
+            id(matrix).ShowFrame(EFF_COMET_COLOR, current_color, &it);
 
       - addressable_lambda:
           name: Comet Two
@@ -574,7 +574,7 @@ light:
             {
               ESP_LOGD("effect", "Comet Two");
             }
-            matrix_lamp.ShowFrame(EFF_COMET_TWO, current_color, &it);
+            id(matrix).ShowFrame(EFF_COMET_TWO, current_color, &it);
 
       - addressable_lambda:
           name: Comet Three
@@ -584,7 +584,7 @@ light:
             {
               ESP_LOGD("effect", "Comet Three");
             }
-            matrix_lamp.ShowFrame(EFF_COMET_THREE, current_color, &it);
+            id(matrix).ShowFrame(EFF_COMET_THREE, current_color, &it);
 
       - addressable_lambda:
           name: Attract
@@ -594,7 +594,7 @@ light:
             {
               ESP_LOGD("effect", "Attract");
             }
-            matrix_lamp.ShowFrame(EFF_ATTRACT, current_color, &it);
+            id(matrix).ShowFrame(EFF_ATTRACT, current_color, &it);
 
       - addressable_lambda:
           name: Firefly
@@ -604,7 +604,7 @@ light:
             {
               ESP_LOGD("effect", "Firefly");
             }
-            matrix_lamp.ShowFrame(EFF_FIREFLY, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIREFLY, current_color, &it);
 
       - addressable_lambda:
           name: Firefly Top
@@ -614,7 +614,7 @@ light:
             {
               ESP_LOGD("effect", "Firefly Top");
             }
-            matrix_lamp.ShowFrame(EFF_FIREFLY_TOP, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIREFLY_TOP, current_color, &it);
 
       - addressable_lambda:
           name: Snake
@@ -624,7 +624,7 @@ light:
             {
               ESP_LOGD("effect", "Snake");
             }
-            matrix_lamp.ShowFrame(EFF_SNAKE, current_color, &it);
+            id(matrix).ShowFrame(EFF_SNAKE, current_color, &it);
 
       - addressable_lambda:
           name: Sparkles
@@ -634,7 +634,7 @@ light:
             {
               ESP_LOGD("effect", "Sparkles");
             }
-            matrix_lamp.ShowFrame(EFF_SPARKLES, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPARKLES, current_color, &it);
 
       - addressable_lambda:
           name: Twinkles
@@ -644,7 +644,7 @@ light:
             {
               ESP_LOGD("effect", "Twinkles");
             }
-            matrix_lamp.ShowFrame(EFF_TWINKLES, current_color, &it);
+            id(matrix).ShowFrame(EFF_TWINKLES, current_color, &it);
 
       - addressable_lambda:
           name: Smoke
@@ -654,7 +654,7 @@ light:
             {
               ESP_LOGD("effect", "Smoke");
             }
-            matrix_lamp.ShowFrame(EFF_SMOKE, current_color, &it);
+            id(matrix).ShowFrame(EFF_SMOKE, current_color, &it);
 
       - addressable_lambda:
           name: Smoke Color
@@ -664,7 +664,7 @@ light:
             {
               ESP_LOGD("effect", "Smoke Color");
             }
-            matrix_lamp.ShowFrame(EFF_SMOKE_COLOR, current_color, &it);
+            id(matrix).ShowFrame(EFF_SMOKE_COLOR, current_color, &it);
 
       - addressable_lambda:
           name: Picasso
@@ -674,7 +674,7 @@ light:
             {
               ESP_LOGD("effect", "Picasso");
             }
-            matrix_lamp.ShowFrame(EFF_PICASSO, current_color, &it);
+            id(matrix).ShowFrame(EFF_PICASSO, current_color, &it);
 
       - addressable_lambda:
           name: Waves
@@ -684,7 +684,7 @@ light:
             {
               ESP_LOGD("effect", "Waves");
             }
-            matrix_lamp.ShowFrame(EFF_WAVES, current_color, &it);
+            id(matrix).ShowFrame(EFF_WAVES, current_color, &it);
 
       - addressable_lambda:
           name: Sand
@@ -694,7 +694,7 @@ light:
             {
               ESP_LOGD("effect", "Sand");
             }
-            matrix_lamp.ShowFrame(EFF_SAND, current_color, &it);
+            id(matrix).ShowFrame(EFF_SAND, current_color, &it);
 
       - addressable_lambda:
           name: Rings
@@ -704,7 +704,7 @@ light:
             {
               ESP_LOGD("effect", "Rings");
             }
-            matrix_lamp.ShowFrame(EFF_RINGS, current_color, &it);
+            id(matrix).ShowFrame(EFF_RINGS, current_color, &it);
 
       - addressable_lambda:
           name: Cube 2D
@@ -714,7 +714,7 @@ light:
             {
               ESP_LOGD("effect", "Cube 2D");
             }
-            matrix_lamp.ShowFrame(EFF_CUBE2D, current_color, &it);
+            id(matrix).ShowFrame(EFF_CUBE2D, current_color, &it);
 
       - addressable_lambda:
           name: Simple Rain
@@ -724,7 +724,7 @@ light:
             {
               ESP_LOGD("effect", "Simple Rain");
             }
-            matrix_lamp.ShowFrame(EFF_SIMPLE_RAIN, current_color, &it);
+            id(matrix).ShowFrame(EFF_SIMPLE_RAIN, current_color, &it);
 
       - addressable_lambda:
           name: Stormy Rain
@@ -734,7 +734,7 @@ light:
             {
               ESP_LOGD("effect", "Stormy Rain");
             }
-            matrix_lamp.ShowFrame(EFF_STORMY_RAIN, current_color, &it);
+            id(matrix).ShowFrame(EFF_STORMY_RAIN, current_color, &it);
 
       - addressable_lambda:
           name: Color Rain
@@ -744,7 +744,7 @@ light:
             {
               ESP_LOGD("effect", "Color Rain");
             }
-            matrix_lamp.ShowFrame(EFF_COLOR_RAIN, current_color, &it);
+            id(matrix).ShowFrame(EFF_COLOR_RAIN, current_color, &it);
 
       - addressable_lambda:
           name: Snow
@@ -754,7 +754,7 @@ light:
             {
               ESP_LOGD("effect", "Snow");
             }
-            matrix_lamp.ShowFrame(EFF_SNOW, current_color, &it);
+            id(matrix).ShowFrame(EFF_SNOW, current_color, &it);
 
       - addressable_lambda:
           name: Starfall
@@ -764,7 +764,7 @@ light:
             {
               ESP_LOGD("effect", "Starfall");
             }
-            matrix_lamp.ShowFrame(EFF_STARFALL, current_color, &it);
+            id(matrix).ShowFrame(EFF_STARFALL, current_color, &it);
 
       - addressable_lambda:
           name: Leapers
@@ -774,7 +774,7 @@ light:
             {
               ESP_LOGD("effect", "Leapers");
             }
-            matrix_lamp.ShowFrame(EFF_LEAPERS, current_color, &it);
+            id(matrix).ShowFrame(EFF_LEAPERS, current_color, &it);
 
       - addressable_lambda:
           name: Lighters
@@ -784,7 +784,7 @@ light:
             {
               ESP_LOGD("effect", "Lighters");
             }
-            matrix_lamp.ShowFrame(EFF_LIGHTERS, current_color, &it);
+            id(matrix).ShowFrame(EFF_LIGHTERS, current_color, &it);
 
       - addressable_lambda:
           name: Lighters with Traces
@@ -794,7 +794,7 @@ light:
             {
               ESP_LOGD("effect", "Lighters with Traces");
             }
-            matrix_lamp.ShowFrame(EFF_LIGHTER_TRACES, current_color, &it);
+            id(matrix).ShowFrame(EFF_LIGHTER_TRACES, current_color, &it);
 
       - addressable_lambda:
           name: Lumenjer
@@ -804,7 +804,7 @@ light:
             {
               ESP_LOGD("effect", "Lumenjer");
             }
-            matrix_lamp.ShowFrame(EFF_LUMENJER, current_color, &it);
+            id(matrix).ShowFrame(EFF_LUMENJER, current_color, &it);
 
       - addressable_lambda:
           name: Paintball
@@ -814,7 +814,7 @@ light:
             {
               ESP_LOGD("effect", "Paintball");
             }
-            matrix_lamp.ShowFrame(EFF_PAINTBALL, current_color, &it);
+            id(matrix).ShowFrame(EFF_PAINTBALL, current_color, &it);
 
       - addressable_lambda:
           name: Rainbow
@@ -824,7 +824,7 @@ light:
             {
               ESP_LOGD("effect", "Rainbow");
             }
-            matrix_lamp.ShowFrame(EFF_RAINBOW_VER, current_color, &it);
+            id(matrix).ShowFrame(EFF_RAINBOW_VER, current_color, &it);
 
       - addressable_lambda:
           name: Christmas Tree
@@ -834,7 +834,7 @@ light:
             {
               ESP_LOGD("effect", "Christmas Tree");
             }
-            matrix_lamp.ShowFrame(EFF_CHRISTMAS_TREE, current_color, &it);
+            id(matrix).ShowFrame(EFF_CHRISTMAS_TREE, current_color, &it);
 
       - addressable_lambda:
           name: By Effect
@@ -844,7 +844,7 @@ light:
             {
               ESP_LOGD("effect", "By Effect");
             }
-            matrix_lamp.ShowFrame(EFF_BY_EFFECT, current_color, &it);
+            id(matrix).ShowFrame(EFF_BY_EFFECT, current_color, &it);
 
       - addressable_lambda:
           name: Color Frizzles
@@ -854,7 +854,7 @@ light:
             {
               ESP_LOGD("effect", "Color Frizzles");
             }
-            matrix_lamp.ShowFrame(EFF_COLOR_FRIZZLES, current_color, &it);
+            id(matrix).ShowFrame(EFF_COLOR_FRIZZLES, current_color, &it);
 
       - addressable_lambda:
           name: Colored Python
@@ -864,7 +864,7 @@ light:
             {
               ESP_LOGD("effect", "Colored Python");
             }
-            matrix_lamp.ShowFrame(EFF_COLORED_PYTHON, current_color, &it);
+            id(matrix).ShowFrame(EFF_COLORED_PYTHON, current_color, &it);
 
       - addressable_lambda:
           name: Contacts
@@ -874,7 +874,7 @@ light:
             {
               ESP_LOGD("effect", "Contacts");
             }
-            matrix_lamp.ShowFrame(EFF_CONTACTS, current_color, &it);
+            id(matrix).ShowFrame(EFF_CONTACTS, current_color, &it);
 
       - addressable_lambda:
           name: Drop in Water
@@ -884,7 +884,7 @@ light:
             {
               ESP_LOGD("effect", "Drop in Water");
             }
-            matrix_lamp.ShowFrame(EFF_DROP_IN_WATER, current_color, &it);
+            id(matrix).ShowFrame(EFF_DROP_IN_WATER, current_color, &it);
 
       - addressable_lambda:
           name: Firework
@@ -894,7 +894,7 @@ light:
             {
               ESP_LOGD("effect", "Firework");
             }
-            matrix_lamp.ShowFrame(EFF_FIREWORK, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIREWORK, current_color, &it);
 
       - addressable_lambda:
           name: Firework II
@@ -904,7 +904,7 @@ light:
             {
               ESP_LOGD("effect", "Firework II");
             }
-            matrix_lamp.ShowFrame(EFF_FIREWORK_2, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIREWORK_2, current_color, &it);
 
       - addressable_lambda:
           name: Hourglass
@@ -914,7 +914,7 @@ light:
             {
               ESP_LOGD("effect", "Hourglass");
             }
-            matrix_lamp.ShowFrame(EFF_HOURGLASS, current_color, &it);
+            id(matrix).ShowFrame(EFF_HOURGLASS, current_color, &it);
 
       - addressable_lambda:
           name: Flower Ruta
@@ -924,7 +924,7 @@ light:
             {
               ESP_LOGD("effect", "Flower Ruta");
             }
-            matrix_lamp.ShowFrame(EFF_FLOWERRUTA, current_color, &it);
+            id(matrix).ShowFrame(EFF_FLOWERRUTA, current_color, &it);
 
       - addressable_lambda:
           name: Magic Lantern
@@ -934,7 +934,7 @@ light:
             {
               ESP_LOGD("effect", "Magic Lantern");
             }
-            matrix_lamp.ShowFrame(EFF_MAGIC_LANTERN, current_color, &it);
+            id(matrix).ShowFrame(EFF_MAGIC_LANTERN, current_color, &it);
 
       - addressable_lambda:
           name: Mosaic
@@ -944,7 +944,7 @@ light:
             {
               ESP_LOGD("effect", "Mosaic");
             }
-            matrix_lamp.ShowFrame(EFF_MOSAIC, current_color, &it);
+            id(matrix).ShowFrame(EFF_MOSAIC, current_color, &it);
 
       - addressable_lambda:
           name: Octopus
@@ -954,7 +954,7 @@ light:
             {
               ESP_LOGD("effect", "Octopus");
             }
-            matrix_lamp.ShowFrame(EFF_OCTOPUS, current_color, &it);
+            id(matrix).ShowFrame(EFF_OCTOPUS, current_color, &it);
 
       - addressable_lambda:
           name: Paints
@@ -964,7 +964,7 @@ light:
             {
               ESP_LOGD("effect", "Paints");
             }
-            matrix_lamp.ShowFrame(EFF_PAINTS, current_color, &it);
+            id(matrix).ShowFrame(EFF_PAINTS, current_color, &it);
 
       - addressable_lambda:
           name: Plasma Waves
@@ -974,7 +974,7 @@ light:
             {
               ESP_LOGD("effect", "Plasma Waves");
             }
-            matrix_lamp.ShowFrame(EFF_PLASMA_WAVES, current_color, &it);
+            id(matrix).ShowFrame(EFF_PLASMA_WAVES, current_color, &it);
 
       - addressable_lambda:
           name: Radial Wave
@@ -984,7 +984,7 @@ light:
             {
               ESP_LOGD("effect", "Radial Wave");
             }
-            matrix_lamp.ShowFrame(EFF_RADIAL_WAVE, current_color, &it);
+            id(matrix).ShowFrame(EFF_RADIAL_WAVE, current_color, &it);
 
       - addressable_lambda:
           name: Rivers
@@ -994,7 +994,7 @@ light:
             {
               ESP_LOGD("effect", "Rivers");
             }
-            matrix_lamp.ShowFrame(EFF_RIVERS, current_color, &it);
+            id(matrix).ShowFrame(EFF_RIVERS, current_color, &it);
 
       - addressable_lambda:
           name: Spectrum
@@ -1004,7 +1004,7 @@ light:
             {
               ESP_LOGD("effect", "Spectrum");
             }
-            matrix_lamp.ShowFrame(EFF_SPECTRUM, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPECTRUM, current_color, &it);
 
       - addressable_lambda:
           name: Strobe / Chaos / Diffusion
@@ -1014,7 +1014,7 @@ light:
             {
               ESP_LOGD("effect", "Strobe | Chaos | Diffusion");
             }
-            matrix_lamp.ShowFrame(EFF_STROBE, current_color, &it);
+            id(matrix).ShowFrame(EFF_STROBE, current_color, &it);
 
       - addressable_lambda:
           name: Swirl
@@ -1024,7 +1024,7 @@ light:
             {
               ESP_LOGD("effect", "Swirl");
             }
-            matrix_lamp.ShowFrame(EFF_SWIRL, current_color, &it);
+            id(matrix).ShowFrame(EFF_SWIRL, current_color, &it);
 
       - addressable_lambda:
           name: Tornado
@@ -1034,7 +1034,7 @@ light:
             {
               ESP_LOGD("effect", "Tornado");
             }
-            matrix_lamp.ShowFrame(EFF_TORNADO, current_color, &it);
+            id(matrix).ShowFrame(EFF_TORNADO, current_color, &it);
 
       - addressable_lambda:
           name: Watercolor
@@ -1044,7 +1044,7 @@ light:
             {
               ESP_LOGD("effect", "Watercolor");
             }
-            matrix_lamp.ShowFrame(EFF_WATERCOLOR, current_color, &it);
+            id(matrix).ShowFrame(EFF_WATERCOLOR, current_color, &it);
 
       - addressable_lambda:
           name: Web Tools
@@ -1054,7 +1054,7 @@ light:
             {
               ESP_LOGD("effect", "Web Tools");
             }
-            matrix_lamp.ShowFrame(EFF_WEB_TOOLS, current_color, &it);
+            id(matrix).ShowFrame(EFF_WEB_TOOLS, current_color, &it);
 
       - addressable_lambda:
           name: Wine
@@ -1064,7 +1064,7 @@ light:
             {
               ESP_LOGD("effect", "Wine");
             }
-            matrix_lamp.ShowFrame(EFF_WINE, current_color, &it);
+            id(matrix).ShowFrame(EFF_WINE, current_color, &it);
 
       - addressable_lambda:
           name: Bamboo
@@ -1074,7 +1074,7 @@ light:
             {
               ESP_LOGD("effect", "Bamboo");
             }
-            matrix_lamp.ShowFrame(EFF_BAMBOO, current_color, &it);
+            id(matrix).ShowFrame(EFF_BAMBOO, current_color, &it);
 
       - addressable_lambda:
           name: Ball Routine
@@ -1084,7 +1084,7 @@ light:
             {
               ESP_LOGD("effect", "Ball Routine");
             }
-            matrix_lamp.ShowFrame(EFF_BALLROUTINE, current_color, &it);
+            id(matrix).ShowFrame(EFF_BALLROUTINE, current_color, &it);
 
       - addressable_lambda:
           name: Stars
@@ -1094,7 +1094,7 @@ light:
             {
               ESP_LOGD("effect", "Stars");
             }
-            matrix_lamp.ShowFrame(EFF_STARS, current_color, &it);
+            id(matrix).ShowFrame(EFF_STARS, current_color, &it);
 
       - addressable_lambda:
           name: Tyxy Land
@@ -1104,7 +1104,7 @@ light:
             {
               ESP_LOGD("effect", "Tyxy Land");
             }
-            matrix_lamp.ShowFrame(EFF_TIXYLAND, current_color, &it);
+            id(matrix).ShowFrame(EFF_TIXYLAND, current_color, &it);
 
       - addressable_lambda:
           name: Firesparcs
@@ -1114,7 +1114,7 @@ light:
             {
               ESP_LOGD("effect", "Firesparcs");
             }
-            matrix_lamp.ShowFrame(EFF_FIRESPARKS, current_color, &it);
+            id(matrix).ShowFrame(EFF_FIRESPARKS, current_color, &it);
 
       - addressable_lambda:
           name: Dandelions
@@ -1124,7 +1124,7 @@ light:
             {
               ESP_LOGD("effect", "Dandelions");
             }
-            matrix_lamp.ShowFrame(EFF_DANDELIONS, current_color, &it);
+            id(matrix).ShowFrame(EFF_DANDELIONS, current_color, &it);
 
       - addressable_lambda:
           name: Serpentine
@@ -1134,7 +1134,7 @@ light:
             {
               ESP_LOGD("effect", "Serpentine");
             }
-            matrix_lamp.ShowFrame(EFF_SERPENTINE, current_color, &it);
+            id(matrix).ShowFrame(EFF_SERPENTINE, current_color, &it);
 
       - addressable_lambda:
           name: Turbulence
@@ -1144,7 +1144,7 @@ light:
             {
               ESP_LOGD("effect", "Turbulence");
             }
-            matrix_lamp.ShowFrame(EFF_TURBULENCE, current_color, &it);
+            id(matrix).ShowFrame(EFF_TURBULENCE, current_color, &it);
 
       - addressable_lambda:
           name: Arrows
@@ -1154,7 +1154,7 @@ light:
             {
               ESP_LOGD("effect", "Arrows");
             }
-            matrix_lamp.ShowFrame(EFF_ARROWS, current_color, &it);
+            id(matrix).ShowFrame(EFF_ARROWS, current_color, &it);
 
       - addressable_lambda:
           name: Avrora
@@ -1164,7 +1164,7 @@ light:
             {
               ESP_LOGD("effect", "Avrora");
             }
-            matrix_lamp.ShowFrame(EFF_AVRORA, current_color, &it);
+            id(matrix).ShowFrame(EFF_AVRORA, current_color, &it);
 
       - addressable_lambda:
           name: Lotus
@@ -1174,7 +1174,7 @@ light:
             {
               ESP_LOGD("effect", "Lotus");
             }
-            matrix_lamp.ShowFrame(EFF_LOTUS, current_color, &it);
+            id(matrix).ShowFrame(EFF_LOTUS, current_color, &it);
 
       - addressable_lambda:
           name: Fontan
@@ -1184,7 +1184,7 @@ light:
             {
               ESP_LOGD("effect", "Fontan");
             }
-            matrix_lamp.ShowFrame(EFF_FONTAN, current_color, &it);
+            id(matrix).ShowFrame(EFF_FONTAN, current_color, &it);
 
       - addressable_lambda:
           name: Night City
@@ -1194,7 +1194,7 @@ light:
             {
               ESP_LOGD("effect", "Night City");
             }
-            matrix_lamp.ShowFrame(EFF_NIGHTCITY, current_color, &it);
+            id(matrix).ShowFrame(EFF_NIGHTCITY, current_color, &it);
 
       - addressable_lambda:
           name: Rain
@@ -1204,7 +1204,7 @@ light:
             {
               ESP_LOGD("effect", "Rain");
             }
-            matrix_lamp.ShowFrame(EFF_RAIN, current_color, &it);
+            id(matrix).ShowFrame(EFF_RAIN, current_color, &it);
 
       - addressable_lambda:
           name: Mirage
@@ -1214,7 +1214,7 @@ light:
             {
               ESP_LOGD("effect", "Mirage");
             }
-            matrix_lamp.ShowFrame(EFF_MIRAGE, current_color, &it);
+            id(matrix).ShowFrame(EFF_MIRAGE, current_color, &it);
 
       - addressable_lambda:
           name: Hand Fan
@@ -1224,7 +1224,7 @@ light:
             {
               ESP_LOGD("effect", "Hand Fan");
             }
-            matrix_lamp.ShowFrame(EFF_HANDFAN, current_color, &it);
+            id(matrix).ShowFrame(EFF_HANDFAN, current_color, &it);
 
       - addressable_lambda:
           name: Light Filter
@@ -1234,7 +1234,7 @@ light:
             {
               ESP_LOGD("effect", "Light Filter");
             }
-            matrix_lamp.ShowFrame(EFF_LIGHTFILTER, current_color, &it);
+            id(matrix).ShowFrame(EFF_LIGHTFILTER, current_color, &it);
 
       - addressable_lambda:
           name: A Taste of Honey
@@ -1244,7 +1244,7 @@ light:
             {
               ESP_LOGD("effect", "A Taste of Honey");
             }
-            matrix_lamp.ShowFrame(EFF_TASTEHONEY, current_color, &it);
+            id(matrix).ShowFrame(EFF_TASTEHONEY, current_color, &it);
 
       - addressable_lambda:
           name: Spindle
@@ -1254,7 +1254,7 @@ light:
             {
               ESP_LOGD("effect", "Spindle");
             }
-            matrix_lamp.ShowFrame(EFF_SPINDLE, current_color, &it);
+            id(matrix).ShowFrame(EFF_SPINDLE, current_color, &it);
 
       - addressable_lambda:
           name: Popuri
@@ -1264,7 +1264,7 @@ light:
             {
               ESP_LOGD("effect", "Popuri");
             }
-            matrix_lamp.ShowFrame(EFF_POPURI, current_color, &it);
+            id(matrix).ShowFrame(EFF_POPURI, current_color, &it);
 
       - addressable_lambda:
           name: Rainbow Spot
@@ -1274,7 +1274,7 @@ light:
             {
               ESP_LOGD("effect", "Rainbow Spot");
             }
-            matrix_lamp.ShowFrame(EFF_RAINBOW_SPOT, current_color, &it);
+            id(matrix).ShowFrame(EFF_RAINBOW_SPOT, current_color, &it);
 
       - addressable_lambda:
           name: Scanner
@@ -1286,7 +1286,7 @@ light:
 
               if (current_color.red == 255 && current_color.green == 255 && current_color.blue == 255)
               {
-                modes[EFF_SCANNER].Scale = 0;
+                id(matrix).SetScaleForEffect(EFF_SCANNER, 0);
               }
               else
               {
@@ -1294,10 +1294,10 @@ light:
                 float saturation, value;
                 rgb_to_hsv(current_color.red / 255, current_color.green / 255, current_color.blue / 255, hue, saturation, value);
 
-                modes[EFF_SCANNER].Scale = remap(hue, 0, 360, 1, 100);
+                id(matrix).SetScaleForEffect(EFF_SCANNER, remap(hue, 0, 360, 1, 100));
               }
             }
-            matrix_lamp.ShowFrame(EFF_SCANNER, current_color, &it);
+            id(matrix).ShowFrame(EFF_SCANNER, current_color, &it);
 
       - addressable_lambda:
           name: White Color
@@ -1307,7 +1307,7 @@ light:
             {
               ESP_LOGD("effect", "White Color");
             }
-            matrix_lamp.ShowFrame(EFF_WHITE_COLOR, current_color, &it);
+            id(matrix).ShowFrame(EFF_WHITE_COLOR, current_color, &it);
 
       - addressable_lambda:
           name: Colors
@@ -1317,7 +1317,7 @@ light:
             {
               ESP_LOGD("effect", "Colors");
             }
-            matrix_lamp.ShowFrame(EFF_COLORS, current_color, &it);
+            id(matrix).ShowFrame(EFF_COLORS, current_color, &it);
 
       - addressable_lambda:
           name: Ukraine
@@ -1327,7 +1327,7 @@ light:
             {
               ESP_LOGD("effect", "Ukraine");
             }
-            matrix_lamp.ShowFrame(EFF_UKRAINE, current_color, &it);
+            id(matrix).ShowFrame(EFF_UKRAINE, current_color, &it);
 
       - addressable_lambda:
           name: Bluez
@@ -1485,4 +1485,4 @@ light:
 
     on_state:
       - lambda: |-
-          matrix_lamp.ResetCurrentEffect();
+          id(matrix).ResetCurrentEffect();

@@ -7,6 +7,9 @@
 #include "constants.h"
 #include "utility.h"
 
+namespace esphome {
+namespace matrix_lamp {
+
 // ************* НАСТРОЙКИ *************
 /*
 // "масштаб" эффектов. Чем меньше, тем крупнее!
@@ -34,19 +37,19 @@ static uint16_t z;
 // This is the array that we keep our computed noise values in
 #define MAX_DIMENSION (max(WIDTH, HEIGHT))
 #if (WIDTH > HEIGHT)
-uint8_t noise[WIDTH][WIDTH];
+static uint8_t noise[WIDTH][WIDTH];
 #else
-uint8_t noise[HEIGHT][HEIGHT];
+static uint8_t noise[HEIGHT][HEIGHT];
 #endif
 
 //CRGBPalette16 currentPalette(PartyColors_p);
-uint8_t colorLoop = 1;
-uint8_t ihue = 0;
+static uint8_t colorLoop = 1;
+static uint8_t ihue = 0;
 
-void fillNoiseLED();
-void fillnoise8();
+static void fillNoiseLED();
+static void fillnoise8();
 
-void madnessNoiseRoutine()
+static void madnessNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -73,7 +76,7 @@ void madnessNoiseRoutine()
   ihue += 1;
 }
 
-void rainbowNoiseRoutine()
+static void rainbowNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -93,7 +96,7 @@ void rainbowNoiseRoutine()
   fillNoiseLED();
 }
 
-void rainbowStripeNoiseRoutine()
+static void rainbowStripeNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -112,7 +115,7 @@ void rainbowStripeNoiseRoutine()
   fillNoiseLED();
 }
 
-void zebraNoiseRoutine()
+static void zebraNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -137,7 +140,7 @@ void zebraNoiseRoutine()
   fillNoiseLED();
 }
 
-void forestNoiseRoutine()
+static void forestNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -156,7 +159,7 @@ void forestNoiseRoutine()
   fillNoiseLED();
 }
 
-void oceanNoiseRoutine()
+static void oceanNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -176,7 +179,7 @@ void oceanNoiseRoutine()
   fillNoiseLED();
 }
 
-void plasmaNoiseRoutine()
+static void plasmaNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -196,7 +199,7 @@ void plasmaNoiseRoutine()
   fillNoiseLED();
 }
 
-void cloudsNoiseRoutine()
+static void cloudsNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -215,7 +218,7 @@ void cloudsNoiseRoutine()
   fillNoiseLED();
 }
 
-void lavaNoiseRoutine()
+static void lavaNoiseRoutine()
 {
   if (loadingFlag)
   {
@@ -235,91 +238,13 @@ void lavaNoiseRoutine()
   fillNoiseLED();
 }
 
-// ************* СЛУЖЕБНЫЕ *************
-void fillNoiseLED()
-{
-  uint8_t dataSmoothing = 0;
-  if (speed < 50)
-  {
-    dataSmoothing = 200 - (speed * 4);
-  }
-  for (uint8_t i = 0; i < MAX_DIMENSION; i++)
-  {
-    int32_t ioffset = scale * i;
-    for (uint8_t j = 0; j < MAX_DIMENSION; j++)
-    {
-      int32_t joffset = scale * j;
-
-      uint8_t data = inoise8(x + ioffset, y + joffset, z);
-
-      data = qsub8(data, 16);
-      data = qadd8(data, scale8(data, 39));
-
-      if (dataSmoothing)
-      {
-        uint8_t olddata = noise[i][j];
-        uint8_t newdata = scale8( olddata, dataSmoothing) + scale8( data, 256 - dataSmoothing);
-        data = newdata;
-      }
-
-      noise[i][j] = data;
-    }
-  }
-  z += speed;
-
-  // apply slow drift to X and Y, just for visual variation.
-  x += speed / 8;
-  y -= speed / 16;
-
-  for (uint8_t i = 0; i < WIDTH; i++)
-  {
-    for (uint8_t j = 0; j < HEIGHT; j++)
-    {
-      uint8_t index = noise[j][i];
-      uint8_t bri =   noise[i][j];
-      // if this palette is a 'loop', add a slowly-changing base value
-      if ( colorLoop)
-      {
-        index += ihue;
-      }
-      // brighten up, as the color palette itself often contains the
-      // light/dark dynamic range desired
-      if ( bri > 127 )
-      {
-        bri = 255;
-      }
-      else
-      {
-        bri = dim8_raw( bri * 2);
-      }
-      CRGB color = ColorFromPalette( currentPalette, index, bri);      
-      drawPixelXY(i, j, color);                             //leds[XY(i, j)] = color;
-    }
-  }
-  ihue += 1;
-}
-
-void fillnoise8()
-{
-  for (uint8_t i = 0; i < MAX_DIMENSION; i++)
-  {
-    int32_t ioffset = scale * i;
-    for (uint8_t j = 0; j < MAX_DIMENSION; j++)
-    {
-      int32_t joffset = scale * j;
-      noise[i][j] = inoise8(x + ioffset, y + joffset, z);
-    }
-  }
-  z += speed;
-}
-
 // ========== Taste of Honey ============
 //         SRS code by © Stepko
 //        Adaptation © SlingMaster
 //               Смак Меду
 // --------------------------------------
 
-void TasteHoney() {
+static void TasteHoney() {
   byte index;
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
@@ -375,7 +300,7 @@ void TasteHoney() {
 //             © SlingMaster
 //                Попурі
 // =====================================
-void Popuri() {
+static void Popuri() {
   const byte PADDING = HEIGHT * 0.25;
   const byte step1 = WIDTH;
   const double freq = 3000;
@@ -496,3 +421,85 @@ void Popuri() {
   // -----------------
   step++;
 }
+
+// ************* СЛУЖЕБНЫЕ *************
+static void fillNoiseLED()
+{
+  uint8_t dataSmoothing = 0;
+  if (speed < 50)
+  {
+    dataSmoothing = 200 - (speed * 4);
+  }
+  for (uint8_t i = 0; i < MAX_DIMENSION; i++)
+  {
+    int32_t ioffset = scale * i;
+    for (uint8_t j = 0; j < MAX_DIMENSION; j++)
+    {
+      int32_t joffset = scale * j;
+
+      uint8_t data = inoise8(x + ioffset, y + joffset, z);
+
+      data = qsub8(data, 16);
+      data = qadd8(data, scale8(data, 39));
+
+      if (dataSmoothing)
+      {
+        uint8_t olddata = noise[i][j];
+        uint8_t newdata = scale8( olddata, dataSmoothing) + scale8( data, 256 - dataSmoothing);
+        data = newdata;
+      }
+
+      noise[i][j] = data;
+    }
+  }
+  z += speed;
+
+  // apply slow drift to X and Y, just for visual variation.
+  x += speed / 8;
+  y -= speed / 16;
+
+  for (uint8_t i = 0; i < WIDTH; i++)
+  {
+    for (uint8_t j = 0; j < HEIGHT; j++)
+    {
+      uint8_t index = noise[j][i];
+      uint8_t bri =   noise[i][j];
+      // if this palette is a 'loop', add a slowly-changing base value
+      if ( colorLoop)
+      {
+        index += ihue;
+      }
+      // brighten up, as the color palette itself often contains the
+      // light/dark dynamic range desired
+      if ( bri > 127 )
+      {
+        bri = 255;
+      }
+      else
+      {
+        bri = dim8_raw( bri * 2);
+      }
+      CRGB color = ColorFromPalette( currentPalette, index, bri);      
+      drawPixelXY(i, j, color);                             //leds[XY(i, j)] = color;
+    }
+  }
+  ihue += 1;
+}
+
+static void fillnoise8()
+{
+  for (uint8_t i = 0; i < MAX_DIMENSION; i++)
+  {
+    int32_t ioffset = scale * i;
+    for (uint8_t j = 0; j < MAX_DIMENSION; j++)
+    {
+      int32_t joffset = scale * j;
+      noise[i][j] = inoise8(x + ioffset, y + joffset, z);
+    }
+  }
+  z += speed;
+}
+
+}  // namespace matrix_lamp
+}  // namespace esphome
+

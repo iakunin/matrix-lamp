@@ -16,10 +16,6 @@ api:
 # Over The Air Update
 ota:
   - platform: esphome
-    on_begin:
-      then:
-        - lambda: |-
-            matrix_lamp.~MatrixLamp();
 
 logger:
   level: INFO

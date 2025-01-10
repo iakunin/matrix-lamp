@@ -19,10 +19,6 @@ update:
 
 ota:
   - platform: http_request
-    on_begin:
-      then:
-        - lambda: |-
-            matrix_lamp.~MatrixLamp();
 
 http_request:
   useragent: "esphome/${device} (${project_version})"
