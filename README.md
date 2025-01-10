@@ -1,5 +1,5 @@
 # ESPHome Matrix Lamp
-[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Components&color=blue&logo=esphome)](https://esphome.io/)
+[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Components&color=blue&logo=esphome)](https://github.com/andrewjswan/esphome-components/)
 [![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Config&color=blue&logo=esphome)](https://esphome.io/)
 [![matrix-lamp_badge](https://img.shields.io/badge/Matrix-Lamp-orange.svg)](https://github.com/andrewjswan/matrix-lamp/)
 [![esp32_arduino](https://img.shields.io/badge/ESP32-Arduino-darkcyan.svg)](https://esphome.io/)

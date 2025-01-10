@@ -24,6 +24,7 @@ external_components:
       url: https://github.com/andrewjswan/matrix-lamp
       ref: main
     components: [matrix_lamp]
+    refresh: 60s
 
 matrix_lamp:
   id: matrix
