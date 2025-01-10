@@ -16,7 +16,7 @@ DEPENDENCIES = ["light"]
 AUTO_LOAD = ["matrix_lamp"]
 
 logging.info("")
-logging.info("Load Matrix Lamp component https://github.com/andrewjswan/esphome-components")
+logging.info("Load Matrix Lamp component https://github.com/andrewjswan/matrix-lamp")
 logging.info("")
 
 matrix_lamp_ns = cg.esphome_ns.namespace("matrix_lamp")

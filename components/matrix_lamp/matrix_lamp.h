@@ -7,7 +7,7 @@ namespace esphome {
 namespace matrix_lamp {
 
 static const char *const TAG = "matrix_lamp";
-static const char *const MATRIX_LAMP_VERSION = "2025.1.1";
+static const char *const MATRIX_LAMP_VERSION = "2025.1.13";
 
 class MatrixLamp : public Component {
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)

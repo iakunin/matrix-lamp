@@ -20,8 +20,9 @@ esphome:
 
 external_components:
   - source:
-      type: local
-      path: components
+      type: git
+      url: https://github.com/andrewjswan/matrix-lamp
+      ref: main
     components: [matrix_lamp]
 
 matrix_lamp:
