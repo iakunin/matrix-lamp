@@ -6,17 +6,6 @@ substitutions:
 esphome:
   libraries:
     - fastled/FastLED @ 3.6.0
-  includes:
-    - includes/matrix_lamp/light.h
-    - includes/matrix_lamp/common.h
-    - includes/matrix_lamp/constants.h
-    - includes/matrix_lamp/effect_data.h
-    - includes/matrix_lamp/effect_palette.h
-    - includes/matrix_lamp/effects.h
-    - includes/matrix_lamp/noise_effects.h
-    - includes/matrix_lamp/effect_ticker.h
-    - includes/matrix_lamp/utility.h
-    - includes/matrix_lamp/matrix_lamp.h
   on_boot:
     priority: -100
     then:
@@ -28,6 +17,20 @@ esphome:
           args: ['id(neopixel_led)->get_effects().size()']
           level: INFO
           tag: start
+
+external_components:
+  - source:
+      type: local
+      path: components
+    components: [matrix_lamp]
+
+matrix_lamp:
+  id: matrix
+  width: 16
+  height: 16
+  random: true
+  scale_id: matrix_scale
+  speed_id: matrix_speed
 
 number:
   # Matrix Orientation
@@ -47,7 +50,7 @@ number:
     on_value:
       then:
         - lambda: |-
-            matrix_lamp.SetMatrixOrientation(x);
+            id(matrix).SetMatrixOrientation(x);
 
   # Matrix Settings
   - platform: template
@@ -57,7 +60,7 @@ number:
     max_value: 255
     step: 1
     optimistic: true
-    id: fastled_speed
+    id: matrix_speed
     initial_value: 128
     mode: slider
     entity_category: config
@@ -69,7 +72,7 @@ number:
     max_value: 100
     step: 1
     optimistic: true
-    id: fastled_variant
+    id: matrix_scale
     initial_value: 50
     mode: slider
     entity_category: config

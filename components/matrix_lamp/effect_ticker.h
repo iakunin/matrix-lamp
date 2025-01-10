@@ -12,9 +12,12 @@
 // 5. здесь в файле effectTicker.ino - подключается процедура вызова эффекта на соответствующий ей "EFF_......"
 //    Можно подключать один и тот же эффект под разными номерами. Например: EFF_FIRE (24U), EFF_FIRE2 (25U), EFF_FIRE3 (26U). Будет три огня для разных цветов.
 
-uint32_t effTimer;
+namespace esphome {
+namespace matrix_lamp {
 
-void effectsTick()
+static uint32_t effTimer;
+
+static void effectsTick()
 {
   switch (currentMode)
   {
@@ -151,3 +154,6 @@ void effectsTick()
     case EFF_UKRAINE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Ukraine();                         }  break;  // (130U) Україна
   }
 }
+
+}  // namespace matrix_lamp
+}  // namespace esphome

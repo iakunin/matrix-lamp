@@ -7,9 +7,12 @@
 #include "FastLED.h"
 #include "constants.h"
 
+namespace esphome {
+namespace matrix_lamp {
+
 // --- МАТРИЦА ------------------------------------------------------------------------------------------------------------------------------------------
-uint8_t ORIENTATION = 5;                                    // Ориентация матрицы
-uint8_t MATRIX_TYPE = 0;                                    // Тип матрицы: 0 - зигзаг, 1 - параллельная
+static uint8_t ORIENTATION = 5;                                    // Ориентация матрицы
+static uint8_t MATRIX_TYPE = 0;                                    // Тип матрицы: 0 - зигзаг, 1 - параллельная
 
 /*
   ORIENTATION 0 :: CONNECTION_ANGLE == 0 :: STRIP_DIRECTION == 0
@@ -29,10 +32,10 @@ uint8_t MATRIX_TYPE = 0;                                    // Тип матри
 
 
 // --- Common -------------------------------------------------------------------------------------------------------------------------------------------
-uint8_t FPSdelay = DYNAMIC;
+static uint8_t FPSdelay = DYNAMIC;
 
-uint8_t currentMode = MODE_AMOUNT;
-bool loadingFlag = true;
+static uint8_t currentMode = MODE_AMOUNT;
+static bool loadingFlag = true;
 
 struct ModeType
 {
@@ -41,15 +44,18 @@ struct ModeType
   uint8_t Scale = 40U;
 };
 
-ModeType modes[MODE_AMOUNT];
+static ModeType modes[MODE_AMOUNT];
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-uint8_t selectedSettings = 0U;
+static uint8_t selectedSettings = 0U;
 #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
 
 // --- Effects ------------------------------------------------------------------------------------------------------------------------------------------
-uint16_t speed = 20; // speed is set dynamically once we've started up
-uint16_t scale = 30; // scale is set dynamically once we've started up
+static uint16_t speed = 20; // speed is set dynamically once we've started up
+static uint16_t scale = 30; // scale is set dynamically once we've started up
 
-CRGBPalette16 currentPalette(PartyColors_p);
+static CRGBPalette16 currentPalette(PartyColors_p);
+
+}  // namespace matrix_lamp
+}  // namespace esphome

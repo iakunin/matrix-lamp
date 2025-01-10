@@ -5,13 +5,13 @@ switch:
     icon: mdi:shuffle
     id: random_mode
     lambda: |-
-      return matrix_lamp.GetRandomSettings();
+      return id(matrix).GetRandomSettings();
     turn_on_action:
       - lambda: |-
-          matrix_lamp.SetRandomSettings(true);
+          id(matrix).SetRandomSettings(true);
     turn_off_action:
       - lambda: |-
-          matrix_lamp.SetRandomSettings(false);
+          id(matrix).SetRandomSettings(false);
 
 interval:
   - interval: 15min
@@ -43,7 +43,6 @@ interval:
                     effects[rand]->get_name() == "Strobe" ||
                     effects[rand]->get_name() == "Strobe Police" ||
                     effects[rand]->get_name() == "White Color" ||
-                    effects[rand]->get_name() == "Ukraine" ||
                     effects[rand]->get_name() == "Sunrise" ||
                     effects[rand]->get_name() == "Clock Full" ||
                     effects[rand]->get_name() == "WLED / DDP" ||
