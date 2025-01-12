@@ -21,7 +21,7 @@ static uint16_t XY(uint8_t x, uint8_t y)
   uint8_t THIS_Y;
   uint8_t _WIDTH = WIDTH;
  
-  switch (esphome::matrix_lamp::ORIENTATION)
+  switch (ORIENTATION)
   {
     case 0: 
       THIS_X = x;
@@ -65,7 +65,7 @@ static uint16_t XY(uint8_t x, uint8_t y)
       break;
    }
  
-   if (!(THIS_Y & 0x01) || esphome::matrix_lamp::MATRIX_TYPE)               // Even rows run forwards
+   if (!(THIS_Y & 0x01) || MATRIX_TYPE)               // Even rows run forwards
      return (THIS_Y * _WIDTH + THIS_X);
    else                                                  
      return (THIS_Y * _WIDTH + _WIDTH - THIS_X - 1);  // Odd rows run backwards
@@ -471,7 +471,7 @@ static void gradientDownTop( uint8_t bottom, CHSV bottom_color, uint8_t top, CHS
   //  BACKWARD_HUES: hue always goes counter-clockwise
   //  SHORTEST_HUES: hue goes whichever way is shortest
   //  LONGEST_HUES:  hue goes whichever way is longest
-  if (esphome::matrix_lamp::ORIENTATION < 3 || esphome::matrix_lamp::ORIENTATION == 7)
+  if (ORIENTATION < 3 || ORIENTATION == 7)
   {
     // STRIP_DIRECTION to UP ========
     fill_gradient(leds, top * WIDTH, top_color, bottom * WIDTH, bottom_color, SHORTEST_HUES);

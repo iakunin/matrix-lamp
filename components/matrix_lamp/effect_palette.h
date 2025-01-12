@@ -80,6 +80,7 @@ static const TProgmemRGBPalette16 *palette_arr[] = {
     &RainbowStripeColors_p};
 
 static const TProgmemRGBPalette16 *curPalette = palette_arr[0];
+static CRGBPalette16 currentPalette(PartyColors_p);
 
 static void setCurrentPalette()
 {

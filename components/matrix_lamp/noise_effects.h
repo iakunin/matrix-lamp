@@ -31,9 +31,6 @@ static uint16_t x;
 static uint16_t y;
 static uint16_t z;
 
-//uint16_t speed = 20;                                        // speed is set dynamically once we've started up
-//uint16_t scale = 30;                                        // scale is set dynamically once we've started up
-
 // This is the array that we keep our computed noise values in
 #define MAX_DIMENSION (max(WIDTH, HEIGHT))
 #if (WIDTH > HEIGHT)
@@ -129,9 +126,9 @@ static void zebraNoiseRoutine()
     // 'black out' all 16 palette entries...
     fill_solid(currentPalette, 16, CRGB::Black);
     // and set every fourth one to white.
-    currentPalette[0] = CRGB::White;
-    currentPalette[4] = CRGB::White;
-    currentPalette[8] = CRGB::White;
+    currentPalette[ 0] = CRGB::White;
+    currentPalette[ 4] = CRGB::White;
+    currentPalette[ 8] = CRGB::White;
     currentPalette[12] = CRGB::White;
     scale = modes[currentMode].Scale;
     speed = modes[currentMode].Speed;
@@ -463,7 +460,7 @@ static void fillNoiseLED()
     for (uint8_t j = 0; j < HEIGHT; j++)
     {
       uint8_t index = noise[j][i];
-      uint8_t bri =   noise[i][j];
+      uint8_t bri   = noise[i][j];
       // if this palette is a 'loop', add a slowly-changing base value
       if ( colorLoop)
       {
@@ -479,7 +476,7 @@ static void fillNoiseLED()
       {
         bri = dim8_raw( bri * 2);
       }
-      CRGB color = ColorFromPalette( currentPalette, index, bri);      
+      CRGB color = ColorFromPalette(currentPalette, index, bri);      
       drawPixelXY(i, j, color);                             //leds[XY(i, j)] = color;
     }
   }

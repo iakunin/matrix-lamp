@@ -42,6 +42,7 @@ void MatrixLamp::SetScaleForEffect(uint8_t mode, uint8_t scale)
   modes[mode].Scale = scale;
 }
 
+#ifndef ORIENTATION
 bool MatrixLamp::SetMatrixOrientation(uint8_t orientation)
 {
   if (orientation >= 1 && orientation <= 8)
@@ -51,7 +52,9 @@ bool MatrixLamp::SetMatrixOrientation(uint8_t orientation)
   }
   return false;
 }
+#endif // #ifndef ORIENTATION
 
+#ifndef MATRIX_TYPE
 bool MatrixLamp::SetMatrixType(uint8_t type)
 {
   if (type >= 1 && type <= 2)
@@ -61,6 +64,7 @@ bool MatrixLamp::SetMatrixType(uint8_t type)
   }
   return false;
 }
+#endif // #ifndef MATRIX_TYPE
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 bool MatrixLamp::GetRandomSettings()
