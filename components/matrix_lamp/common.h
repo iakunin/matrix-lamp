@@ -11,8 +11,13 @@ namespace esphome {
 namespace matrix_lamp {
 
 // --- МАТРИЦА ------------------------------------------------------------------------------------------------------------------------------------------
+
+#ifndef ORIENTATION
 static uint8_t ORIENTATION = 5;                                    // Ориентация матрицы
+#endif
+#ifndef MATRIX_TYPE
 static uint8_t MATRIX_TYPE = 0;                                    // Тип матрицы: 0 - зигзаг, 1 - параллельная
+#endif
 
 /*
   ORIENTATION 0 :: CONNECTION_ANGLE == 0 :: STRIP_DIRECTION == 0
@@ -50,12 +55,9 @@ static ModeType modes[MODE_AMOUNT];
 static uint8_t selectedSettings = 0U;
 #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-
 // --- Effects ------------------------------------------------------------------------------------------------------------------------------------------
 static uint16_t speed = 20; // speed is set dynamically once we've started up
 static uint16_t scale = 30; // scale is set dynamically once we've started up
-
-static CRGBPalette16 currentPalette(PartyColors_p);
 
 }  // namespace matrix_lamp
 }  // namespace esphome

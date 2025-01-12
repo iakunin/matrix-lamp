@@ -27,11 +27,15 @@ class MatrixLamp : public Component {
     // Reset the current effect, for example when changing the lamp state. 
     void ResetCurrentEffect();
 
+#ifndef ORIENTATION
     // Set Matrix Orientation [1..8] instead of real matrix ORIENTATION [0..7]
     bool SetMatrixOrientation(uint8_t orientation);
+#endif // #ifndef ORIENTATION
 
+#ifndef MATRIX_TYPE
     // Set Matrix Type [1..2] instead of real matrix MATRIX_TYPE [0..1]
     bool SetMatrixType(uint8_t type);
+#endif // #ifndef MATRIX_TYPE
 
     // Set scale for effect
     void SetScaleForEffect(uint8_t mode, uint8_t scale);

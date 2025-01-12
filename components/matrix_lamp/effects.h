@@ -1733,7 +1733,7 @@ static void spiroRoutine() {
         uint8_t y2 = mapcos8(spirotheta2 + i * spirooffset, y - spiroradiusy, y + spiroradiusy);
 
 
-       //CRGB color = ColorFromPalette( PartyColors_p, (hue + i * spirooffset), 128U); // вообще-то палитра должна постоянно меняться, но до адаптации этого руки уже не дошли
+       //CRGB color = ColorFromPalette(PartyColors_p, (hue + i * spirooffset), 128U); // вообще-то палитра должна постоянно меняться, но до адаптации этого руки уже не дошли
        //CRGB color = ColorFromPalette(*curPalette, hue + i * spirooffset, 128U); // вот так уже прикручена к бегунку Масштаба. за
        //leds[XY(x2, y2)] += color;
        if (x2<WIDTH && y2<HEIGHT) // добавил проверки. не знаю, почему эффект подвисает без них
@@ -5699,12 +5699,12 @@ static void pacifica_one_layer(CRGB *leds, const TProgmemRGBPalette16& p, uint16
   uint16_t wavescale_half = (wavescale / 2) + 20;
   for( uint16_t i = 0; i < NUM_LEDS; i++) {
     waveangle += 250;
-    uint16_t s16 = sin16( waveangle ) + 32768;
-    uint16_t cs = scale16( s16 , wavescale_half ) + wavescale_half;
+    uint16_t s16 = sin16(waveangle) + 32768;
+    uint16_t cs  = scale16(s16 , wavescale_half) + wavescale_half;
     ci += cs;
-    uint16_t sindex16 = sin16( ci) + 32768;
-    uint8_t sindex8 = scale16( sindex16, 240);
-    CRGB c = ColorFromPalette( p, sindex8, bri, LINEARBLEND);
+    uint16_t sindex16 = sin16(ci) + 32768;
+    uint8_t  sindex8  = scale16(sindex16, 240);
+    CRGB c = ColorFromPalette(p, sindex8, bri, LINEARBLEND);
     leds[i] += c;
   }
 }
@@ -7091,7 +7091,7 @@ static void DropInWater() {
       rad[i] = random(-1, MaxRad);
     }
   }
-  fill_solid( currentPalette, 16, CHSV(hue, Sat, 230));
+  fill_solid(currentPalette, 16, CHSV(hue, Sat, 230));
   currentPalette[10] = CHSV(hue, Sat - 60, 255);
   currentPalette[9] = CHSV(hue, 255 - Sat, 210);
   currentPalette[8] = CHSV(hue, 255 - Sat, 210);
@@ -8982,7 +8982,7 @@ static void WebTools() {
   static int posY = 0;
   static int nextX = -STEP * 2;
   static bool stop_moving = true;
-  uint8_t speed =modes[currentMode].Speed > 65U ? modes[currentMode].Speed : 65U;   //constrain (modes[currentMode].Speed, 65, 255);
+  uint8_t speed = modes[currentMode].Speed > 65U ? modes[currentMode].Speed : 65U;   //constrain (modes[currentMode].Speed, 65, 255);
   if (loadingFlag) {
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings) {

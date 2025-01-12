@@ -11,7 +11,7 @@ _LOGGER = logging.getLogger(__name__)
 
 CODEOWNERS = ["@andrewjswan"]
 
-DEPENDENCIES = ["light"]
+DEPENDENCIES = ["light", "number"]
 
 AUTO_LOAD = ["matrix_lamp"]
 
@@ -24,6 +24,8 @@ MATRIX_LAMP_ = matrix_lamp_ns.class_("MatrixLamp", cg.Component)
 
 CONF_SCALE_ID = "scale_id"
 CONF_SPEED_ID = "speed_id"
+CONF_ORIENTATION = "matrix_orientation"
+CONF_MATRIX_TYPE = "matrix_type"
 
 MATRIX_LAMP_SCHEMA = cv.Schema(
     {
@@ -33,6 +35,8 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
         cv.Optional(CONF_WIDTH, default="16"): cv.templatable(cv.positive_int),
         cv.Optional(CONF_HEIGHT, default="16"): cv.templatable(cv.positive_int),
         cv.Optional(CONF_RANDOM, default=False): cv.templatable(cv.boolean),
+        cv.Optional(CONF_ORIENTATION): cv.templatable(cv.positive_int),
+        cv.Optional(CONF_MATRIX_TYPE): cv.templatable(cv.positive_int),
     },
 )
 
@@ -52,5 +56,9 @@ async def to_code(config) -> None:  # noqa: ANN001
     cg.add_define("HEIGHT", config[CONF_HEIGHT])
     if config[CONF_RANDOM]:
         cg.add_define("RANDOM_SETTINGS_IN_CYCLE_MODE")
+    if CONF_ORIENTATION in config:
+        cg.add_define("ORIENTATION", config[CONF_ORIENTATION])
+    if CONF_MATRIX_TYPE in config:
+        cg.add_define("MATRIX_TYPE", config[CONF_MATRIX_TYPE])
   
     await cg.register_component(var, config)
