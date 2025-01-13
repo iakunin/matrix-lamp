@@ -47,6 +47,8 @@ async def to_code(config) -> None:  # noqa: ANN001
     """Code generation entry point."""
     var = cg.new_Pvariable(config[CONF_ID])
 
+    cg.add_library("fastled/FastLED", "3.6.0")
+
     scale_number = await cg.get_variable(config[CONF_SCALE_ID])
     cg.add(var.set_scale(scale_number))
     speed_number = await cg.get_variable(config[CONF_SPEED_ID])
