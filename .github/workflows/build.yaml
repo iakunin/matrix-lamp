@@ -56,11 +56,16 @@ jobs:
           fi
           echo version=$version >> $GITHUB_OUTPUT
 
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yaml
+
   build:
     name: Build ${{ matrix.config-file }}
     needs:
       - configuration
       - prepare
+      - test
     runs-on: ubuntu-latest
     strategy:
       matrix:
