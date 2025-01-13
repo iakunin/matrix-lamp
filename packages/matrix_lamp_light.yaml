@@ -1283,19 +1283,7 @@ light:
             if (initial_run)
             {
               ESP_LOGD("effect", "Scanner");
-
-              if (current_color.red == 255 && current_color.green == 255 && current_color.blue == 255)
-              {
-                id(matrix).SetScaleForEffect(EFF_SCANNER, 0);
-              }
-              else
-              {
-                int hue;
-                float saturation, value;
-                rgb_to_hsv(current_color.red / 255, current_color.green / 255, current_color.blue / 255, hue, saturation, value);
-
-                id(matrix).SetScaleForEffect(EFF_SCANNER, remap(hue, 0, 360, 1, 100));
-              }
+              id(matrix).SetScaleFromColorForEffect(EFF_SCANNER, current_color);
             }
             id(matrix).ShowFrame(EFF_SCANNER, current_color, &it);
 

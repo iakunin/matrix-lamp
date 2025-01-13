@@ -21,7 +21,14 @@ void MatrixLamp::dump_config() {
   ESP_LOGCONFIG(TAG, "MatrixLamp version: %s", MATRIX_LAMP_VERSION);
   ESP_LOGCONFIG(TAG, "             Width: %s", WIDTH);
   ESP_LOGCONFIG(TAG, "            Height: %s", HEIGHT);
+  #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   ESP_LOGCONFIG(TAG, "Random mode enable: %s", YESNO(RANDOM_SETTINGS_IN_CYCLE_MODE));
+  #else
+  ESP_LOGCONFIG(TAG, "Random mode enable: NO");
+  #endif
+  ESP_LOGCONFIG(TAG, "       Orientation: %s", ORIENTATION);
+  ESP_LOGCONFIG(TAG, "       Matrix Type: %s", MATRIX_TYPE);
+  ESP_LOGCONFIG(TAG, "   Number of modes: %s", MODE_AMOUNT);
 }  // dump_config()
 
 void MatrixLamp::set_scale(esphome::template_::TemplateNumber *scale) {
@@ -40,6 +47,27 @@ void MatrixLamp::ResetCurrentEffect()
 void MatrixLamp::SetScaleForEffect(uint8_t mode, uint8_t scale)
 {
   modes[mode].Scale = scale;
+}
+
+void MatrixLamp::SetSpeedForEffect(uint8_t mode, uint8_t speed)
+{
+  modes[mode].Speed = speed;
+}
+
+void MatrixLamp::SetScaleFromColorForEffect(uint8_t mode, Color color)
+{
+  if (color.red == 255 && color.green == 255 && color.blue == 255)
+  {
+    this->SetScaleForEffect(EFF_SCANNER, 0);
+  }
+  else
+  {
+    int hue;
+    float saturation, value;
+    rgb_to_hsv(color.red / 255, color.green / 255, color.blue / 255, hue, saturation, value);
+
+    this->SetScaleForEffect(EFF_SCANNER, remap(hue, 0, 360, 1, 100));
+  }
 }
 
 #ifndef ORIENTATION

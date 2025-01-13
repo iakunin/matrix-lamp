@@ -39,6 +39,10 @@ class MatrixLamp : public Component {
 
     // Set scale for effect
     void SetScaleForEffect(uint8_t mode, uint8_t scale);
+    // Set speed for effect
+    void SetSpeedForEffect(uint8_t mode, uint8_t speed);
+    // Set scale from Color for effect
+    void SetScaleFromColorForEffect(uint8_t mode, Color color);
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     bool GetRandomSettings();
