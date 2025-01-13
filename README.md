@@ -31,7 +31,7 @@ substitutions:
   color_correct_bright: "70%"
 ```
 
-### Component connection
+### Matrix Lamp Component
 ```Yaml
 external_components:
   - source:
