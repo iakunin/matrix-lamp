@@ -31,6 +31,26 @@ substitutions:
   color_correct_bright: "70%"
 ```
 
+### Component connection
+```Yaml
+external_components:
+  - source:
+      type: git
+      url: https://github.com/andrewjswan/matrix-lamp
+      ref: main
+    components: [matrix_lamp]
+
+matrix_lamp:
+  id: matrix
+  width: 16               # Matrix width
+  height: 16              # Matrix height
+  random: true            # The effects will be turned on at random (but successful) Speed ​nd Scale settings (Optional)
+  scale_id: matrix_scale  # Template number identifier for scale control
+  speed_id: matrix_speed  # Template number identifier for speed control
+  matrix_orientation: 5   # Matrix orientation [0..7] (Optional) If not specified, it will be possible to change it on the fly using the SetMatrixOrientation function
+  matrix_type: 0          # Matrix type [0..1] (Optional) If not specified, it will be possible to change it on the fly using the SetMatrixType function
+```
+
 <br />
 
 > [!TIP]
