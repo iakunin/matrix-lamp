@@ -22,7 +22,7 @@ void MatrixLamp::dump_config() {
   ESP_LOGCONFIG(TAG, "             Width: %s", WIDTH);
   ESP_LOGCONFIG(TAG, "            Height: %s", HEIGHT);
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-  ESP_LOGCONFIG(TAG, "Random mode enable: %s", YESNO(RANDOM_SETTINGS_IN_CYCLE_MODE));
+  ESP_LOGCONFIG(TAG, "Random mode enable: YES");
   #else
   ESP_LOGCONFIG(TAG, "Random mode enable: NO");
   #endif
@@ -68,6 +68,11 @@ void MatrixLamp::SetScaleFromColorForEffect(uint8_t mode, Color color)
 
     this->SetScaleForEffect(EFF_SCANNER, remap(hue, 0, 360, 1, 100));
   }
+}
+
+void MatrixLamp::SetCustomEffect(uint8_t mode)
+{
+  custom_eff = mode;
 }
 
 #ifndef ORIENTATION

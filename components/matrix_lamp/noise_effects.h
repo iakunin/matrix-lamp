@@ -46,6 +46,7 @@ static uint8_t ihue = 0;
 static void fillNoiseLED();
 static void fillnoise8();
 
+#ifdef DEF_MADNESS
 static void madnessNoiseRoutine()
 {
   if (loadingFlag)
@@ -72,7 +73,9 @@ static void madnessNoiseRoutine()
   }
   ihue += 1;
 }
+#endif
 
+#ifdef DEF_RAINBOW
 static void rainbowNoiseRoutine()
 {
   if (loadingFlag)
@@ -92,7 +95,9 @@ static void rainbowNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_RAINBOW_STRIPE
 static void rainbowStripeNoiseRoutine()
 {
   if (loadingFlag)
@@ -111,7 +116,9 @@ static void rainbowStripeNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_ZEBRA
 static void zebraNoiseRoutine()
 {
   if (loadingFlag)
@@ -136,7 +143,9 @@ static void zebraNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_FOREST
 static void forestNoiseRoutine()
 {
   if (loadingFlag)
@@ -155,7 +164,9 @@ static void forestNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_OCEAN
 static void oceanNoiseRoutine()
 {
   if (loadingFlag)
@@ -175,7 +186,9 @@ static void oceanNoiseRoutine()
 
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_PLASMA
 static void plasmaNoiseRoutine()
 {
   if (loadingFlag)
@@ -195,7 +208,9 @@ static void plasmaNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_CLOUDS
 static void cloudsNoiseRoutine()
 {
   if (loadingFlag)
@@ -214,7 +229,9 @@ static void cloudsNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+#ifdef DEF_LAVA
 static void lavaNoiseRoutine()
 {
   if (loadingFlag)
@@ -234,7 +251,10 @@ static void lavaNoiseRoutine()
   }
   fillNoiseLED();
 }
+#endif
 
+
+#ifdef DEF_TASTEHONEY
 // ========== Taste of Honey ============
 //         SRS code by © Stepko
 //        Adaptation © SlingMaster
@@ -292,7 +312,10 @@ static void TasteHoney() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_POPURI
 // ============== Popuri ===============
 //             © SlingMaster
 //                Попурі
@@ -418,6 +441,8 @@ static void Popuri() {
   // -----------------
   step++;
 }
+#endif
+
 
 // ************* СЛУЖЕБНЫЕ *************
 static void fillNoiseLED()

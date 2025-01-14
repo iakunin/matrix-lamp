@@ -38,7 +38,7 @@ static int8_t noise2[2][WIDTH + 1][HEIGHT + 1];
 static const uint8_t maxDim = max(WIDTH, HEIGHT);
 
 //массивы состояния объектов, которые могут использоваться в любом эффекте
-#define trackingOBJECT_MAX_COUNT                         (100U)      // максимальное количество отслеживаемых объектов (очень влияет на расход памяти)
+#define trackingOBJECT_MAX_COUNT                         (100U)              // максимальное количество отслеживаемых объектов (очень влияет на расход памяти)
 static float    trackingObjectPosX[trackingOBJECT_MAX_COUNT];
 static float    trackingObjectPosY[trackingOBJECT_MAX_COUNT];
 static float    trackingObjectSpeedX[trackingOBJECT_MAX_COUNT];
@@ -48,7 +48,7 @@ static uint8_t  trackingObjectHue[trackingOBJECT_MAX_COUNT];
 static uint8_t  trackingObjectState[trackingOBJECT_MAX_COUNT];
 static bool     trackingObjectIsShift[trackingOBJECT_MAX_COUNT];
 
-#define enlargedOBJECT_MAX_COUNT                     (WIDTH * 2)     // максимальное количество сложных отслеживаемых объектов (меньше, чем trackingOBJECT_MAX_COUNT)
+#define enlargedOBJECT_MAX_COUNT                     (WIDTH * 2)            // максимальное количество сложных отслеживаемых объектов (меньше, чем trackingOBJECT_MAX_COUNT)
 static uint8_t  enlargedObjectNUM;                                          // используемое в эффекте количество объектов
 static long     enlargedObjectTime[enlargedOBJECT_MAX_COUNT];
 static float    liquidLampHot[enlargedOBJECT_MAX_COUNT];        
@@ -69,6 +69,7 @@ static const uint8_t CENTER_Y_MAJOR =  HEIGHT / 2  + (HEIGHT % 2);          // �
 
 // --------------------------------------------------------------------------------------
 
+#ifdef DEF_SPARKLES
 // ------------- конфетти --------------
 #define FADE_OUT_SPEED        (70U)                         // скорость затухания
 static void sparklesRoutine()
@@ -100,7 +101,10 @@ static void sparklesRoutine()
   //fader(FADE_OUT_SPEED);
   dimAll(256U - FADE_OUT_SPEED);
 }
+#endif
 
+
+#ifdef DEF_WATERFALL
 // =============- новый огонь / водопад -===============
 // COOLING: How much does the air cool as it rises?
 // Less cooling = taller flames.  More cooling = shorter flames.
@@ -160,7 +164,10 @@ static void fire2012WithPalette() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_FIRE
 // ------------- Огонь -----------------
 #define SPARKLES              (1U)                       // вылетающие угольки вкл выкл
 #define UNIVERSE_FIRE                                    // универсальный огонь 2-в-1 Цветной+Белый
@@ -212,7 +219,6 @@ static void generateLine() {
     line[x] = random(127, 255);                             // заполнение случайным образом нижней линии (127, 255) - менее контрастное, (64, 255) - оригинал
   }
 }
-
 
 //---------------------------------------
 static void shiftUp() {                                            //подъем кадра
@@ -316,8 +322,10 @@ static void drawFrame(uint8_t pcnt, bool isColored) {                     // п�
     }
   }
 }
+#endif
 
 
+#ifdef DEF_RAINBOW_VER
 // ------------- радуга три в одной -------------
 static void rainbowHorVertRoutine(bool isVertical) {
   for (uint8_t i = 0U; i < (isVertical?WIDTH:HEIGHT); i++) {
@@ -352,7 +360,10 @@ static void rainbowRoutine() {
         drawPixelXY(i, j, thisColor);
       }
 }
+#endif
 
+
+#if defined(DEF_PULSE) || defined(DEF_PULSE_RAINBOW) || defined(DEF_PULSE_WHITE)
 // -------------- эффект пульс ------------
 // Stefan Petrick's PULSE Effect mod by PalPalych for GyverLamp
 static void drawCircle(int x0, int y0, int radius, const CRGB &color){
@@ -461,7 +472,9 @@ static void pulseRoutine(uint8_t PMode) {
     }
     step++;
 }
+#endif
 
+#ifdef DEF_POOL
 // ------------- цвет + вода в бассейне ------------------
 // (с) SottNick. 03.2020
 // эффект иммеет шов на стыке краёв матрицы (сзади лампы, как и у других эффектов), зато адаптирован для нестандартных размеров матриц.
@@ -529,9 +542,11 @@ static void poolRoutine()
     step++;
   }
 }
+#endif
 
+
+#ifdef DEF_COLORS
 // ------------- цвета - 2 -----------------
-//#define SECONDS_DELAY (1U) // растягиваем задержку, регулируемую бегунком "Скорость" в указанное количество времени
 #define DELAY_MULTIPLIER (20U) //при задержке между кадрами примерно в 50 мс с этим множителем получится 1 с на единицу бегунка Скорость
 static void colorsRoutine2()
 {
@@ -582,8 +597,10 @@ static void colorsRoutine2()
         else 
           hue2++;
 }
+#endif
 
 
+#ifdef DEF_SNOW
 // ------------- снегопад ----------
 static void snowRoutine()
 {
@@ -612,8 +629,10 @@ static void snowRoutine()
       drawPixelXY(x, HEIGHT - 1U, 0x000000);
   }
 }
+#endif
 
 
+#ifdef DEF_STARFALL
 // ------------- метель - 2 -------------
 //SNOWSTORM / МЕТЕЛЬ # STARFALL / ЗВЕЗДОПАД ***** V1.2
 // v1.0 - Updating for GuverLamp v1.7 by PalPalych 12.03.2020
@@ -669,8 +688,10 @@ bool isColored = modes[currentMode].Speed & 0x01; // сворачиваем 2 э
     fadePixel(i, HEIGHT - 1U, e_TAIL_STEP);
   }
 }
+#endif
 
 
+#ifdef DEF_MATRIX
 // ------------- матрица ---------------
 static void matrixRoutine()
 {
@@ -727,7 +748,10 @@ static void matrixRoutine()
       // drawPixelXY(x, HEIGHT - 1U, thisColor - 0x050800);                                     // для длинных хвостов
   }
 }
+#endif
 
+
+#if defined(DEF_BUTTERFLYS) || defined(DEF_BUTTERFLYS_LAMP)
 // ------------- Светлячки 2 - Светлячки в банке - Мотыльки - Лампа с мотыльками --------------
 // (c) SottNick
 
@@ -920,8 +944,10 @@ static void butterflysRoutine(bool isColored)
       leds[i] = CHSV(hue, hue2, 255U - leds[i].r);
   }
 }
+#endif
 
 
+#ifdef DEF_LIGHTERS
 // ------------- светлячки --------------
 // #define LIGHTERS_AM           (100U)  // для экономии памяти берём trackingOBJECT_MAX_COUNT
 // #define trackingOBJECT_MAX_COUNT
@@ -989,8 +1015,10 @@ static void lightersRoutine()
     drawPixelXY(trackingObjectPosX[i] / 10, trackingObjectPosY[i] / 10, CHSV(trackingObjectHue[i], 255U, 255U));
   }
 }
+#endif
 
 
+#ifdef DEF_LIGHTER_TRACES
 // --------------------------- светлячки со шлейфом ---------------------
 #define BALLS_AMOUNT          (3U)                          // количество "шариков"
 #define CLEAR_PATH            (1U)                          // очищать путь
@@ -1065,7 +1093,10 @@ static void ballsRoutine()
     drawPixelXYF(coord[j][0U] / 10., coord[j][1U] / 10., ballColors[j]);
   }
 }
+#endif
 
+
+#ifdef DEF_PAINTBALL
 // ------------- пейнтбол -------------
 #define BORDERTHICKNESS (1U) // глубина бордюра для размытия яркой частицы: 0U - без границы (резкие края); 1U - 1 пиксель (среднее размытие) ; 2U - 2 пикселя (глубокое размытие)
 const uint8_t paintWidth = WIDTH - BORDERTHICKNESS * 2;
@@ -1100,8 +1131,10 @@ static void lightBallsRoutine()
   leds[XY( highByte(k * paintWidth) + BORDERTHICKNESS, highByte(m * paintHeight) + BORDERTHICKNESS)] += CHSV( ms / 37, 200U, 255U);
   leds[XY( highByte(m * paintWidth) + BORDERTHICKNESS, highByte(i * paintHeight) + BORDERTHICKNESS)] += CHSV( ms / 53, 200U, 255U);
 }
+#endif
 
 
+#ifdef DEF_WHITE_COLOR
 // ------------- ещё более белый свет (с вертикальным вариантом) -------------
 // (c) SottNick
 #define BORDERLAND   2 // две дополнительные единицы бегунка Масштаб на границе вертикального и горизонтального варианта эффекта (с каждой стороны границы) будут для света всеми светодиодами в полную силу
@@ -1157,6 +1190,7 @@ static void whiteColorStripeRoutine()
     }
   }
 }
+#endif
 
 // --------------------------- эффект кометы ----------------------
 
@@ -1289,6 +1323,7 @@ static void MoveFractionalNoiseY(int8_t amplitude = 1, float shift = 0) {
   memcpy(leds, ledsbuff, sizeof(CRGB)* NUM_LEDS);
 }
 
+#ifdef DEF_COMET_TWO
 // NoiseSmearing(by StefanPetrick) Effect mod for GyverLamp by PalPalych
 static void MultipleStream() { // 2 comets
   if (loadingFlag)
@@ -1322,18 +1357,17 @@ static void MultipleStream() { // 2 comets
   //dimAll(192); // < -- затухание эффекта для последующего кадрв
   dimAll(255U - modes[currentMode].Scale * 2);
 
-
   // gelb im Kreis
   byte xx = trackingObjectState[0] + sin8( millis() / 10) / trackingObjectShift[0]; // / 22;
   byte yy = trackingObjectState[1] + cos8( millis() / 10) / trackingObjectShift[1]; // / 22;
-if (xx < WIDTH && yy < HEIGHT)
-  leds[XY( xx, yy)] = CHSV(hue2 , 255, 255);                                        // 0xFFFF00;
+  if (xx < WIDTH && yy < HEIGHT)
+    leds[XY( xx, yy)] = CHSV(hue2 , 255, 255);                                      // 0xFFFF00;
 
   // rot in einer Acht
   xx = trackingObjectState[2] + sin8( millis() / 46) / trackingObjectShift[2];      // / 32;
   yy = trackingObjectState[3] + cos8( millis() / 15) / trackingObjectShift[3];      // / 32;
-if (xx < WIDTH && yy < HEIGHT)
-  leds[XY( xx, yy)] = CHSV(hue , 255, 255);                                         // 0xFF0000;
+  if (xx < WIDTH && yy < HEIGHT)
+    leds[XY( xx, yy)] = CHSV(hue , 255, 255);                                       // 0xFF0000;
 
   // Noise
   noise32_x[0] += 3000;
@@ -1345,7 +1379,10 @@ if (xx < WIDTH && yy < HEIGHT)
   MoveFractionalNoiseX(3, 0.33);
   MoveFractionalNoiseY(3);
 }
+#endif
 
+
+#ifdef DEF_COMET_THREE
 static void MultipleStream2() { // 3 comets
   if (loadingFlag)
   {
@@ -1385,15 +1422,15 @@ static void MultipleStream2() { // 3 comets
   byte xx = trackingObjectState[0] + sin8( millis() / 10) / trackingObjectShift[0]; // / 22;
   byte yy = trackingObjectState[1] + cos8( millis() / 9) / trackingObjectShift[1];  // / 22;
 
-if (xx < WIDTH && yy < HEIGHT)
-  leds[XY( xx, yy)] += CHSV(deltaHue , 255, 255);//0x0000FF;
+  if (xx < WIDTH && yy < HEIGHT)
+    leds[XY( xx, yy)] += CHSV(deltaHue , 255, 255);//0x0000FF;
 
   //xx = 4 + sin8( millis() / 10) / 32;
   //yy = 4 + cos8( millis() / 7) / 32;
   xx = trackingObjectState[2] + sin8( millis() / 10) / trackingObjectShift[2];     // / 32;
   yy = trackingObjectState[3] + cos8( millis() / 7) / trackingObjectShift[3];      // / 32;
-if (xx < WIDTH && yy < HEIGHT)
-  leds[XY( xx, yy)] += CHSV(hue , 255, 255);                                       // 0xFF0000;
+  if (xx < WIDTH && yy < HEIGHT)
+    leds[XY( xx, yy)] += CHSV(hue , 255, 255);                                     // 0xFF0000;
   leds[XY( CENTER_X_MINOR, CENTER_Y_MINOR)] += CHSV(hue2 , 255, 255);              // 0xFFFF00;
 
   noise32_x[0] += 3000;
@@ -1405,7 +1442,10 @@ if (xx < WIDTH && yy < HEIGHT)
   MoveFractionalNoiseX(2);
   MoveFractionalNoiseY(2, 0.33);
 }
+#endif
 
+
+#ifdef DEF_FIREFLY
 static void MultipleStream3() { // Fireline
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
@@ -1429,7 +1469,10 @@ static void MultipleStream3() { // Fireline
   MoveFractionalNoiseY(3);
   MoveFractionalNoiseX(3);
 }
+#endif
 
+
+#ifdef DEF_FIREFLY_TOP
 static void MultipleStream5() { // Fractorial Fire
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
@@ -1455,7 +1498,9 @@ static void MultipleStream5() { // Fractorial Fire
   MoveFractionalNoiseY(2, 1);
   MoveFractionalNoiseX(2);
 }
+#endif
 
+/*
 static void MultipleStream4() { // Comet
   //dimAll(184); // < -- затухание эффекта для последующего кадрв
   dimAll(255U - modes[currentMode].Scale * 2);
@@ -1472,7 +1517,9 @@ static void MultipleStream4() { // Comet
   MoveFractionalNoiseX(6);
   MoveFractionalNoiseY(5, -0.5);
 }
+*/
 
+#ifdef DEF_SNAKE
 static void MultipleStream8() { // Windows ))
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
@@ -1509,7 +1556,10 @@ static void MultipleStream8() { // Windows ))
   MoveFractionalNoiseX(3);
   MoveFractionalNoiseY(3);
 }
+#endif
 
+
+#ifdef DEF_COMET
 //  Follow the Rainbow Comet by Palpalych (Effect for GyverLamp 02/03/2020) //
 
 // Кометы обычные
@@ -1537,7 +1587,10 @@ static void RainbowCometRoutine() {
   MoveFractionalNoiseX(WIDTH / 2U - 1U);
   MoveFractionalNoiseY(HEIGHT / 2U - 1U);
 }
+#endif
 
+
+#ifdef DEF_COMET_COLOR
 // Кометы белые и одноцветные
 static void ColorCometRoutine() {
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
@@ -1565,7 +1618,10 @@ static void ColorCometRoutine() {
   MoveFractionalNoiseX(WIDTH / 2U - 1U);
   MoveFractionalNoiseY(HEIGHT / 2U - 1U);
 }
+#endif
 
+
+#ifdef DEF_BBALLS
 // --------------------------- эффект мячики ----------------------
 //  BouncingBalls2014 is a program that lets you animate an LED strip
 //  to look like a group of bouncing balls
@@ -1659,7 +1715,10 @@ static void BBallsRoutine() {
     //drawPixelXY(trackingObjectState[i], trackingObjectPosY[i], CHSV(trackingObjectHue[i] + deltaHue, hue2, 255U));  //на случай, если останутся жалобы, что эффект вылетает
   }
 }
+#endif
 
+
+#ifdef DEF_SPIRO
 // --------------------------- эффект спирали ----------------------
 /*
  * Aurora: https://github.com/pixelmatix/aurora
@@ -1772,7 +1831,10 @@ static void spiroRoutine() {
       }
       hue += 1;
 }
+#endif
 
+
+#ifdef DEF_METABALLS
 // --------------------------- эффект МетаБолз ----------------------
 // https://gist.github.com/StefanPetrick/170fbf141390fafb9c0c76b8a0d34e54
 // Stefan Petrick's MetaBalls Effect mod by PalPalych for GyverLamp 
@@ -1850,7 +1912,10 @@ static void MetaBallsRoutine() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_SINUSOID3
 // ***** SINUSOID3 / СИНУСОИД3 ***** + попытка повторить все остальные версии
 
 /*
@@ -2154,7 +2219,10 @@ static void Sinusoid3Routine()
       break;
   }
 }
+#endif
 
+
+#ifdef DEF_WATERFALL_4IN1
 // ============= водо/огне/лава/радуга/хренопад ===============
 // SPARKING: What chance (out of 255) is there that a new spark will be lit?
 // Higher chance = more roaring fire.  Lower chance = more flickery fire.
@@ -2219,12 +2287,14 @@ static void fire2012WithPalette4in1() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_PRISMATA
 // ============= ЭФФЕКТ ПРИЗМАТА ===============
 // Prismata Loading Animation
 // https://github.com/pixelmatix/aurora/blob/master/PatternPendulumWave.h
 // Адаптация от (c) SottNick
-
 static void PrismataRoutine() {
   if (loadingFlag)
   {
@@ -2255,12 +2325,11 @@ static void PrismataRoutine() {
     drawPixelXY(x, y, ColorFromPalette(*curPalette, x * 7 + hue));
   }
 }
+#endif
 
-// ============= ЭФФЕКТ СТАЯ ===============
-// https://github.com/pixelmatix/aurora/blob/master/PatternFlock.h
-// Адаптация от (c) SottNick и @kDn
 
 template <class T>
+
 class Vector2 {
 public:
     T x, y;
@@ -2403,10 +2472,6 @@ public:
 };
 
 typedef Vector2<float> PVector;
-
-// Flocking
-// Daniel Shiffman <http://www.shiffman.net>
-// The Nature of Code, Spring 2009
 
 // Boid class
 // Methods for Separation, Cohesion, Alignment added
@@ -2702,6 +2767,16 @@ class Boid {
     }
 };
 
+
+#if defined(DEF_FLOCK) || defined(DEF_FLOCK_N_PR)
+// ============= ЭФФЕКТ СТАЯ ===============
+// https://github.com/pixelmatix/aurora/blob/master/PatternFlock.h
+// Адаптация от (c) SottNick и @kDn
+
+// Flocking
+// Daniel Shiffman <http://www.shiffman.net>
+// The Nature of Code, Spring 2009
+
 static const uint8_t AVAILABLE_BOID_COUNT = 20U;
 static Boid boids[AVAILABLE_BOID_COUNT]; 
 
@@ -2797,8 +2872,10 @@ static void flockRoutine(bool predatorIs) {
         predatorPresent = predatorIs && !predatorPresent;
       }
 }
+#endif
 
 
+#if defined(DEF_WHIRL) || defined(DEF_WHIRL_MULTI)
 // ============= ЭФФЕКТ ВИХРИ ===============
 // https://github.com/pixelmatix/aurora/blob/master/PatternFlowField.h
 // Адаптация (c) SottNick
@@ -2872,7 +2949,10 @@ static void whirlRoutine(bool oneColor) {
   ff_y += ff_speed;
   ff_z += ff_speed;
 }
+#endif
 
+
+#ifdef DEF_WAVES
 // ============= ЭФФЕКТ ВОЛНЫ ===============
 // https://github.com/pixelmatix/aurora/blob/master/PatternWave.h
 // Адаптация от (c) SottNick
@@ -2972,7 +3052,10 @@ static void WaveRoutine() {
         
         blurScreen(20); // @Palpalych советует делать размытие. вот в этом эффекте его явно не хватает...
 }
+#endif
 
+
+#ifdef DEF_FIRE_2018
 // ============= ЭФФЕКТ ОГОНЬ 2018 ===============
 // https://gist.github.com/StefanPetrick/819e873492f344ebebac5bcd2fdd8aa8
 // https://gist.github.com/StefanPetrick/1ba4584e534ba99ca259c1103754e4c5
@@ -3090,7 +3173,10 @@ static void Fire2018_2() {
   }
 
 }
+#endif
 
+
+#ifdef DEF_FIRE_2012
 // ============= ЭФФЕКТ ОГОНЬ 2012 ===============
 // там выше есть его копии для эффектов Водопад и Водопад 4 в 1
 // по идее, надо бы объединить и оптимизировать, но мелких отличий довольно много
@@ -3159,7 +3245,10 @@ static void fire2012again()
       nblend(leds[XY(x,y)], ColorFromPalette(*curPalette, ((noise3d[0][x][y]*0.7) + (noise3d[0][wrapX(x+1)][y]*0.3))), fireSmoothing);
   }
 }
+#endif
 
+
+#if defined(DEF_SIMPLE_RAIN) || defined(DEF_STORMY_RAIN) || defined(DEF_COLOR_RAIN)
 // ============= ЭФФЕКТЫ ОСАДКИ / ТУЧКА В БАНКЕ / ГРОЗА В БАНКЕ ===============
 // https://github.com/marcmerlin/FastLED_NeoMatrix_SmartMatrix_LEDMatrix_GFX_Demos/blob/master/FastLED/Sublime_Demos/Sublime_Demos.ino
 // там по ссылке ещё остались эффекты с 3 по 9 (в SimplePatternList перечислены)
@@ -3358,8 +3447,10 @@ static void stormyRain()
   //rain(0, 90, map8(intensity,0,150)+60, 10, solidRainColor, true, true, true);
   rain(60, 160, (modes[currentMode].Scale-1) * 2.58, 30, solidRainColor, true, true, true);
 }
+#endif
 
 
+#ifdef DEF_TWINKLES
 // ------------------------------ ЭФФЕКТ МЕРЦАНИЕ ----------------------
 // (c) SottNick
 
@@ -3392,25 +3483,25 @@ static void twinklesRoutine(){
     }
     for (uint32_t idx=0; idx < NUM_LEDS; idx++) {
       if (ledsbuff[idx].b == 0){
-        if (random8(deltaValue) == 0 && hue > 0){  // если пиксель ещё не горит, зажигаем каждый ХЗй
-          ledsbuff[idx].r = random8();                          // оттенок пикселя
-          ledsbuff[idx].g = random8(1, TWINKLES_SPEEDS +1);     // скорость и направление (нарастает 1-4, но не угасает 5-8)
-          ledsbuff[idx].b = ledsbuff[idx].g;                    // яркость
-          hue--; // уменьшаем количество погасших пикселей
+        if (random8(deltaValue) == 0 && hue > 0){                                        // если пиксель ещё не горит, зажигаем каждый ХЗй
+          ledsbuff[idx].r = random8();                                                   // оттенок пикселя
+          ledsbuff[idx].g = random8(1, TWINKLES_SPEEDS +1);                              // скорость и направление (нарастает 1-4, но не угасает 5-8)
+          ledsbuff[idx].b = ledsbuff[idx].g;                                             // яркость
+          hue--;                                                                         // уменьшаем количество погасших пикселей
         }
       }
-      else if (ledsbuff[idx].g <= TWINKLES_SPEEDS){             // если нарастание яркости
-        if (ledsbuff[idx].b > 255U - ledsbuff[idx].g - TWINKLES_MULTIPLIER){            // если досигнут максимум
+      else if (ledsbuff[idx].g <= TWINKLES_SPEEDS){                                      // если нарастание яркости
+        if (ledsbuff[idx].b > 255U - ledsbuff[idx].g - TWINKLES_MULTIPLIER){             // если досигнут максимум
           ledsbuff[idx].b = 255U;
           ledsbuff[idx].g = ledsbuff[idx].g + TWINKLES_SPEEDS;
         }
         else
           ledsbuff[idx].b = ledsbuff[idx].b + ledsbuff[idx].g + TWINKLES_MULTIPLIER;
       }
-      else {                                                    // если угасание яркости
-        if (ledsbuff[idx].b <= ledsbuff[idx].g - TWINKLES_SPEEDS + TWINKLES_MULTIPLIER){// если досигнут минимум
-          ledsbuff[idx].b = 0;                                  // всё выкл
-          hue++; // считаем количество погасших пикселей
+      else {                                                                             // если угасание яркости
+        if (ledsbuff[idx].b <= ledsbuff[idx].g - TWINKLES_SPEEDS + TWINKLES_MULTIPLIER){ // если досигнут минимум
+          ledsbuff[idx].b = 0;                                                           // всё выкл
+          hue++;                                                                         // считаем количество погасших пикселей
         }
         else
           ledsbuff[idx].b = ledsbuff[idx].b - ledsbuff[idx].g + TWINKLES_SPEEDS - TWINKLES_MULTIPLIER;
@@ -3421,7 +3512,10 @@ static void twinklesRoutine(){
         leds[idx] = ColorFromPalette(*curPalette, ledsbuff[idx].r, ledsbuff[idx].b);
     }
 }
+#endif
 
+
+#ifdef DEF_BALLS_BOUNCE
 // ============= BOUNCE / ПРЫЖКИ / МЯЧИКИ БЕЗ ГРАНИЦ ===============
 // Aurora : https://github.com/pixelmatix/aurora/blob/master/PatternBounce.h
 // Copyright(c) 2014 Jason Coon
@@ -3443,15 +3537,12 @@ static void bounceRoutine()
     loadingFlag = false;
     setCurrentPalette();
 
-    //hue2 = 255U - scale8(64U, myScale8(modes[currentMode].Scale * 2.55));
-    //hue2 = 254U - ((modes[currentMode].Scale - 1U) % 11U) * 3;
     enlargedObjectNUM = (modes[currentMode].Scale - 1U) % 11U / 10.0 * (AVAILABLE_BOID_COUNT - 1U) + 1U;
     uint8_t colorWidth = 256U / enlargedObjectNUM;
     for (uint8_t i = 0; i < enlargedObjectNUM; i++)
     {
-      Boid boid = Boid(i % WIDTH, 0);//random8(HEIGHT));//HEIGHT / 8
+      Boid boid = Boid(i % WIDTH, 0);
       boid.velocity.x = 0;
-      //boid.location.y = 0;//(HEIGHT -1) / 4;
       boid.velocity.y = i * -0.01;
       boid.colorIndex = colorWidth * i;
       boid.maxforce = 10;
@@ -3460,7 +3551,7 @@ static void bounceRoutine()
     }
   }
   blurScreen(beatsin8(5U, 1U, 5U));
-  dimAll(255U - modes[currentMode].Speed); // dimAll(hue2);
+  dimAll(255U - modes[currentMode].Speed);
   for (uint8_t i = 0; i < enlargedObjectNUM; i++)
   {
     Boid boid = boids[i];
@@ -3468,9 +3559,7 @@ static void bounceRoutine()
     boid.update();
     if (boid.location.x >= WIDTH) boid.location.x = boid.location.x - WIDTH; // это только
     else if (boid.location.x < 0) boid.location.x = boid.location.x + WIDTH; // для субпиксельной версии
-    CRGB color = ColorFromPalette(*curPalette, boid.colorIndex); // boid.colorIndex + hue
-    //drawPixelXY((uint32_t)(boid.location.x) % WIDTH, boid.location.y, color);
-    //drawPixelXYFseamless(boid.location.x, boid.location.y, color); вот это я тупанул
+    CRGB color = ColorFromPalette(*curPalette, boid.colorIndex);
     drawPixelXYF(boid.location.x, boid.location.y, color);
 
     if (boid.location.y <= 0)
@@ -3489,12 +3578,11 @@ static void bounceRoutine()
     }
     boids[i] = boid;
   }
-//  EVERY_N_MILLIS(20)
-//  {
-//  hue++;
-//  }
 }
+#endif
 
+
+#ifdef DEF_RINGS
 // ------------------------------ ЭФФЕКТ КОЛЬЦА / КОДОВЫЙ ЗАМОК ----------------------
 // (c) SottNick
 // из-за повторного использоваия переменных от других эффектов теперь в этом коде невозможно что-то понять.
@@ -3600,7 +3688,10 @@ static void ringsRoutine(){
         }
     }
 }
+#endif
 
+
+#ifdef DEF_CUBE2D
 // ------------------------------ ЭФФЕКТ КУБИК РУБИКА 2D ----------------------
 // (c) SottNick
 
@@ -3904,8 +3995,10 @@ static void cube2dRoutine(){
       }
    }
 }
+#endif
 
 
+#if defined(DEF_SMOKE) || defined(DEF_SMOKE_COLOR)
 // ------------------------------ ЭФФЕКТ ДЫМ ----------------------
 // (c) SottNick
 
@@ -3984,7 +4077,10 @@ static void MultipleStreamSmoke(bool isColored){
   blurScreen(20); // без размытия как-то пиксельно, наверное...  
 //} endif (modes[currentMode].Brightness & 0x01)
 }
+#endif
 
+
+#ifdef DEF_PICASSO
 // ------------------------------ ЭФФЕКТЫ ПИКАССО ----------------------
 // взято откуда-то by @obliterator или им написано
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/blob/templ/src/effects.cpp
@@ -4161,8 +4257,10 @@ static void picassoSelector(){
   else                                             // для масштабов посередине
     PicassoRoutine2();
 }
+#endif
 
 
+#ifdef DEF_LEAPERS
 // ------------------------------ ЭФФЕКТ ПРЫГУНЫ ----------------------
 // взято откуда-то by @obliterator
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/blob/templ/src/effects.cpp
@@ -4273,7 +4371,10 @@ static void LeapersRoutine(){
 
   blurScreen(20);
 }
+#endif
 
+
+#ifdef DEF_LAVALAMP
 // ------------------------------ ЭФФЕКТ ЛАВОВАЯ ЛАМПА ----------------------
 // (c) SottNick
 
@@ -4363,7 +4464,10 @@ static void LavaLampRoutine(){
 
   blurScreen(20);
 }
+#endif
 
+
+#ifdef DEF_SHADOWS
 // ********************** SHADOWS ***********************
 // https://github.com/vvip-68/GyverPanelWiFi/blob/master/firmware/GyverPanelWiFi_v1.04/effects.ino
 // (c) vvip-68
@@ -4374,13 +4478,6 @@ static void shadowsRoutine() {
     setModeSettings(1U, 1U+random8(255U));
   }
   #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-
-  /*
-  if (loadingFlag)
-  {
-    loadingFlag = false;
-  }
-  */
 
   static uint16_t sPseudotime = 0;
   static uint16_t sLastMillis = 0;
@@ -4423,7 +4520,10 @@ static void shadowsRoutine() {
     nblend( leds[pixelnumber], newcolor, 64);
   }
 }
+#endif
 
+
+#ifdef DEF_DNA
 // ----------- Эффект "ДНК"
 // База https://pastebin.com/jwvC1sNF адаптация и доработки kostyamat
 // нормальные копирайты:
@@ -4504,9 +4604,10 @@ else
 
   blurScreen(16);
 }
+#endif
 
 
-
+#ifdef DEF_SNAKES
 // ------------- Змейки --------------
 // (c) SottNick
 
@@ -4728,12 +4829,14 @@ static void snakesRoutine(){
     leds[XY(x,y)] += CHSV(trackingObjectHue[i] + (SNAKES_LENGTH + trackingObjectSpeedY[i])*4U, 255U, (1 - trackingObjectSpeedY[i]) * 255); // хвостик
   }
 }
+#endif
 
+
+#if defined(DEF_LIQUIDLAMP) || defined(DEF_LIQUIDLAMP_AUTO)
 // ----------------------------- Жидкая лампа ---------------------
 // ----------- Эффект "Лавовая лампа" (c) obliterator
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/commit/9bad25adc2c917fbf3dfa97f4c498769aaf76ebe
 // с генератором палитр by SottNick
-
 
 //аналог ардуино функции map(), но только для float
 static float fmap(const float x, const float in_min, const float in_max, const float out_min, const float out_max){
@@ -4976,23 +5079,26 @@ static void LiquidLampRoutine(bool isColored){
     }
   }
 }
+#endif
 
+
+#ifdef DEF_POPCORN
 // ----------- Эффект "Попкорн"
 // (C) Aaron Gotwalt (Soulmate)
 // https://editor.soulmatelights.com/gallery/117
 // переосмысление (c) SottNick
 
-    //uint8_t NUM_ROCKETS = 10;
-//enlargedObjectNUM = (modes[currentMode].Scale - 1U) % 11U / 10.0 * (AVAILABLE_BOID_COUNT - 1U) + 1U;
+// uint8_t NUM_ROCKETS = 10;
+// enlargedObjectNUM = (modes[currentMode].Scale - 1U) % 11U / 10.0 * (AVAILABLE_BOID_COUNT - 1U) + 1U;
 
-//    typedef struct
-//    {
-//        int32_t x, y, xd, yd;
-//    } Rocket;
-///////float trackingObjectPosX[trackingOBJECT_MAX_COUNT];
-///////float trackingObjectPosY[trackingOBJECT_MAX_COUNT];
-///////float trackingObjectSpeedX[trackingOBJECT_MAX_COUNT];
-///////float trackingObjectSpeedY[trackingOBJECT_MAX_COUNT];
+// typedef struct
+// {
+//   int32_t x, y, xd, yd;
+// } Rocket;
+// float trackingObjectPosX[trackingOBJECT_MAX_COUNT];
+// float trackingObjectPosY[trackingOBJECT_MAX_COUNT];
+// float trackingObjectSpeedX[trackingOBJECT_MAX_COUNT];
+// float trackingObjectSpeedY[trackingOBJECT_MAX_COUNT];
 
 static void popcornRestart_rocket(uint8_t r) {
   //deltaHue = !deltaHue; // "Мальчик" <> "Девочка"
@@ -5096,7 +5202,10 @@ static void popcornRoutine() {
               : ColorFromPalette(*curPalette, trackingObjectHue[r]));
   }
 }
+#endif
 
+
+#ifdef DEF_OSCILLATING
 // ============= Эффект Реакция Белоусова-Жаботинского (Осциллятор) ===============
 // по наводке https://www.wikiwand.com/ru/%D0%9A%D0%BB%D0%B5%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82
 // (c) SottNick
@@ -5279,7 +5388,10 @@ static void oscillatingRoutine() {
       }
   }
 }
+#endif
 
+
+#ifdef DEF_FIRE_2020
 // ============= Огонь 2020 ===============
 // (c) SottNick
 //сильно по мотивам https://pastebin.com/RG0QGzfK
@@ -5352,7 +5464,10 @@ static void fire2020Routine2(){
   if (ff_y & 0x01)
     ff_z++;
 }
+#endif
 
+
+#ifdef DEF_LLAND
 // ============= Эффект Кипение ===============
 // (c) SottNick
 //по мотивам LDIRKO Ленд - эффект номер 10
@@ -5392,7 +5507,10 @@ static void LLandRoutine(){
       drawPixelXY(x, y, ColorFromPalette (*curPalette, map(inoise8(x * deltaValue, y * deltaValue - ff_y, ff_z) - y * 255 / (HEIGHT - 1), 0, 255, 205, 255) + hue, 255));
   ff_z++;      
 }
+#endif
 
+
+#ifdef DEF_ATTRACT
 // ============= ЭФФЕКТ ПРИТЯЖЕНИЕ ===============
 // https://github.com/pixelmatix/aurora/blob/master/PatternAttract.h
 // Адаптация (c) SottNick
@@ -5466,7 +5584,10 @@ static void attractRoutine() {
   }
 
 }
+#endif
 
+
+#ifdef DEF_DROPS
 // ============= ЭФФЕКТ Капли на стекле ===============
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/blob/master/src/effects.cpp
 static void newMatrixRoutine()
@@ -5534,12 +5655,14 @@ static void newMatrixRoutine()
     }
   }
 }
+#endif
 
+
+#ifdef DEF_SMOKEBALLS
 //-------- Эффект Дымовые шашки ----------- aka "Детские сны"
 // (c) Stepko
 // https://editor.soulmatelights.com/gallery/505
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/blob/master/src/effects.cpp
-
 static void smokeballsRoutine(){
   if (loadingFlag)
   {
@@ -5572,10 +5695,9 @@ static void smokeballsRoutine(){
     }
   }
   
-  //dimAll(240); фиксированное число - очень плохо, когда матрицы разной высоты // fadeToBlackBy(leds, NUM_LEDS, 10);
   fadeToBlackBy(leds, NUM_LEDS, 128U / HEIGHT);
-if (modes[currentMode].Speed & 0x01)
-  blurScreen(20);
+  if (modes[currentMode].Speed & 0x01)
+    blurScreen(20);
   for (byte j = 0; j < enlargedObjectNUM; j++) {
     trackingObjectPosX[j] = beatsin16((uint8_t)(trackingObjectSpeedX[j] * (speedfactor * 5.)), trackingObjectShift[j], trackingObjectState[j] + trackingObjectShift[j], trackingObjectHue[j]*256, trackingObjectHue[j]*8);
     drawPixelXYF(trackingObjectPosX[j] / 10., 0.05, ColorFromPalette(*curPalette, trackingObjectHue[j]));
@@ -5590,7 +5712,10 @@ if (modes[currentMode].Speed & 0x01)
 
   loadingFlag = random8() > 253U;
 }
+#endif
 
+
+#ifdef DEF_NEXUS
 // ------------- Nexus --------------
 // (c) kostyamat
 // https://github.com/DmytroKorniienko/FireLamp_JeeUI/blob/master/src/effects.cpp
@@ -5681,8 +5806,10 @@ static void nexusRoutine(){
     drawPixelXYF(trackingObjectPosX[i], trackingObjectPosY[i],  CHSV(trackingObjectHue[i], 255U, 255));
   }
 }
+#endif
 
 
+#ifdef DEF_PACIFIC
 // ------------ Эффект "Тихий Океан"
 //  "Pacifica" перенос кода kostyamat
 //  Gentle, blue-green ocean waves.
@@ -5778,6 +5905,7 @@ static void pacificRoutine()
   pacifica_deepen_colors(&*leds);
   blurScreen(20);
 }
+#endif
 
 //-------- по мотивам Эффектов Particle System -------------------------
 // https://github.com/fuse314/arduino-particle-sys
@@ -5802,6 +5930,8 @@ static void particlesUpdate2(uint8_t i){
     trackingObjectIsShift[i] = false;
 }
 
+
+#ifdef DEF_FOUNTAIN
 // ============= ЭФФЕКТ ИСТОЧНИК ===============
 // (c) SottNick
 // выглядит как https://github.com/fuse314/arduino-particle-sys/blob/master/examples/StarfieldFastLED/StarfieldFastLED.ino
@@ -5870,7 +6000,10 @@ static void starfield2Routine(){
     }
   }
 }
+#endif
 
+
+#ifdef DEF_FAIRY
 // ============= ЭФФЕКТ ФЕЯ ===============
 // (c) SottNick
 #define FAIRY_BEHAVIOR //типа сложное поведение
@@ -5987,7 +6120,6 @@ static void fairyRoutine(){
     }
   }
 
-
   //renderer.fade(leds); = fadeToBlackBy(128); = dimAll(255-128)
   //dimAll(255-128/.25*speedfactor); очередной эффект, к которому нужно будет "подобрать коэффициенты"
   //if (modes[currentMode].Speed & 0x01)
@@ -6015,11 +6147,11 @@ static void fairyRoutine(){
     }
   }
   drawPixelXYF(boids[0].location.x, boids[0].location.y, CHSV(hue, 160U, 255U));//boid.colorIndex + hue
-
-     
 }
+#endif
 
 
+#ifdef DEF_SAND
 // ============= Эффект Цветные драже ===============
 // (c) SottNick
 //по мотивам визуала эффекта by Yaroslaw Turbin 14.12.2020
@@ -6093,7 +6225,10 @@ static void sandRoutine(){
     leds[XY(temp,HEIGHT-1)] = CHSV(random8(), 255U, 255U);
   }
 }
+#endif
 
+
+#ifdef DEF_SPIDER
 // ============= Эффект Плазменная лампа ===============
 // эффект Паук (c) stepko
 // плюс выбор палитры и багфикс (c) SottNick
@@ -6122,13 +6257,16 @@ static void spiderRoutine() {
    float xx = 2. + sin8(time_shift + 6000 * c) / 12.;
    float yy = 2. + cos8(time_shift + 9000 * c) / 12.;
    //DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, CHSV(c * (256 / pcnt), 200, 255)); // так было в оригинале
-//if (modes[currentMode].Speed & 0x01)
-//DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, ColorFromPalette(*curPalette, hue + c * (255 / pcnt)).nscale8(200)); // кажется, это не работает, хотя и компилируется
-//else
+   //if (modes[currentMode].Speed & 0x01)
+   //DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, ColorFromPalette(*curPalette, hue + c * (255 / pcnt)).nscale8(200)); // кажется, это не работает, хотя и компилируется
+   //else
    DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, ColorFromPalette(*curPalette, hue + c * (255 / pcnt)));
  }
 }
+#endif
 
+
+#ifdef DEF_AURORA
 // --------- Эффект "Северное Сияние"
 // (c) kostyamat 05.02.2021
 // идеи подсмотрены тут https://www.reddit.com/r/FastLED/comments/jyly1e/challenge_fastled_sketch_that_fits_entirely_in_a/
@@ -6207,13 +6345,12 @@ static void polarRoutine() {
 
   }
   
-if (modes[currentMode].Scale == 100){
-  if (hue2++ & 0x01 && deltaHue++ & 0x01 && deltaHue2++ & 0x01) hue++; // это ж бред, но я хз. как с 60ю кадрами в секунду можно эффективно скорость замедлять...
-  fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + hue, modes[currentMode].Scale & 0x01);
-}
-else
-  fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + AURORA_COLOR_RANGE - beatsin8(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE+AURORA_COLOR_RANGE), modes[currentMode].Scale & 0x01);
-
+  if (modes[currentMode].Scale == 100){
+    if (hue2++ & 0x01 && deltaHue++ & 0x01 && deltaHue2++ & 0x01) hue++; // это ж бред, но я хз. как с 60ю кадрами в секунду можно эффективно скорость замедлять...
+      fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + hue, modes[currentMode].Scale & 0x01);
+  }
+  else
+    fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + AURORA_COLOR_RANGE - beatsin8(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE+AURORA_COLOR_RANGE), modes[currentMode].Scale & 0x01);
 
   for (byte x = 0; x < WIDTH; x++) {
     for (byte y = 0; y < HEIGHT; y++) {
@@ -6244,8 +6381,10 @@ else
     }
   }
 }
+#endif
 
 
+#ifdef DEF_SPHERES
 // ----------- Эффект "Шары"
 // (c) stepko and kostyamat https://wokwi.com/arduino/projects/289839434049782281
 // 07.02.2021
@@ -6355,8 +6494,10 @@ static void spheresRoutine() {
   }
   blurScreen(48);
 }
+#endif
 
 
+#ifdef DEF_MAGMA
 // ============= Эффект Магма ===============
 // (c) SottNick
 // берём эффекты Огонь 2020 и Прыгуны:
@@ -6432,7 +6573,10 @@ static void magmaRoutine(){
     ff_z++;
   
 }
+#endif
 
+
+#ifdef DEF_FLAME
 // ============= Эффект Пламя ===============
 // (c) SottNick
 // По мотивам https://goldenandy.blogspot.com/2021/05/ws2812.html
@@ -6568,8 +6712,10 @@ static void execStringsFlame(){ // внимание! эффект заточен
       //hsv2rgb_spectrum(CHSV(noise3d[0][i][j], shiftValue[j], noise3d[1][i][j] * 1.033), leds[XY(i,j)]); // 1.033 - это коэффициент нормализации яркости (чтобы чутка увеличить яркость эффекта в целом)
       hsv2rgb_spectrum(CHSV(noise3d[0][i][j], shiftValue[j], noise3d[1][i][j]), leds[XY(i,j)]);
 }
+#endif
 
 
+#ifdef DEF_FIRE_2021
 // ============= Эффект Огонь 2021 ===============
 // (c) SottNick
 // На основе алгоритма https://editor.soulmatelights.com/gallery/546-fire
@@ -6633,8 +6779,10 @@ static void Fire2021Routine(){
   if (!random8())
     ff_z++;
 }
+#endif
 
 
+#ifdef DEF_LUMENJER
 // =============== Эффект Lumenjer ================
 // (c) SottNick
 
@@ -6683,7 +6831,10 @@ static void lumenjerRoutine() {
   else
     leds[XY(hue, hue2)] += ColorFromPalette(*curPalette, step++);
 }
+#endif
 
+
+#ifdef DEF_CHRISTMAS_TREE
 // =========== Christmas Tree ===========
 //             © SlingMaster
 //           EFF_CHRISTMAS_TREE
@@ -6838,7 +6989,10 @@ static void ChristmasTree() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_BY_EFFECT
 // ============== ByEffect ==============
 //             © SlingMaster
 //             EFF_BY_EFFECT
@@ -6848,12 +7002,13 @@ static void ByEffect() {
   uint8_t saturation;
   uint8_t delta;
   if (loadingFlag) {
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings) {
       //                     scale | speed 210
       setModeSettings(random8(100U), random8(200U));
     }
-#endif
+    #endif
+
     loadingFlag = false;
     deltaValue = 0;
     step = deltaValue;
@@ -6904,7 +7059,10 @@ static void ByEffect() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_COLOR_FRIZZLES
 // =====================================
 //            Цветные кудри
 //           Color Frizzles
@@ -6913,7 +7071,7 @@ static void ByEffect() {
 // =====================================
 static void ColorFrizzles() {
   if (loadingFlag) {
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings) {
       // scale | speed
       setModeSettings(random(10U, 90U), 128);
@@ -6921,7 +7079,7 @@ static void ColorFrizzles() {
     loadingFlag = false;
     FPSdelay = 10U;
     deltaValue = 0;
-#endif
+    #endif
   }
 
   if (modes[currentMode].Scale > 50) {
@@ -6944,7 +7102,10 @@ static void ColorFrizzles() {
     leds[XY(beatsin8(12 + i, 0, WIDTH - 1), beatsin8(15 - i, 0, HEIGHT - 1))] = CHSV(beatsin8(12, 0, 255), 255, (255 - FPSdelay * 2));
   }
 }
+#endif
 
+
+#ifdef DEF_COLORED_PYTHON
 // ============ Colored Python ============
 //      base code WavingCell from © Stepko
 //       Adaptation & modefed © alvikskor
@@ -6955,12 +7116,12 @@ static uint32_t color_timer = millis();
 
 static void Colored_Python() {
   if (loadingFlag) {
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+      #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings) {
           //                     scale | speed
           setModeSettings(random8(100U), random8(1, 255U));
       }
-#endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+      #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       loadingFlag = false;
       step = 0;
   }
@@ -6999,7 +7160,10 @@ static void Colored_Python() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_CONTACTS
 // ================Contacts==============
 //             © Yaroslaw Turbin
 //        Adaptation © SlingMaster
@@ -7011,12 +7175,12 @@ static void Colored_Python() {
 
 static void Contacts() {
   if (loadingFlag) {
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings) {
       // scale | speed
       setModeSettings(random(25U, 90U), random(5U, 250U));
     }
-#endif
+    #endif
     loadingFlag = false;
     FPSdelay = 80U;
     ledsClear(); // esphome: FastLED.clear();
@@ -7062,7 +7226,10 @@ static void Contacts() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_DROP_IN_WATER
 // =====================================
 //               DropInWater
 //                © Stepko
@@ -7114,8 +7281,10 @@ static void DropInWater() {
   }
   blur2d(WIDTH, HEIGHT, 64);
 }
+#endif
 
 
+#ifdef DEF_FEATHER_CANDLE
 // =========== FeatherCandle ============
 //         адаптация © SottNick
 //    github.com/mnemocron/FeatherCandle
@@ -7123,7 +7292,7 @@ static void DropInWater() {
 //           EFF_FEATHER_CANDLE
 //                Свеча
 //---------------------------------------
-// const uint8_t PROGMEM anim[] =               // FeatherCandle animation data
+// const uint8_t PROGMEM anim[] =                      // FeatherCandle animation data
 static const uint8_t  level = 160;
 static const uint8_t  low_level = 110;
 static const uint8_t *ptr  = anim;                     // Current pointer into animation data
@@ -7253,7 +7422,10 @@ static void FeatherCandleRoutine() {
     hue++;
   }
 }
+#endif
 
+
+#ifdef DEF_FIREWORK
 // =====================================
 //               Фейерверк
 //                Firework
@@ -7460,7 +7632,10 @@ static void Firework() {
   //  LOG.printf_P(PSTR("• [%03d] | %03d | sky Bright • [%03d]\n"), step, FPSdelay, hue);
   step ++;
 }
+#endif
 
+
+#ifdef DEF_FIREWORK_2
 //---------- Эффект "Фейерверк" Салют ---
 //адаптация и переписал - kostyamat
 //https://gist.github.com/jasoncoon/0cccc5ba7ab108c0a373
@@ -7691,8 +7866,8 @@ static void Firework() {
   //myLamp.blur2d(20);
   }
 
-  static void fireworksRoutine()
-  {
+static void fireworksRoutine()
+{
   if (loadingFlag)
   {
     loadingFlag = false;
@@ -7721,8 +7896,11 @@ static void Firework() {
       gSparks[b].Move(0, false);//flashing);
       gSparks[b].Draw();
     }
-  }
+}
+#endif
 
+
+#ifdef DEF_HOURGLASS
 // ============= Hourglass ==============
 //             © SlingMaster
 //             EFF_HOURGLASS
@@ -7811,7 +7989,10 @@ static void Hourglass() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_FLOWERRUTA
 // =====================================
 //            Flower Ruta
 //    © Stepko and © Sutaburosu
@@ -7851,7 +8032,10 @@ static void FlowerRuta() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_MAGIC_LANTERN 
 // ============ Magic Lantern ===========
 //             © SlingMaster
 //            Чарівний Ліхтар
@@ -7927,7 +8111,10 @@ static void MagicLantern() {
 
   step++;
 }
+#endif
 
+
+#ifdef DEF_MOSAIC
 // ----------------------------- Эффект Мозайка / Кафель ------------------------------
 // (c) SottNick
 // на основе идеи Idir
@@ -7969,7 +8156,10 @@ static void squaresNdotsRoutine() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_OCTOPUS
 // ============ Octopus ===========
 //        © Stepko and Sutaburosu
 //    Adapted and modifed © alvikskor
@@ -8009,8 +8199,10 @@ static void Octopus() {
     }
   }
 }
+#endif
 
 
+#ifdef DEF_PAINTS
 // ============ Oil Paints ==============
 //      © SlingMaster | by Alex Dovby
 //              EFF_PAINT
@@ -8115,8 +8307,10 @@ static void OilPaints() {
 
   step++;
 }
+#endif
 
 
+#ifdef DEF_PLASMA_WAVES
 // ============ Plasma Waves ============
 //              © Stepko
 //        Adaptation © alvikskor
@@ -8201,8 +8395,10 @@ static void Plasma_Waves() {
     }
   }
 }
+#endif
 
 
+#ifdef DEF_RADIAL_WAVE
 // =====================================
 //              RadialWave
 //            Радіальна хвиля
@@ -8210,7 +8406,6 @@ static void Plasma_Waves() {
 // =====================================
 
 static void RadialWave() {
-
   //ledsClear(); // esphome: FastLED.clear();
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
@@ -8243,13 +8438,16 @@ static void RadialWave() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_RIVERS
 // ========== Botswana Rivers ===========
 //      © SlingMaster | by Alex Dovby
 //              EFF_RIVERS
 //            Реки Ботсваны
-
 //---------------------------------------
+
 static void flora() {
   uint32_t  FLORA_COLOR = 0x2F1F00;
   uint8_t posX =  floor(CENTER_X_MINOR - WIDTH * 0.3);
@@ -8357,7 +8555,8 @@ static void BotswanaRivers() {
   // для ламп из лент с горизонтальной компоновкой и матриц ALT_GRADIENT = false
   // ALT_GRADIENT = false более производительный и более плавная растяжка
   //------------------------------------------------------------------------------
-  static const bool ALT_GRADIENT = true;
+  // static const bool ALT_GRADIENT = true;
+  #define ALT_GRADIENT (1U)
 
   uint8_t divider = 0;
   if (loadingFlag) {
@@ -8421,7 +8620,10 @@ static void BotswanaRivers() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_SPECTRUM
 // ============ Spectrum New ==============
 //             © SlingMaster
 //         source code © kostyamat
@@ -8475,8 +8677,10 @@ static void  Spectrum() {
     }
   }
 }
+#endif
 
 
+#ifdef DEF_STROBE
 // =====================================
 //            Строб Хаос Дифузия
 //          Strobe Haos Diffusion
@@ -8561,8 +8765,10 @@ static void StrobeAndDiffusion() {
     if (step < 1) hue2 = 1;
   }
 }
+#endif
 
 
+#ifdef DEF_SPINDLE
 // ============== Spindle ==============
 //             © SlingMaster
 //          adapted © alvikskor
@@ -8586,7 +8792,7 @@ static void Spindle() {
   if  (modes[currentMode].Scale < 81) {
     blurScreen(128U);
   } else 
-   if  (modes[currentMode].Scale < 86) {
+  if  (modes[currentMode].Scale < 86) {
     blurScreen(96U);
   } else 
   if  (modes[currentMode].Scale < 91) {
@@ -8609,7 +8815,6 @@ static void Spindle() {
     }
   }
   if (modes[currentMode].Scale < 56) {
-
     return;
   }
   if (modes[currentMode].Scale < 61) {
@@ -8625,20 +8830,21 @@ static void Spindle() {
       hue += 4;
   } else {
       hue += 3;
-    }
+  }
 }
+#endif
 
+
+#ifdef DEF_SWIRL
 // ============== Swirl ================
 //    © SlingMaster | by Alex Dovby
 //              EFF_SWIRL
 //--------------------------------------
 static void Swirl() {
-    
-  if (modes[currentMode].Scale > 50) Spindle(); // Якщо масштаб/колір більше 50 - тоді єфект "Веретено"
-  else {
-    
+  uint32_t color;
   uint8_t divider = 0;
   uint8_t lastHue = 0;
+
   static const uint32_t colors[5][6] PROGMEM = {
     {CRGB::Blue, CRGB::DarkRed, CRGB::Aqua, CRGB::Magenta, CRGB::Gold, CRGB::Green },
     {CRGB::Yellow, CRGB::LemonChiffon, CRGB::LightYellow, CRGB::Gold, CRGB::Chocolate, CRGB::Goldenrod},
@@ -8646,16 +8852,15 @@ static void Swirl() {
     {CRGB::Blue, CRGB::DarkBlue, CRGB::MidnightBlue, CRGB::MediumSeaGreen, CRGB::MediumBlue, CRGB:: DeepSkyBlue },
     {CRGB::Magenta, CRGB::Red, CRGB::DarkMagenta, CRGB::IndianRed, CRGB::Gold, CRGB::MediumVioletRed }
   };
-  uint32_t color;
 
   if (loadingFlag) {
-
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings) {
       // scale | speed
       setModeSettings(50U + random8(190U), 250U);
     }
-#endif
+    #endif
+
     loadingFlag = false;
     ledsClear(); // esphome: FastLED.clear();
     deltaValue = 255U - modes[currentMode].Speed + 1U;
@@ -8669,23 +8874,15 @@ static void Swirl() {
     step = 0U;
   }
   divider = floor((modes[currentMode].Scale - 1) / 20); // маштаб задает смену палитры
-  //  if (deltaValue > 50U && deltaHue2 == 0U) {
-  //    hue = random8(6);                       // если низкая скорость меняем цвет после каждого витка
-  //  }
   // задаем цвет и рисуем завиток --------
   color = colors[divider][hue];
-  // drawPixelXY((hue2 + 1), (deltaHue2 - 1), 0x000000); // aded shadow
   drawPixelXY(hue2, deltaHue2, color);
-  // LOG.printf_P(PSTR("Swirl | hue = %03d | x= %03d | y= %03d | divider %d | %d\n"), hue, hue2, deltaHue2, divider, step);
-  // -------------------------------------
 
   hue2++;                     // x
   // два варианта custom_eff задается в сетапе лампы ----
   if (custom_eff == 1) {
-    // blurScreen(beatsin8(5U, 20U, 5U));
     deltaHue2++;              // y
   } else {
-    // blurScreen(10U);
     if (hue2 % 2 == 0) {
       deltaHue2++;            // y
     }
@@ -8700,7 +8897,6 @@ static void Swirl() {
     deltaHue2 = 0U;
     // new swirl ------------
     hue2 = random8(WIDTH - 2);
-    // hue2 = hue2 + 2;
     // select new color -----
     hue = random8(6);
 
@@ -8712,13 +8908,13 @@ static void Swirl() {
     }
     lastHue = hue;
   }
-  // blurScreen(beatsin8(5U, 20U, 5U));
   blurScreen(4U + random8(8));
   step++;
-  } // else у пачатку функції
 }
+#endif
 
 
+#ifdef DEF_TORNADO
 // =====================================
 //           Rainbow Tornado
 //  base code © Stepko, © Sutaburosu
@@ -8727,8 +8923,8 @@ static void Swirl() {
 //              Торнадо
 // =====================================
 
-  const byte OFFSET = 1U;
-  const uint8_t H = HEIGHT - OFFSET;
+const byte OFFSET = 1U;
+const uint8_t H = HEIGHT - OFFSET;
   
 static void Tornado() {
   if (loadingFlag) {
@@ -8758,8 +8954,10 @@ static void Tornado() {
     }
   }
 }
+#endif
 
 
+#ifdef DEF_WATERCOLOR
 // ============ Watercolor ==============
 //      © SlingMaster | by Alex Dovby
 //            EFF_WATERCOLOR
@@ -8826,8 +9024,6 @@ static void SmearPaint(uint8_t obj[trackingOBJECT_MAX_COUNT]) {
   // drawPixelXY(obj[1], obj[3], makeDarker(colors[divider][hue], 240));
   // }
 }
-
-
 
 //---------------------------------------
 static void Watercolor() {
@@ -8902,8 +9098,10 @@ static void Watercolor() {
   //  }
   step++;
 }
+#endif
 
 
+#ifdef DEF_WEB_TOOLS
 // =====================================
 //             Мечта Дизайнера
 //                WebTools
@@ -9061,7 +9259,10 @@ static void WebTools() {
 
   stop_moving = (posX == nextX); 
 }
+#endif
 
+
+#ifdef DEF_WINE
 // =============== Wine ================
 //    © SlingMaster | by Alex Dovby
 //               EFF_WINE
@@ -9155,7 +9356,10 @@ static void colorsWine() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_UKRAINE
 // ============== Ukraine ==============
 //      © SlingMaster | by Alex Dovby
 //              EFF_UKRAINE
@@ -9227,7 +9431,7 @@ static void Ukraine() {
   tMAX = timeout + 100 * divider;
 
   if ((ff_x > timeout - 10) && (ff_x < timeout)) { // таймаут блокировки отрисовки флага
-    if (ff_x < timeout - 5) {                  // размытие тризуба
+    if (ff_x < timeout - 5) {                      // размытие тризуба
       blurScreen(beatsin8(5U, 60U, 5U));
     } else {
       blurScreen(210U - ff_x);
@@ -9295,8 +9499,10 @@ static void Ukraine() {
     step++;
   }
 }
+#endif
 
 
+#ifdef DEF_BAMBOO
 // =============== Bamboo ===============
 //             © SlingMaster
 //                 Бамбук
@@ -9381,7 +9587,10 @@ static void Bamboo() {
   fadeToBlackBy(leds, NUM_LEDS, 60);
   index += STP;
 }
+#endif
 
+
+#ifdef DEF_BALLROUTINE
 // =====================================
 //          Блуждающий кубик
 // =====================================
@@ -9462,7 +9671,10 @@ static void ballRoutine() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_STARS
 // =====================================
 //                Stars
 //     © SottNick and  © Stepko
@@ -9546,8 +9758,10 @@ static void EffectStars() {
   }
   blur2d(WIDTH, HEIGHT, blur);
 }
+#endif
 
 
+#ifdef DEF_TIXYLAND
 // ============= Tixy Land ==============
 //        © Martin Kleppe @aemkei
 //github.com/owenmcateer/tixy.land-display
@@ -9871,7 +10085,10 @@ static void TixyLand() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_FIRESPARKS
 // ============  FireSparks =============
 //               © Stepko
 //    updated with Sparks © kostyamat
@@ -9962,8 +10179,10 @@ static void  FireSparks() {
     }
   }
 }
+#endif
 
 
+#ifdef DEF_DANDELIONS
 // =====================================
 //     Multicolored Dandelions
 //      Base Code © Less Lam
@@ -10088,7 +10307,10 @@ static void Dandelions() {
   // FPSdelay = SOFT_DELAY;
   Circles::draw(false);
 }
+#endif
 
+
+#ifdef DEF_SERPENTINE
 // ============ Serpentine =============
 //             © SlingMaster
 //              Серпантин
@@ -10148,7 +10370,10 @@ static void Serpentine() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_TURBULENCE
 // ======== Digital Тurbulence =========
 //             © SlingMaster
 //        Цифрова Турбулентність
@@ -10247,7 +10472,10 @@ static void Turbulence() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_ARROWS
 // ============== СТРЕЛКИ ==============
 //
 // =====================================
@@ -10645,7 +10873,10 @@ static void arrowsRoutine() {
     break;
   }
 }
+#endif
 
+
+#ifdef DEF_AVRORA
 // ============== Avrora ===============
 //             © SlingMaster
 //                Аврора
@@ -10706,7 +10937,10 @@ static void Avrora() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_LOTUS
 // ============ Lotus Flower ============
 //             © SlingMaster
 //             Цветок Лотоса
@@ -10802,7 +11036,10 @@ static void LotusFlower() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_FONTAN
 // ============== Fountain =============
 //             © SlingMaster
 //                Фонтан
@@ -10882,7 +11119,10 @@ static void Fountain() {
   }
   step++;
 }
+#endif
 
+
+#ifdef DEF_NIGHTCITY
 // ============ Night City =============
 //             © SlingMaster
 //              Ночной Город
@@ -10990,7 +11230,10 @@ static void NightCity() {
   hue++;
   step++;
 }
+#endif
 
+
+#ifdef DEF_RAIN
 // =============== Rain ================
 //             © @Shaitan
 //            ЭФФЕКТ ДОЖДЬ
@@ -11046,7 +11289,10 @@ static void RainRoutine()
     }
   }
 }
+#endif
 
+
+#ifdef DEF_SCANNER
 // ============== Scanner ==============
 //             © SlingMaster
 //                Сканер
@@ -11120,8 +11366,10 @@ static void Scanner() {
   }
   step++;
 }
+#endif
 
 
+#ifdef DEF_MIRAGE
 // =====================================
 //                Mirage
 //               © Stepko
@@ -11201,7 +11449,10 @@ static void Mirage() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_HANDFAN
 // ============== Hand Fan ==============
 //           на основі коду від
 //          © mastercat42@gmail.com
@@ -11243,7 +11494,10 @@ static void HandFan() {
     }
   }
 }
+#endif
 
+
+#ifdef DEF_LIGHTFILTER
 // ============ Light Filter ============
 //             © SlingMaster
 //              Cвітлофільтр
@@ -11375,7 +11629,10 @@ static void LightFilter() {
   }
   hue++;
 }
+#endif
 
+
+#ifdef DEF_RAINBOW_SPOT
 // =========== Rainbow Spot ============
 //             © SlingMaster
 //            Веселкова Пляма
@@ -11449,6 +11706,7 @@ static void RainbowSpot() {
   blurScreen(48);
   step++;
 }
+#endif
 
 }  // namespace matrix_lamp
 }  // namespace esphome
