@@ -155,17 +155,20 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
   effectsTick();
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-  if (this->speed && (modes[currentMode].Speed != (int)this->speed->state))
+  if (random_settings)
   {
-    auto speed = this->speed->make_call();
-    speed.set_value(modes[currentMode].Speed);
-    speed.perform();
-  }
-  if (this->scale && (modes[currentMode].Scale != (int)this->scale->state))
-  {
-    auto scale = this->scale->make_call();
-    scale.set_value(modes[currentMode].Scale);
-    scale.perform();
+    if (this->speed && (modes[currentMode].Speed != (int)this->speed->state))
+    {
+      auto speed = this->speed->make_call();
+      speed.set_value(modes[currentMode].Speed);
+      speed.perform();
+    }
+    if (this->scale && (modes[currentMode].Scale != (int)this->scale->state))
+    {
+      auto scale = this->scale->make_call();
+      scale.set_value(modes[currentMode].Scale);
+      scale.perform();
+    }
   }
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
