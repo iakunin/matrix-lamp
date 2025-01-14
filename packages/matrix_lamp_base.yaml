@@ -1,6 +1,6 @@
 substitutions:
   project_name: "ajs.Light - Matrix Lamp"
-  project_version: "1.1.13"
+  project_version: "1.3.13"
   comment: "ESPHome Matrix Lamp"
 
 esphome:
@@ -27,8 +27,7 @@ matrix_lamp:
   width: 16
   height: 16
   random: true
-  scale_id: matrix_scale
-  speed_id: matrix_speed
+  matrix_type: 0
 
 number:
   # Matrix Orientation
@@ -49,28 +48,3 @@ number:
       then:
         - lambda: |-
             id(matrix).SetMatrixOrientation(x);
-
-  # Matrix Settings
-  - platform: template
-    name: ${name} Effect Speed
-    icon: mdi:speedometer
-    min_value: 0
-    max_value: 255
-    step: 1
-    optimistic: true
-    id: matrix_speed
-    initial_value: 128
-    mode: slider
-    entity_category: config
-
-  - platform: template
-    name: ${name} Effect Scale
-    icon: mdi:drag-variant
-    min_value: 0
-    max_value: 100
-    step: 1
-    optimistic: true
-    id: matrix_scale
-    initial_value: 50
-    mode: slider
-    entity_category: config

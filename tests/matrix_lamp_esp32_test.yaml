@@ -10,8 +10,6 @@ esp32:
   board: nodemcu-32s
 
 esphome:
-  libraries:
-    - fastled/FastLED @ 3.6.0
   on_boot:
     priority: -100
     then:
