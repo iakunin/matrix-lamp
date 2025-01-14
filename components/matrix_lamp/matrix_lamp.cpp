@@ -122,30 +122,41 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
   {
     currentMode = CurrentMode;
     loadingFlag = true;
+
+#ifdef DEF_SCANNER
+    if (currentMode == EFF_SCANNER) {
+      this->SetScaleFromColorForEffect(currentMode, current_color);
+    }
+#endif
+
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     selectedSettings = random_settings;
     if (!random_settings)
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     {
-      auto speed = this->speed->make_call();
-      speed.set_value(modes[currentMode].Speed);
-      speed.perform();
-      auto scale = this->scale->make_call();
-      scale.set_value(modes[currentMode].Scale);
-      scale.perform();
+      if (this->speed) {
+        auto speed = this->speed->make_call();
+        speed.set_value(modes[currentMode].Speed);
+        speed.perform();
+      }
+      if (this->scale) {
+        auto scale = this->scale->make_call();
+        scale.set_value(modes[currentMode].Scale);
+        scale.perform();
+      }
     }
   }
 
   effectsTick();
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-  if (modes[currentMode].Speed != (int)this->speed->state)
+  if (this->speed && (modes[currentMode].Speed != (int)this->speed->state))
   {
     auto speed = this->speed->make_call();
     speed.set_value(modes[currentMode].Speed);
     speed.perform();
   }
-  if (modes[currentMode].Scale != (int)this->scale->state)
+  if (this->scale && (modes[currentMode].Scale != (int)this->scale->state))
   {
     auto scale = this->scale->make_call();
     scale.set_value(modes[currentMode].Scale);
@@ -164,12 +175,12 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
   esphome::delay(1);
   #endif
 
-  if (modes[currentMode].Speed != (int)this->speed->state)
+  if (this->speed && (modes[currentMode].Speed != (int)this->speed->state))
   {
     modes[currentMode].Speed = (int)this->speed->state;
     loadingFlag = true; // без перезапуска эффекта ничего и не увидишь
   }
-  if (modes[currentMode].Scale != (int)this->scale->state)
+  if (this->speed && (modes[currentMode].Scale != (int)this->scale->state))
   {
     modes[currentMode].Scale = (int)this->scale->state;
     loadingFlag = true; // без перезапуска эффекта ничего и не увидишь

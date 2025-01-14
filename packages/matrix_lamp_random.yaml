@@ -32,17 +32,17 @@ interval:
           } while (
                     effects[rand]->get_name() == "None" ||
                     effects[rand]->get_name() == "Magic Lantern" ||
-                    effects[rand]->get_name() == "Simple Rain" ||
-                    effects[rand]->get_name() == "Stormy Rain" ||
-                    effects[rand]->get_name() == "Snow" ||
+                    effects[rand]->get_name() == "Cloud in a Jar" ||
+                    effects[rand]->get_name() == "Thunderstorm in a Jar" ||
+                    effects[rand]->get_name() == "Snowfall" ||
                     effects[rand]->get_name() == "Arrows" ||
-                    effects[rand]->get_name() == "Lotus" ||
-                    effects[rand]->get_name() == "Fontan" ||
+                    effects[rand]->get_name() == "Lotus Flower" ||
+                    effects[rand]->get_name() == "Fountain" ||
                     effects[rand]->get_name() == "Scanner" ||
                     effects[rand]->get_name() == "Colors" ||
                     effects[rand]->get_name() == "Strobe" ||
                     effects[rand]->get_name() == "Strobe Police" ||
-                    effects[rand]->get_name() == "White Color" ||
+                    effects[rand]->get_name() == "White light" ||
                     effects[rand]->get_name() == "Sunrise" ||
                     effects[rand]->get_name() == "Clock Full" ||
                     effects[rand]->get_name() == "WLED / DDP" ||
