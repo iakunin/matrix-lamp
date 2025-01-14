@@ -2767,6 +2767,8 @@ class Boid {
     }
 };
 
+static const uint8_t AVAILABLE_BOID_COUNT = 20U;
+static Boid boids[AVAILABLE_BOID_COUNT];
 
 #if defined(DEF_FLOCK) || defined(DEF_FLOCK_N_PR)
 // ============= ЭФФЕКТ СТАЯ ===============
@@ -2776,9 +2778,6 @@ class Boid {
 // Flocking
 // Daniel Shiffman <http://www.shiffman.net>
 // The Nature of Code, Spring 2009
-
-static const uint8_t AVAILABLE_BOID_COUNT = 20U;
-static Boid boids[AVAILABLE_BOID_COUNT]; 
 
 static const uint8_t boidCount = 10;
 static Boid predator;
@@ -5532,26 +5531,25 @@ static void attractRoutine() {
     loadingFlag = false;
     setCurrentPalette();
 
-    enlargedObjectNUM = (modes[currentMode].Scale - 1U) % 11U + 1U;//(modes[currentMode].Scale - 1U) / 99.0 * (AVAILABLE_BOID_COUNT - 1U) + 1U;
+    enlargedObjectNUM = (modes[currentMode].Scale - 1U) % 11U + 1U; //(modes[currentMode].Scale - 1U) / 99.0 * (AVAILABLE_BOID_COUNT - 1U) + 1U;
     //if (enlargedObjectNUM > AVAILABLE_BOID_COUNT) enlargedObjectNUM = AVAILABLE_BOID_COUNT;
-    
 
-      for (uint8_t i = 0; i < enlargedObjectNUM; i++) {
-            //boids[i] = Boid(random(HEIGHT), 0);
-            boids[i] = Boid(random8(WIDTH), random8(HEIGHT));//WIDTH - 1, HEIGHT - i);
-            //boids[i].location.x = random8(WIDTH);//CENTER_X_MINOR + (float)random8() / 50.;
-            //boids[i].location.y = random8(HEIGHT);//CENTER_Y_MINOR + (float)random8() / 50.;
-            boids[i].mass = ((float)random8(33U, 134U)) / 100.; // random(0.1, 2); // сюда можно поставить регулятор разлёта. чем меньше число, тем дальше от центра будет вылет
-            //boids[i].velocity.x = ((float) random(40, 50)) / 100.0;
-            //boids[i].velocity.x = ((float) random(modes[currentMode].Speed, modes[currentMode].Scale+10)) / 200.0;
-            //boids[i].velocity.x = ((float) random8(modes[currentMode].Scale+45, modes[currentMode].Scale+100)) / 500.0;
-            boids[i].velocity.x = ((float) random8(46U, 100U)) / 500.0;
-            if (random8(2U)) boids[i].velocity.x = -boids[i].velocity.x;
-            boids[i].velocity.y = 0;
-            boids[i].colorIndex = random8();//i * 32;
-            //boids[i].maxspeed = 0.380 * modes[currentMode].Speed /63.5+0.380;
-            //boids[i].maxforce = 0.015 * modes[currentMode].Speed /63.5+0.015;
-      }
+    for (uint8_t i = 0; i < enlargedObjectNUM; i++) {
+      //boids[i] = Boid(random(HEIGHT), 0);
+      boids[i] = Boid(random8(WIDTH), random8(HEIGHT));   //WIDTH - 1, HEIGHT - i);
+      //boids[i].location.x = random8(WIDTH);             //CENTER_X_MINOR + (float)random8() / 50.;
+      //boids[i].location.y = random8(HEIGHT);            //CENTER_Y_MINOR + (float)random8() / 50.;
+      boids[i].mass = ((float)random8(33U, 134U)) / 100.; // random(0.1, 2); // сюда можно поставить регулятор разлёта. чем меньше число, тем дальше от центра будет вылет
+      //boids[i].velocity.x = ((float) random(40, 50)) / 100.0;
+      //boids[i].velocity.x = ((float) random(modes[currentMode].Speed, modes[currentMode].Scale+10)) / 200.0;
+      //boids[i].velocity.x = ((float) random8(modes[currentMode].Scale+45, modes[currentMode].Scale+100)) / 500.0;
+      boids[i].velocity.x = ((float) random8(46U, 100U)) / 500.0;
+      if (random8(2U)) boids[i].velocity.x = -boids[i].velocity.x;
+      boids[i].velocity.y = 0;
+      boids[i].colorIndex = random8();                    //i * 32;
+      //boids[i].maxspeed = 0.380 * modes[currentMode].Speed /63.5+0.380;
+      //boids[i].maxforce = 0.015 * modes[currentMode].Speed /63.5+0.015;
+    }
   } 
   dimAll(220);
   //ledsClear(); // esphome: FastLED.clear();
@@ -5565,11 +5563,11 @@ static void attractRoutine() {
   {
     Boid boid = boids[i];
     //Boid * boid = &boids[i];
-    PVector force = attractLocation - boid.location;   // Calculate direction of force // и вкорячиваем сюда регулировку скорости
+    PVector force = attractLocation - boid.location;    // Calculate direction of force // и вкорячиваем сюда регулировку скорости
     float d = force.mag();                              // Distance between objects
-    d = constrain(d, 5.0f, HEIGHT*2.);                        // Limiting the distance to eliminate "extreme" results for very close or very far objects
+    d = constrain(d, 5.0f, HEIGHT*2.);                  // Limiting the distance to eliminate "extreme" results for very close or very far objects
     force.normalize();                                  // Normalize vector (distance doesn't matter here, we just want this vector for direction)
-    float strength = (5. * boid.mass) / (d * d);      // Calculate gravitional force magnitude 5.=attractG*attractMass
+    float strength = (5. * boid.mass) / (d * d);        // Calculate gravitional force magnitude 5.=attractG*attractMass
     force *= strength;                                  // Get force vector --> magnitude * direction
     
     boid.applyForce(force);
@@ -5582,7 +5580,6 @@ static void attractRoutine() {
   EVERY_N_MILLIS(200) {
     hue++;
   }
-
 }
 #endif
 
