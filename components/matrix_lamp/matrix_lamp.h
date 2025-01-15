@@ -9,20 +9,23 @@ namespace matrix_lamp {
 static const char *const TAG = "matrix_lamp";
 static const char *const MATRIX_LAMP_VERSION = "2025.1.13";
 
-class MatrixLamp : public Component {
-#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-  protected:
-    bool random_settings = false;
-#endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-    esphome::template_::TemplateNumber *scale{nullptr};
-    esphome::template_::TemplateNumber *speed{nullptr};
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+class MatrixLamp_Icon;
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
+#if defined(MATRIX_LAMP_USE_DISPLAY) && defined(USE_API)
+class MatrixLamp : public Component, public api::CustomAPIDevice {
+#else
+class MatrixLamp : public Component {
+#endif
   public:
+    float get_setup_priority() const override { return esphome::setup_priority::LATE; }
+
     void setup() override;
     void dump_config() override;
 
-    void set_scale(esphome::template_::TemplateNumber *scale);
-    void set_speed(esphome::template_::TemplateNumber *speed);
+    void set_scale(template_::TemplateNumber *scale);
+    void set_speed(template_::TemplateNumber *speed);
 
     // Reset the current effect, for example when changing the lamp state. 
     void ResetCurrentEffect();
@@ -48,12 +51,51 @@ class MatrixLamp : public Component {
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     bool GetRandomSettings();
-
     void SetRandomSettings(bool b=false);
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
     void ShowFrame(uint8_t CurrentMode, esphome::Color current_color, light::AddressableLight *p_it);
+
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+    void set_display(addressable_light::AddressableLightDisplay *disp);
+    void add_icon(MatrixLamp_Icon *icon);
+    void show_icon(std::string icon);
+    void Display();
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
+
+  protected:
+#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    bool random_settings = false;
+#endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+    uint8_t icon_count{0};
+    uint8_t current_icon = MAXICONS;
+    unsigned long last_anim_time{0};
+    PROGMEM MatrixLamp_Icon *icons[MAXICONS];
+    addressable_light::AddressableLightDisplay *display{nullptr};
+    uint8_t find_icon(std::string name);
+    void update_screen();
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
+
+    esphome::template_::TemplateNumber *scale{nullptr};
+    esphome::template_::TemplateNumber *speed{nullptr};
 }; // class MatrixLamp
+
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+class MatrixLamp_Icon : public animation::Animation
+{
+  protected:
+    bool counting_up;
+
+  public:
+    MatrixLamp_Icon(const uint8_t *data_start, int width, int height, uint32_t animation_frame_count, esphome::image::ImageType type, std::string icon_name, bool revers, uint16_t frame_duration);
+    PROGMEM std::string name;
+    uint16_t frame_duration;
+    void next_frame();
+    bool reverse;
+}; // class MatrixLamp_Icon
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
 }  // namespace matrix_lamp
 }  // namespace esphome
