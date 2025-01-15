@@ -1,3 +1,23 @@
+MAXICONS = 100
+MAXFRAMES = 110
+
+ICONWIDTH = 8
+ICONHEIGHT = 8
+ICONSIZE = ICONWIDTH * ICONHEIGHT * 2
+
+CONF_SCALE_ID = "scale_id"
+CONF_SPEED_ID = "speed_id"
+CONF_ORIENTATION = "matrix_orientation"
+CONF_MATRIX_TYPE = "matrix_type"
+CONF_MATRIX_ID = "matrix_lamp_id"
+CONF_ICONS = "icons"
+CONF_CACHE = "iconscache"
+CONF_LAMEID = "lameid"
+CONF_RGB565ARRAY = "str565"
+CONF_FRAMEDURATION = "frame_duration"
+CONF_FRAMEINTERVAL = "frame_interval"
+CONF_PINGPONG = "pingpong"
+
 EFF_WHITE_COLOR = "WHITE_COLOR"
 EFF_COLORS = "COLORS"
 EFF_MADNESS = "MADNESS"

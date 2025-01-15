@@ -1,0 +1,50 @@
+light:
+  - id: !extend neopixel_led
+    on_turn_on:
+      - lambda: |-
+          id(neopixel_display).set_enabled(false);
+    on_turn_off:
+      - lambda: |-
+          id(neopixel_display).set_enabled(true);
+
+display:
+  - platform: addressable_light
+    id: neopixel_display
+    addressable_light_id: neopixel_led
+    width: 16
+    height: 16
+    pixel_mapper: |-
+      return esphome::matrix_lamp::XY(x, y);
+    rotation: 180°
+    update_interval: 16ms
+    lambda: |-
+      id(matrix)->Display();
+
+matrix_lamp:
+  id: matrix
+  display: neopixel_display
+  iconscache: true
+
+  # https://developer.lametric.com/icons
+  icons:
+    - id: home_assistant
+      frame_duration: 500
+      lameid: 7956
+
+    - id: ukraine
+      lameid: 881
+      frame_duration: 300
+
+    - id: fireworks
+      lameid: 26001
+    - id: fire
+      lameid: 60710
+
+    - id: pacman
+      lameid: 1496
+    - id: skull
+      lameid: 11241
+
+animation:
+  - id: animation_black
+    file: images/1pixel.gif

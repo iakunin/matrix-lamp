@@ -45,7 +45,7 @@ display:
     width: 16
     height: 16
     pixel_mapper: |-
-      return XY(x, y);
+      return esphome::matrix_lamp::XY(x, y);
     rotation: 180°
     update_interval: 1s
     lambda: |-

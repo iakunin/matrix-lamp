@@ -9,33 +9,59 @@ namespace esphome {
 namespace matrix_lamp {
 
 void MatrixLamp::setup() {
-   memset(matrixValue, 0, sizeof(matrixValue)); // это массив для эффекта Огонь. странно, что его нужно залить нулями
+  memset(matrixValue, 0, sizeof(matrixValue)); // это массив для эффекта Огонь. странно, что его нужно залить нулями
 
   randomSeed(micros());
   restoreSettings();
 
   loadingFlag = true;
+
+  #if defined(MATRIX_LAMP_USE_DISPLAY)
+  this->current_icon = MAXICONS;
+  this->last_anim_time = 0;
+  #if defined(USE_API)
+  register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
+  #endif
+  #endif
 }  // setup()
 
 void MatrixLamp::dump_config() {
   ESP_LOGCONFIG(TAG, "MatrixLamp version: %s", MATRIX_LAMP_VERSION);
-  ESP_LOGCONFIG(TAG, "             Width: %s", WIDTH);
-  ESP_LOGCONFIG(TAG, "            Height: %s", HEIGHT);
+  ESP_LOGCONFIG(TAG, "             Width: %d", WIDTH);
+  ESP_LOGCONFIG(TAG, "            Height: %d", HEIGHT);
+  #if defined(MATRIX_LAMP_USE_DISPLAY)
+  ESP_LOGCONFIG(TAG, "           Display: YES");
+  ESP_LOGCONFIG(TAG, "   Number of icons: %d", this->icon_count);
+  #endif
   #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   ESP_LOGCONFIG(TAG, "Random mode enable: YES");
   #else
   ESP_LOGCONFIG(TAG, "Random mode enable: NO");
   #endif
-  ESP_LOGCONFIG(TAG, "       Orientation: %s", ORIENTATION);
-  ESP_LOGCONFIG(TAG, "       Matrix Type: %s", MATRIX_TYPE);
-  ESP_LOGCONFIG(TAG, "   Number of modes: %s", MODE_AMOUNT);
+  ESP_LOGCONFIG(TAG, "       Orientation: %d", ORIENTATION);
+  ESP_LOGCONFIG(TAG, "       Matrix Type: %d", MATRIX_TYPE);
+  ESP_LOGCONFIG(TAG, "   Number of modes: %d", MODE_AMOUNT);
 }  // dump_config()
 
-void MatrixLamp::set_scale(esphome::template_::TemplateNumber *scale) {
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+void MatrixLamp::set_display(addressable_light::AddressableLightDisplay *display)
+{
+  this->display = display;
+}
+
+void MatrixLamp::add_icon(MatrixLamp_Icon *icon)
+{
+  this->icons[this->icon_count] = icon;
+  ESP_LOGD(TAG, "Add Icon No.: %d name: %s frame_duration: %d ms", this->icon_count, icon->name.c_str(), icon->frame_duration);
+  this->icon_count++;
+}
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
+
+void MatrixLamp::set_scale(template_::TemplateNumber *scale) {
   this->scale = scale;
 } // set_scale()
 
-void MatrixLamp::set_speed(esphome::template_::TemplateNumber *speed) {
+void MatrixLamp::set_speed(template_::TemplateNumber *speed) {
   this->speed = speed;
 } // set_speed()
 
@@ -194,6 +220,66 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
     loadingFlag = true; // без перезапуска эффекта ничего и не увидишь
   }
 }
+
+#if defined(MATRIX_LAMP_USE_DISPLAY)
+uint8_t MatrixLamp::find_icon(std::string name)
+{
+  for (uint8_t i = 0; i < this->icon_count; i++)
+  {
+    if (strcmp(this->icons[i]->name.c_str(), name.c_str()) == 0)
+    {
+      ESP_LOGD(TAG, "Icon: %s found id: %d", name.c_str(), i);
+      return i;
+    }
+  }
+  ESP_LOGW(TAG, "Icon: %s not found", name.c_str());
+  return MAXICONS;
+}
+
+void MatrixLamp::show_icon(std::string iconname)
+{
+  if (iconname == "clean_out")
+  {
+    this->current_icon = MAXICONS;
+    this->display->set_enabled(false);
+    return;
+  }
+
+  this->current_icon = this->find_icon(iconname);
+  if (this->current_icon == MAXICONS)
+  {
+    ESP_LOGD(TAG, "Icon %d/%s not found => skip!", this->current_icon, iconname.c_str());
+  }
+  else
+  {
+    this->icons[this->current_icon]->set_frame(0);
+    this->display->set_enabled(true);
+  }
+}
+
+void MatrixLamp::update_screen()
+{
+  if (this->current_icon < this->icon_count)
+  {
+    if (millis() - this->last_anim_time >= this->icons[this->current_icon]->frame_duration)
+    {
+      this->icons[this->current_icon]->next_frame();
+      this->last_anim_time = millis();
+    }
+  }
+}
+
+void MatrixLamp::Display()
+{
+  if (this->current_icon == MAXICONS)
+  {
+    return;
+  }
+
+  this->display->image(4, 4, this->icons[this->current_icon]);
+  this->update_screen();
+}
+#endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
 }  // namespace matrix_lamp
 }  // namespace esphome
