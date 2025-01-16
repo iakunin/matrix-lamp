@@ -1,0 +1,84 @@
+# Time from SNTP
+time:
+  - platform: sntp
+    id: matrix_lamp_time
+    on_time_sync:
+      then:
+        - if:
+            condition:
+              time.has_time:
+            then:
+              - logger.log: Time has been set and is valid!
+        - if:
+            condition:
+              - time.has_time:
+              - light.is_off: neopixel_led
+            then:
+              - lambda: |-
+                  id(neopixel_display).set_enabled(true);
+
+light:
+  - id: !extend neopixel_led
+    on_turn_on:
+      - lambda: |-
+          id(neopixel_display).set_enabled(false);
+      - light.turn_off:
+          id: color_clock
+
+    on_turn_off:
+      - if:
+          condition:
+            - time.has_time:
+          then:
+            - lambda: |-
+                id(neopixel_display).set_enabled(true);
+      - light.turn_on:
+          id: color_clock
+
+  - platform: esp32_rmt_led_strip
+    pin: 27
+    num_leds: 1
+    name: Color clock
+    id: color_clock
+    icon: mdi:clock-digital
+    rgb_order: GRB
+    chipset: WS2812
+    rmt_channel: 0
+    on_turn_on:
+      - light.turn_off:
+          id: neopixel_led
+    on_turn_off:
+      - lambda: |-
+          id(neopixel_display)->get_light()->set_correction(1.0, 1.0, 1.0);
+      - light.turn_on:
+          id: neopixel_led
+
+font:
+  - file: https://github.com/trip5/Matrix-Fonts/raw/refs/heads/main/8-series/MatrixChunky8.ttf
+    id: px8_font
+    size: 8
+    glyphs: |-
+      01234:56789
+
+display:
+  - platform: addressable_light
+    id: neopixel_display
+    addressable_light_id: neopixel_led
+    width: 32
+    height: 8
+    pixel_mapper: |-
+      return esphome::matrix_lamp::XY(x, y);
+    rotation: 180°
+    update_interval: 1s
+    lambda: |-
+      auto font_color = Color(id(color_clock).remote_values.get_red()*255,id(color_clock).remote_values.get_green()*255 ,id(color_clock).remote_values.get_blue()*255 );
+
+      static int i = 0;
+      i++;
+      if ((i % 2) == 0)
+        it.print(WIDTH/2, HEIGHT/2, id(px8_font), font_color, TextAlign::CENTER, ":");
+      it.strftime(WIDTH/4, HEIGHT/2, id(px8_font), font_color, TextAlign::CENTER, "%H", id(matrix_lamp_time).now());
+      it.strftime(WIDTH/2+WIDTH/4, HEIGHT/2, id(px8_font), font_color, TextAlign::CENTER, "%M", id(matrix_lamp_time).now());
+
+      auto clock_br = id(color_clock).remote_values.get_brightness();
+      id(neopixel_display)->get_light()->set_correction(clock_br, clock_br, clock_br);
