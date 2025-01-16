@@ -1,12 +1,11 @@
 # ESPHome Matrix Lamp
-[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Components&color=blue&logo=esphome)](https://github.com/andrewjswan/esphome-components/)
-[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Config&color=blue&logo=esphome)](https://esphome.io/)
-[![matrix-lamp_badge](https://img.shields.io/badge/Matrix-Lamp-orange.svg)](https://github.com/andrewjswan/matrix-lamp/)
+[![matrix-lamp_badge](https://img.shields.io/static/v1?label=Matrix&message=Lamp&color=orange&logo=lighthouse&logoColor=white)](https://github.com/andrewjswan/esphome-components/)
 [![esp32_arduino](https://img.shields.io/badge/ESP32-Arduino-darkcyan.svg)](https://esphome.io/)
 [![Build](https://github.com/andrewjswan/matrix-lamp/actions/workflows/build.yaml/badge.svg)](https://github.com/andrewjswan/matrix-lamp/actions/workflows/build.yaml)
+[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Components&color=blue&logo=esphome)](https://github.com/andrewjswan/esphome-components/)
+[![esphome_badge](https://img.shields.io/static/v1?label=ESPHome&message=Config&color=blue&logo=esphome)](https://esphome.io/)
 [![GitHub](https://img.shields.io/github/license/andrewjswan/matrix-lamp?color=blue)](https://github.com/andrewjswan/matrix-lamp/blob/main/LICENSE)
 [![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/andrewjswan/matrix-lamp?include_prereleases)](https://github.com/andrewjswan/matrix-lamp/releases)
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/andrewjswan/matrix-lamp/latest/total?label=release@downloads)](https://github.com/andrewjswan/matrix-lamp/releases)
 [![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 ## Description
