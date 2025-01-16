@@ -1,22 +1,58 @@
 """Matrix Lamp component for ESPHome."""
 
 import io
+import json
 import logging
-import os
-import requests
+from pathlib import Path
+from urllib.parse import urlparse
 
 import esphome.codegen as cg
+import esphome.components.image as esp_image
 import esphome.config_validation as cv
-import esphome.components.image as espImage
+import requests
+from esphome import core
+from esphome.components import display
+from esphome.components.light.effects import register_addressable_effect
+from esphome.components.light.types import AddressableLightEffect
+from esphome.components.template.number import TemplateNumber
+from esphome.const import (
+    CONF_DISPLAY,
+    CONF_FILE,
+    CONF_HEIGHT,
+    CONF_ID,
+    CONF_MODE,
+    CONF_NAME,
+    CONF_RANDOM,
+    CONF_RAW_DATA_ID,
+    CONF_RESIZE,
+    CONF_URL,
+    CONF_WIDTH,
+)
 from esphome.core import CORE, HexInt
 from esphome.cpp_generator import RawExpression
-from esphome.components import display
-from esphome.components.light.types import AddressableLightEffect
-from esphome.components.light.effects import register_addressable_effect
-from esphome.components.template.number import TemplateNumber
-from esphome.const import CONF_ID, CONF_DISPLAY, CONF_FILE, CONF_URL, CONF_RESIZE, CONF_WIDTH, CONF_HEIGHT, CONF_NAME, CONF_MODE, CONF_RANDOM, CONF_RAW_DATA_ID
-from .const import CONF_SCALE_ID, CONF_SPEED_ID, CONF_ICONS, CONF_CACHE, CONF_LAMEID, CONF_ORIENTATION, CONF_RGB565ARRAY, CONF_FRAMEDURATION, CONF_FRAMEINTERVAL, CONF_PINGPONG, CONF_MATRIX_TYPE, CONF_MATRIX_ID, EFF_DNA, MATRIX_LAMP_EFFECTS, MAXICONS, ICONWIDTH, ICONHEIGHT, ICONSIZE, MAXFRAMES
 
+from .const import (
+    CONF_CACHE,
+    CONF_FRAMEDURATION,
+    CONF_FRAMEINTERVAL,
+    CONF_ICONS,
+    CONF_LAMEID,
+    CONF_MATRIX_ID,
+    CONF_MATRIX_TYPE,
+    CONF_ORIENTATION,
+    CONF_PINGPONG,
+    CONF_RGB565ARRAY,
+    CONF_SCALE_ID,
+    CONF_SPEED_ID,
+    EFF_DNA,
+    ICONHEIGHT,
+    ICONSIZE,
+    ICONWIDTH,
+    IS_8X8,
+    MATRIX_LAMP_EFFECTS,
+    MAXFRAMES,
+    MAXICONS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,16 +86,15 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
             cv.ensure_list(
                 {
                     cv.Required(CONF_ID): cv.declare_id(MATRIX_ICONS),
-
-                    cv.Exclusive(CONF_FILE,"uri"): cv.file_,
-                    cv.Exclusive(CONF_URL,"uri"): cv.url,
-                    cv.Exclusive(CONF_LAMEID,"uri"): cv.string,
-                    cv.Exclusive(CONF_RGB565ARRAY,"uri"): cv.string,
+                    cv.Exclusive(CONF_FILE, "uri"): cv.file_,
+                    cv.Exclusive(CONF_URL, "uri"): cv.url,
+                    cv.Exclusive(CONF_LAMEID, "uri"): cv.string,
+                    cv.Exclusive(CONF_RGB565ARRAY, "uri"): cv.string,
                     cv.Optional(CONF_RESIZE): cv.dimensions,
                     cv.Optional(CONF_FRAMEDURATION, default="0"): cv.templatable(cv.positive_int),
                     cv.Optional(CONF_PINGPONG, default=False): cv.boolean,
                     cv.GenerateID(CONF_RAW_DATA_ID): cv.declare_id(cg.uint8),
-                }
+                },
             ),
             cv.Length(max=MAXICONS),
         ),
@@ -70,7 +105,8 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
 
 CONFIG_SCHEMA = cv.All(MATRIX_LAMP_SCHEMA)
 
-async def to_code(config) -> None:  # noqa: ANN001
+
+async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     """Code generation entry point."""
     var = cg.new_Pvariable(config[CONF_ID])
 
@@ -93,7 +129,7 @@ async def to_code(config) -> None:  # noqa: ANN001
 
     if config[CONF_RANDOM]:
         cg.add_define("RANDOM_SETTINGS_IN_CYCLE_MODE")
-  
+
     if CONF_DISPLAY in config:
         cg.add_define("MATRIX_LAMP_USE_DISPLAY")
         disp = await cg.get_variable(config[CONF_DISPLAY])
@@ -102,15 +138,16 @@ async def to_code(config) -> None:  # noqa: ANN001
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)
 
-        from PIL import Image, ImageSequence
+        from PIL import Image
 
-        def openImageFile(path):
-            try:
-                return Image.open(path)
-            except Exception as e:
-                raise core.EsphomeError(f"Icons: Could not load image file {path}: {e}")
+        def rgb565_888(v565):  # noqa: ANN001 ANN202
+            """RGB 565 to 888."""
+            b = ((v565) & 0x001F) << 3
+            g = ((v565) & 0x07E0) >> 3
+            r = ((v565) & 0xF800) >> 8
+            return (r, g, b)
 
-        logging.info(f"Icons: Preparing icons, this may take some seconds.")
+        logging.info("Icons: Preparing icons, this may take some seconds.")
 
         yaml_string = ""
         icon_count = 0
@@ -119,65 +156,87 @@ async def to_code(config) -> None:  # noqa: ANN001
             if CONF_FILE in conf:
                 path = CORE.relative_config_path(conf[CONF_FILE])
                 try:
-                    image = openImageFile(path)
-                except Exception as e:
-                    raise core.EsphomeError(f" Icons: Could not load image file {path}: {e}")
+                    image = Image.open(path)
+                except Exception as e:  # noqa: BLE001
+                    msg = f" Icons: Could not load image file {path}: {e}"
+                    raise core.EsphomeError(msg)  # noqa: B904
 
             elif CONF_LAMEID in conf:
                 path = CORE.relative_config_path(".cache/icons/lameid/" + conf[CONF_LAMEID])
-                if config[CONF_CACHE] and os.path.isfile(path):
+                if config[CONF_CACHE] and Path(path).is_file():
                     try:
-                        image = openImageFile(path)
-                        logging.info(f" Icons: Load {conf[CONF_LAMEID]} from cache.")
-                    except Exception as e:
-                        raise core.EsphomeError(f" Icons: Could not load image file {path}: {e}")
+                        image = Image.open(path)
+                        logging.info(" Icons: Load %s from cache.", conf[CONF_LAMEID])
+                    except Exception as e:  # noqa: BLE001
+                        msg = f" Icons: Could not load image file {path}: {e}"
+                        raise core.EsphomeError(msg)  # noqa: B904
                 else:
-                    r = requests.get("https://developer.lametric.com/content/apps/icon_thumbs/" + conf[CONF_LAMEID],
-                                     headers = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
-                                     timeout=4.0)
+                    r = requests.get(
+                        "https://developer.lametric.com/content/apps/icon_thumbs/"
+                        + conf[CONF_LAMEID],
+                        headers={
+                            "Cache-Control": "no-cache, no-store, must-revalidate",
+                            "Pragma": "no-cache",
+                        },
+                        timeout=4.0,
+                    )
                     if r.status_code != requests.codes.ok:
-                        raise core.EsphomeError(f" Icons: Could not download image file {conf[CONF_LAMEID]}: {conf[CONF_ID]}")
+                        msg = (
+                            " Icons: Could not download image file "
+                            f"{conf[CONF_LAMEID]}: {conf[CONF_ID]}"
+                        )
+                        raise core.EsphomeError(msg)
                     image = Image.open(io.BytesIO(r.content))
 
                     if config[CONF_CACHE]:
-                        os.makedirs(os.path.dirname(path), exist_ok=True)
-                        f = open(path,"wb")
-                        f.write(r.content) 
-                        f.close()
-                        logging.info(f" Icons: Save {conf[CONF_LAMEID]} to cache.")
+                        Path(Path(path).parent).mkdir(parents=True, exist_ok=True)
+                        with Path(path).open(mode="wb") as f:
+                            f.write(r.content)
+                            f.close()
+                        logging.info(" Icons: Save %s to cache.", conf[CONF_LAMEID])
 
             elif CONF_URL in conf:
                 a = urlparse(conf[CONF_URL])
-                path = CORE.relative_config_path(".cache/icons/url/" + os.path.basename(a.path))
-                if config[CONF_CACHE] and os.path.isfile(path):
+                path = CORE.relative_config_path(".cache/icons/url/" + Path(a.path).name)
+                if config[CONF_CACHE] and Path(path).is_file():
                     try:
-                        image = openImageFile(path)
-                        logging.info(f" Icons: Load {conf[CONF_URL]} from cache.")
-                    except Exception as e:
-                        raise core.EsphomeError(f" Icons: Could not load image file {path}: {e}")
+                        image = Image.open(path)
+                        logging.info(" Icons: Load %s from cache.", conf[CONF_URL])
+                    except Exception as e:  # noqa: BLE001
+                        msg = f" Icons: Could not load image file {path}: {e}"
+                        raise core.EsphomeError(msg)  # noqa: B904
                 else:
-                    r = requests.get(conf[CONF_URL], 
-                                     headers = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
-                                     timeout=4.0)
+                    r = requests.get(
+                        conf[CONF_URL],
+                        headers={
+                            "Cache-Control": "no-cache, no-store, must-revalidate",
+                            "Pragma": "no-cache",
+                        },
+                        timeout=4.0,
+                    )
                     if r.status_code != requests.codes.ok:
-                        raise core.EsphomeError(f" Icons: Could not download image file {conf[CONF_URL]}: {conf[CONF_ID]}")
+                        msg = (
+                            " Icons: Could not download image file "
+                            f"{conf[CONF_URL]}: {conf[CONF_ID]}"
+                        )
+                        raise core.EsphomeError(msg)
                     image = Image.open(io.BytesIO(r.content))
 
                     if config[CONF_CACHE]:
-                        os.makedirs(os.path.dirname(path), exist_ok=True)
-                        f = open(path,"wb")
-                        f.write(r.content) 
-                        f.close()
-                        logging.info(f" Icons: Save {conf[CONF_URL]} to cache.")
+                        Path(Path(path).parent).mkdir(parents=True, exist_ok=True)
+                        with Path(path).open(mode="wb") as f:
+                            f.write(r.content)
+                            f.close()
+                        logging.info(" Icons: Save %s to cache.", conf[CONF_URL])
 
             elif CONF_RGB565ARRAY in conf:
                 r = list(json.loads(conf[CONF_RGB565ARRAY]))
-                if len(r) == 64:
-                    image = Image.new("RGB",[8,8])
-                    for y in range(0,8):
-                       for x in range(0,8):
-                            image.putpixel((x,y),rgb565_888(r[x+y*8]))
-                               
+                if len(r) == IS_8X8:
+                    image = Image.new("RGB", [8, 8])
+                    for y in range(8):
+                        for x in range(8):
+                            image.putpixel((x, y), rgb565_888(r[x + y * 8]))
+
             width, height = image.size
 
             if CONF_RESIZE in conf:
@@ -185,60 +244,60 @@ async def to_code(config) -> None:  # noqa: ANN001
                 ratio = min(new_width_max / width, new_height_max / height)
                 width, height = int(width * ratio), int(height * ratio)
 
-            if hasattr(image, 'n_frames'):
+            if hasattr(image, "n_frames"):
                 frames = min(image.n_frames, MAXFRAMES)
-                logging.info(f" Icons: Animation {conf[CONF_ID]} with { frames } frame(s)")
+                logging.info(" Icons: Animation %s with %s frame(s)", conf[CONF_ID], frames)
             else:
                 frames = 1
 
             if (width != ICONWIDTH) and (height != ICONHEIGHT):
-                logging.warning(f" Icons: Icon wrong size valid 8x8: {conf[CONF_ID]} skipped!")
+                logging.warning(" Icons: Icon wrong size valid 8x8: %s skipped!", conf[CONF_ID])
             else:
-                if (conf[CONF_FRAMEDURATION] == 0):
+                if conf[CONF_FRAMEDURATION] == 0:
                     try:
-                        duration = image.info['duration']         
-                    except:
+                        duration = image.info["duration"]
+                    except:  # noqa: E722
                         duration = config[CONF_FRAMEINTERVAL]
                 else:
                     duration = conf[CONF_FRAMEDURATION]
 
-                yaml_string += F"\"{conf[CONF_ID]}\","
+                yaml_string += f'"{conf[CONF_ID]}",'
                 icon_count += 1
 
-                pos = 0 
-                frameIndex = 0
+                pos = 0
+                frame_index = 0
                 data = [0 for _ in range(ICONSIZE * frames)]
                 if image.has_transparency_data:
-                    logging.debug(f" Icons: icon {conf[CONF_ID]} has transparency!")
-                
-                for frameIndex in range(frames):
-                    image.seek(frameIndex)
+                    logging.debug(" Icons: icon %s has transparency!", conf[CONF_ID])
+
+                for frame_index in range(frames):
+                    image.seek(frame_index)
                     frame = image.convert("RGB")
 
                     if CONF_RESIZE in conf:
                         frame = frame.resize([width, height])
-        
+
                     pixels = list(frame.getdata())
-                    
+
                     i = 0
                     for pix in pixels:
-                        R = pix[0] >> 3
-                        G = pix[1] >> 2
-                        B = pix[2] >> 3
-                                                
-                        x = (i % width)
-                        y = i//width
-                        i +=1
+                        R = pix[0] >> 3  # noqa: N806
+                        G = pix[1] >> 2  # noqa: N806
+                        B = pix[2] >> 3  # noqa: N806
+
+                        x = i % width
+                        y = i // width
+                        i += 1  # noqa: SIM113
                         rgb = (R << 11) | (G << 5) | B
-                        
+
                         data[pos] = rgb >> 8
                         pos += 1
                         data[pos] = rgb & 255
                         pos += 1
-                        
+
                 rhs = [HexInt(x) for x in data]
-                
-                logging.debug(f"Icons: icon {conf[CONF_ID]} {rhs}")
+
+                logging.debug("Icons: icon %s %s", conf[CONF_ID], rhs)
 
                 prog_arr = cg.progmem_array(conf[CONF_RAW_DATA_ID], rhs)
 
@@ -248,15 +307,19 @@ async def to_code(config) -> None:  # noqa: ANN001
                     width,
                     height,
                     frames,
-                    espImage.IMAGE_TYPE["RGB565"],
+                    esp_image.IMAGE_TYPE["RGB565"],
                     str(conf[CONF_ID]),
                     conf[CONF_PINGPONG],
                     duration,
                 )
 
                 cg.add(var.add_icon(RawExpression(str(conf[CONF_ID]))))
-        
-        logging.info(f"Icons: [{icon_count}] List of icons for e.g. blueprint:\n\n\r[{yaml_string}]\n")
+
+        logging.info(
+            "Icons: [%s] List of icons for e.g. blueprint:\n\n\r[%s]\n",
+            icon_count,
+            yaml_string,
+        )
 
     await cg.register_component(var, config)
 
@@ -270,9 +333,7 @@ async def to_code(config) -> None:  # noqa: ANN001
         cv.Optional(CONF_MODE, default=EFF_DNA): cv.one_of(*MATRIX_LAMP_EFFECTS, upper=True),
     },
 )
-
-
-async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLightEffect:
+async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLightEffect:  # noqa: ANN001
     """Effect registration entry point."""
     parent = await cg.get_variable(config[CONF_MATRIX_ID])
 

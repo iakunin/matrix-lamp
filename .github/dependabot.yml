@@ -10,5 +10,20 @@ updates:
     labels:
       - dependencies
     commit-message:
-      prefix: "ESP"
+      prefix: "DEP"
+    open-pull-requests-limit: 10
+
+  # Update Python dependencies
+  - package-ecosystem: "pip"
+    directories:
+      - "*"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "12:00"
+    labels:
+      - dependencies
+      - python
+    commit-message:
+      prefix: "PIP"
     open-pull-requests-limit: 10

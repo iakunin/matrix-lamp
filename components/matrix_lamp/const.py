@@ -1,9 +1,13 @@
+"""Constants for Matrix Lamp component for ESPHome."""
+
 MAXICONS = 100
 MAXFRAMES = 110
 
 ICONWIDTH = 8
 ICONHEIGHT = 8
 ICONSIZE = ICONWIDTH * ICONHEIGHT * 2
+
+IS_8X8 = 64
 
 CONF_SCALE_ID = "scale_id"
 CONF_SPEED_ID = "speed_id"
