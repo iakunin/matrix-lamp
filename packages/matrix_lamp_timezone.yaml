@@ -7,7 +7,7 @@ text:
     max_length: 15
     mode: text
     restore_value: true
-    initial_value: "Europe/Kyiv"
+    initial_value: "EET-2EEST,M3.5.0/3,M10.5.0/4"
     icon: mdi:airplane-time
     entity_category: config
     disabled_by_default: true
