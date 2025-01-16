@@ -60,6 +60,8 @@ class MatrixLamp : public Component {
     void set_display(addressable_light::AddressableLightDisplay *disp);
     void add_icon(MatrixLamp_Icon *icon);
     void show_icon(std::string icon);
+    void show_icon_by_index(int icon);
+    void set_brightness(int value);
     void Display();
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
@@ -69,10 +71,13 @@ class MatrixLamp : public Component {
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
-    uint8_t icon_count{0};
     uint8_t current_icon = MAXICONS;
+    uint8_t icon_count{0};
+    uint8_t brightness{0};
+    uint8_t target_brightness{0};
     unsigned long last_anim_time{0};
     PROGMEM MatrixLamp_Icon *icons[MAXICONS];
+
     addressable_light::AddressableLightDisplay *display{nullptr};
     uint8_t find_icon(std::string name);
     void update_screen();

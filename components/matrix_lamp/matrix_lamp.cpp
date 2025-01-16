@@ -9,8 +9,6 @@ namespace esphome {
 namespace matrix_lamp {
 
 void MatrixLamp::setup() {
-  memset(matrixValue, 0, sizeof(matrixValue)); // это массив для эффекта Огонь. странно, что его нужно залить нулями
-
   randomSeed(micros());
   restoreSettings();
 
@@ -19,8 +17,11 @@ void MatrixLamp::setup() {
   #if defined(MATRIX_LAMP_USE_DISPLAY)
   this->current_icon = MAXICONS;
   this->last_anim_time = 0;
+  this->brightness = 0;
+  this->target_brightness = 0;
   #if defined(USE_API)
   register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
+  register_service(&MatrixLamp::set_brightness, "brightness", {"value"});
   #endif
   #endif
 }  // setup()
@@ -245,15 +246,40 @@ void MatrixLamp::show_icon(std::string iconname)
     return;
   }
 
-  this->current_icon = this->find_icon(iconname);
-  if (this->current_icon == MAXICONS)
+  uint8_t icon = this->find_icon(iconname);
+  if (icon == MAXICONS)
   {
     ESP_LOGD(TAG, "Icon %d/%s not found => skip!", this->current_icon, iconname.c_str());
   }
   else
   {
-    this->icons[this->current_icon]->set_frame(0);
+    if (this->current_icon != icon)
+    {
+      this->display->set_enabled(false);
+    }
+    this->current_icon = icon;
+    this->icons[icon]->set_frame(0);
     this->display->set_enabled(true);
+  }
+}
+
+void MatrixLamp::show_icon_by_index(int icon)
+{
+  if (icon < this->icon_count)
+  {
+    this->current_icon = icon;
+    return;
+  }
+  this->current_icon = MAXICONS;
+}
+
+void MatrixLamp::set_brightness(int value)
+{
+  if (value < 256)
+  {
+    this->target_brightness = value;
+    float br = (float)value / (float)255;
+    ESP_LOGI(TAG, "Display: set_brightness %d => %.2f %%", value, 100 * br);
   }
 }
 
@@ -271,6 +297,13 @@ void MatrixLamp::update_screen()
 
 void MatrixLamp::Display()
 {
+  if (this->brightness != this->target_brightness)
+  {
+    this->brightness = this->brightness + (this->target_brightness < this->brightness ? -1 : 1);
+    float br = (float)this->brightness / (float)255;
+    this->display->get_light()->set_correction(br, br, br);
+  }
+
   if (this->current_icon == MAXICONS)
   {
     return;

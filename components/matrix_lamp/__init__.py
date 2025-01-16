@@ -112,7 +112,8 @@ async def to_code(config) -> None:  # noqa: ANN001
 
         logging.info(f"Icons: Preparing icons, this may take some seconds.")
 
-        yaml_string= ""
+        yaml_string = ""
+        icon_count = 0
 
         for conf in config[CONF_ICONS]:
             if CONF_FILE in conf:
@@ -202,6 +203,8 @@ async def to_code(config) -> None:  # noqa: ANN001
                     duration = conf[CONF_FRAMEDURATION]
 
                 yaml_string += F"\"{conf[CONF_ID]}\","
+                icon_count += 1
+
                 pos = 0 
                 frameIndex = 0
                 data = [0 for _ in range(ICONSIZE * frames)]
@@ -253,7 +256,7 @@ async def to_code(config) -> None:  # noqa: ANN001
 
                 cg.add(var.add_icon(RawExpression(str(conf[CONF_ID]))))
         
-        logging.info("Icons: List of icons for e.g. blueprint:\n\n\r[" + yaml_string + "]\n")
+        logging.info(f"Icons: [{icon_count}] List of icons for e.g. blueprint:\n\n\r[{yaml_string}]\n")
 
     await cg.register_component(var, config)
 

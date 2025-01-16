@@ -57,8 +57,6 @@ static unsigned liquidLampMX[enlargedOBJECT_MAX_COUNT];
 static unsigned liquidLampSC[enlargedOBJECT_MAX_COUNT];        
 static unsigned liquidLampTR[enlargedOBJECT_MAX_COUNT];        
 
-static unsigned char matrixValue[8][16];                                    // это массив для эффекта Огонь
-
 static uint8_t custom_eff = 0;
 
 //константы размера матрицы вычисляется только здесь и не меняется в эффектах
@@ -185,6 +183,8 @@ static void fire2012WithPalette() {
 // should be between 0 (red) to about 25 (yellow)
 // static const uint8_t hueMask[8][16] PROGMEM =
 
+static unsigned char matrixValue[8][16];                 // это массив для эффекта Огонь
+
 static void generateLine();
 static void shiftUp();
 static void drawFrame(uint8_t pcnt, bool isColored);
@@ -192,6 +192,7 @@ static void drawFrame(uint8_t pcnt, bool isColored);
 static void fireRoutine(bool isColored)
 {
   if (loadingFlag) {
+    memset(matrixValue, 0, sizeof(matrixValue)); // это массив для эффекта Огонь. странно, что его нужно залить нулями
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
         setModeSettings(random8(30U) ? 1U+random8(100U) : 100U, 200U+random8(35U));
@@ -202,6 +203,7 @@ static void fireRoutine(bool isColored)
     generateLine();
     pcnt = 0;
   }
+
   if (pcnt >= 30) {                                         // внутренний делитель кадров для поднимающегося пламени
     shiftUp();                                              // смещение кадра вверх
     generateLine();                                         // перерисовать новую нижнюю линию случайным образом
@@ -221,12 +223,12 @@ static void generateLine() {
 }
 
 //---------------------------------------
-static void shiftUp() {                                            //подъем кадра
+static void shiftUp() {                                     // подъем кадра
   for (uint8_t y = HEIGHT - 1U; y > 0U; y--) {
     for (uint8_t x = 0U; x < WIDTH; x++) {
       uint8_t newX = x % 16U;                               // сократил формулу без доп. проверок
       if (y > 7U) continue;
-      matrixValue[y][newX] = matrixValue[y - 1U][newX];     //смещение пламени (только для зоны очага)
+      matrixValue[y][newX] = matrixValue[y - 1U][newX];     // смещение пламени (только для зоны очага)
     }
   }
 
@@ -240,7 +242,7 @@ static void shiftUp() {                                            //подъе�
 //---------------------------------------
 // draw a frame, interpolating between 2 "key frames"
 // @param pcnt percentage of interpolation
-static void drawFrame(uint8_t pcnt, bool isColored) {                     // прорисовка нового кадра
+static void drawFrame(uint8_t pcnt, bool isColored) {              // прорисовка нового кадра
   int32_t nextv;
 #ifdef UNIVERSE_FIRE                                               // если определен универсальный огонь  
   uint8_t baseHue = (float)(modes[currentMode].Scale - 1U) * 2.6;
