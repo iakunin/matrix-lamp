@@ -58,10 +58,11 @@ class MatrixLamp : public Component {
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
     void set_display(addressable_light::AddressableLightDisplay *disp);
+    void set_brightness(int value);
     void add_icon(MatrixLamp_Icon *icon);
     void show_icon(std::string icon);
     void show_icon_by_index(int icon);
-    void set_brightness(int value);
+    void hide_icon();
     void Display();
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
