@@ -148,15 +148,17 @@ You can call this from, e.g., the developer tools service.
 ```c
   brightness {"value"}
   show_icon {"icon_name"}
+  hide_icon
 ```
 #### Lambda
 
 You can use the above functions also in [lambdas](https://esphome.io/automations/actions#lambda-action) in your esphome YAML.
 
 ```c
+  void set_brightness(int value);
   void show_icon(std::string icon);
   void show_icon_by_index(int icon);
-  void set_brightness(int value);
+  void hide_icon();
 
   // Reset the current effect, for example when changing the lamp state. 
   void ResetCurrentEffect();

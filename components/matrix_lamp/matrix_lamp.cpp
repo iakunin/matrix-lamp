@@ -20,8 +20,9 @@ void MatrixLamp::setup() {
   this->brightness = 0;
   this->target_brightness = 0;
   #if defined(USE_API)
-  register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
   register_service(&MatrixLamp::set_brightness, "brightness", {"value"});
+  register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
+  register_service(&MatrixLamp::hide_icon, "hide_icon");
   #endif
   #endif
 }  // setup()
@@ -241,8 +242,7 @@ void MatrixLamp::show_icon(std::string iconname)
 {
   if (iconname == "clean_out")
   {
-    this->current_icon = MAXICONS;
-    this->display->set_enabled(false);
+    this->hide_icon();
     return;
   }
 
@@ -271,6 +271,12 @@ void MatrixLamp::show_icon_by_index(int icon)
     return;
   }
   this->current_icon = MAXICONS;
+}
+
+void MatrixLamp::hide_icon()
+{
+  this->current_icon = MAXICONS;
+  this->display->set_enabled(false);
 }
 
 void MatrixLamp::set_brightness(int value)
