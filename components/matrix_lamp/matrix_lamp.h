@@ -23,6 +23,7 @@ class MatrixLamp : public Component {
 
     void setup() override;
     void dump_config() override;
+    void on_shutdown() override;
 
     void set_scale(template_::TemplateNumber *scale);
     void set_speed(template_::TemplateNumber *speed);

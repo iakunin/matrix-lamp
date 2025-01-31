@@ -1,7 +1,5 @@
 #pragma once
 
-#undef delay
-
 #define FASTLED_INTERNAL // remove annoying pragma messages
 
 #include "FastLED.h"

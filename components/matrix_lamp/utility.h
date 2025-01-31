@@ -5,12 +5,13 @@
 #include "FastLED.h"
 #include "esphome.h"
 #include "common.h"
-#include "fastled_helper.h"
 
 #define WU_WEIGHT(a, b) ((uint8_t)(((a) * (b) + (a) + (b)) >> 8))
 
 namespace esphome {
 namespace matrix_lamp {
+
+using namespace fastled_helper;
 
 // ------------------------------------------------
 // получить номер пикселя в ленте по координатам

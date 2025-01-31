@@ -22,9 +22,18 @@ esphome:
 
 external_components:
   - source:
+      type: git
+      url: https://github.com/andrewjswan/esphome-components
+      ref: main
+    components: [fastled_helper]
+    refresh: 60s
+  - source:
       type: local
       path: ../components
     components: [matrix_lamp]
+
+fastled_helper:
+  palettes: false
 
 matrix_lamp:
   id: matrix

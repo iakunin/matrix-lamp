@@ -3,10 +3,11 @@
 #include "constants.h"
 #include "utility.h"
 #include "effect_ticker.h"
-#include "fastled_helper.h"
 
 namespace esphome {
 namespace matrix_lamp {
+
+using namespace fastled_helper;
 
 void MatrixLamp::setup() {
   randomSeed(micros());
@@ -44,6 +45,11 @@ void MatrixLamp::dump_config() {
   ESP_LOGCONFIG(TAG, "       Matrix Type: %d", MATRIX_TYPE);
   ESP_LOGCONFIG(TAG, "   Number of modes: %d", MODE_AMOUNT);
 }  // dump_config()
+
+void MatrixLamp::on_shutdown()
+{
+  FreeLeds();
+}
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
 void MatrixLamp::set_display(addressable_light::AddressableLightDisplay *display)
