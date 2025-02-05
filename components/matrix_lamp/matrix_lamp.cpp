@@ -20,9 +20,17 @@ void MatrixLamp::setup() {
   this->last_anim_time = 0;
   this->brightness = 0;
   this->target_brightness = 0;
+
+  #ifdef MATRIX_LAMP_BITMAP_MODE
+  this->bitmap = nullptr;
+  #endif
+
   #if defined(USE_API)
   register_service(&MatrixLamp::set_brightness, "brightness", {"value"});
   register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
+  #ifdef MATRIX_LAMP_BITMAP_MODE
+  register_service(&MatrixLamp::show_bitmap, "show_bitmap", {"bitmap"});
+  #endif
   register_service(&MatrixLamp::hide_icon, "hide_icon");
   #endif
   #endif
@@ -259,13 +267,7 @@ void MatrixLamp::show_icon(std::string iconname)
   }
   else
   {
-    if (this->current_icon != icon)
-    {
-      this->display->set_enabled(false);
-    }
-    this->current_icon = icon;
-    this->icons[icon]->set_frame(0);
-    this->display->set_enabled(true);
+    this->show_icon_by_index(icon);    
   }
 }
 
@@ -274,15 +276,54 @@ void MatrixLamp::show_icon_by_index(int icon)
   if (icon < this->icon_count)
   {
     this->current_icon = icon;
+    this->icons[icon]->set_frame(0);
+    this->display->set_enabled(true);
     return;
   }
   this->current_icon = MAXICONS;
 }
 
+#ifdef MATRIX_LAMP_BITMAP_MODE
+void MatrixLamp::show_bitmap(std::string bitmap)
+{
+  if (this->bitmap == NULL)
+  {
+    this->bitmap = new Color[256];
+  }
+
+  const size_t CAPACITY = JSON_ARRAY_SIZE(256);
+  StaticJsonDocument<CAPACITY> doc;
+  deserializeJson(doc, bitmap);
+  JsonArray array = doc.as<JsonArray>();
+  // extract the values
+  uint16_t i = 0;
+  for (JsonVariant v : array)
+  {
+    uint16_t buf = v.as<int>();
+
+    unsigned char b = (((buf) & 0x001F) << 3);
+    unsigned char g = (((buf) & 0x07E0) >> 3); // Fixed: shift >> 5 and << 2
+    unsigned char r = (((buf) & 0xF800) >> 8); // shift >> 11 and << 3
+    Color c = Color(r, g, b);
+
+    this->bitmap[i++] = c;
+  }
+  this->current_icon = BITMAPICON;
+  this->display->set_enabled(true);
+}
+#endif
+
 void MatrixLamp::hide_icon()
 {
   this->current_icon = MAXICONS;
   this->display->set_enabled(false);
+#ifdef MATRIX_LAMP_BITMAP_MODE
+  if (this->bitmap != NULL)
+  {
+    delete[] this->bitmap;
+    this->bitmap = nullptr;
+  }
+#endif
 }
 
 void MatrixLamp::set_brightness(int value)
@@ -321,7 +362,27 @@ void MatrixLamp::Display()
     return;
   }
 
+#ifdef MATRIX_LAMP_BITMAP_MODE
+  if (this->current_icon == BITMAPICON)
+  {
+    if (this->bitmap != NULL)
+    {
+      for (uint8_t x = 0; x < 16; x++)
+      {
+        for (uint8_t y = 0; y < 16; y++)
+        {
+          this->display->draw_pixel_at(x, y, this->bitmap[x + y * 16]);
+        }
+      }
+    }
+  }
+  else
+  {
+#endif
   this->display->image(4, 4, this->icons[this->current_icon]);
+#ifdef MATRIX_LAMP_BITMAP_MODE
+  }
+#endif
   this->update_screen();
 }
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)

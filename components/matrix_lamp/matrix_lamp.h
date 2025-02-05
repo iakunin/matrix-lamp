@@ -13,6 +13,10 @@ static const char *const MATRIX_LAMP_VERSION = "2025.1.13";
 class MatrixLamp_Icon;
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
+#ifdef MATRIX_LAMP_BITMAP_MODE
+#define BITMAPICON MAXICONS + 1
+#endif
+
 #if defined(MATRIX_LAMP_USE_DISPLAY) && defined(USE_API)
 class MatrixLamp : public Component, public api::CustomAPIDevice {
 #else
@@ -63,6 +67,9 @@ class MatrixLamp : public Component {
     void add_icon(MatrixLamp_Icon *icon);
     void show_icon(std::string icon);
     void show_icon_by_index(int icon);
+    #ifdef MATRIX_LAMP_BITMAP_MODE
+    void show_bitmap(std::string bitmap);
+    #endif
     void hide_icon();
     void Display();
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
@@ -83,6 +90,10 @@ class MatrixLamp : public Component {
     addressable_light::AddressableLightDisplay *display{nullptr};
     uint8_t find_icon(std::string name);
     void update_screen();
+
+    #ifdef MATRIX_LAMP_BITMAP_MODE
+    Color* bitmap;
+    #endif
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
     esphome::template_::TemplateNumber *scale{nullptr};

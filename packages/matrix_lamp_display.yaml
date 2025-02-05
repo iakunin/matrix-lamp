@@ -24,6 +24,7 @@ matrix_lamp:
   id: matrix
   display: neopixel_display
   iconscache: true
+  bitmap: true
 
   # https://developer.lametric.com/icons
   icons:
