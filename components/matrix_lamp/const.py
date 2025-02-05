@@ -9,6 +9,7 @@ ICONSIZE = ICONWIDTH * ICONHEIGHT * 2
 
 IS_8X8 = 64
 
+CONF_BITMAP = "bitmap"
 CONF_SCALE_ID = "scale_id"
 CONF_SPEED_ID = "speed_id"
 CONF_ORIENTATION = "matrix_orientation"

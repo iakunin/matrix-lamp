@@ -86,6 +86,8 @@ light:
 
 **iconscache** (optional, boolean): If true, it caches icons in the `.cache\icons` folder and if it finds the specified icons in the cache, it uses them instead of trying to download them again from the Internet. (default = `false`)
 
+**bitmap** (optional, boolean): if true, adds a service `show_bitmap` for displaying icons defined as an rgb565 array.
+
 ### Icons and Animations
 
 Download and install all needed icons (.jpg/.png) and animations (.GIF) under the `matrix_lamp:` key. All icons have to be 8x8 pixels in size. If necessary, you can scale them with the option `resize: 8x8`.
@@ -148,6 +150,7 @@ You can call this from, e.g., the developer tools service.
 ```c
   brightness {"value"}
   show_icon {"icon_name"}
+  show_bitmap {"bitmap"}
   hide_icon
 ```
 #### Lambda
@@ -158,6 +161,7 @@ You can use the above functions also in [lambdas](https://esphome.io/automations
   void set_brightness(int value);
   void show_icon(std::string icon);
   void show_icon_by_index(int icon);
+  void show_bitmap(std::string bitmap);
   void hide_icon();
 
   // Reset the current effect, for example when changing the lamp state. 

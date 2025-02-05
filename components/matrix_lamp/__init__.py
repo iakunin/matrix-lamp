@@ -32,6 +32,7 @@ from esphome.core import CORE, HexInt
 from esphome.cpp_generator import RawExpression
 
 from .const import (
+    CONF_BITMAP,
     CONF_CACHE,
     CONF_FRAMEDURATION,
     CONF_FRAMEINTERVAL,
@@ -80,6 +81,7 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
         cv.Optional(CONF_MATRIX_TYPE): cv.templatable(cv.int_range(min=0, max=1)),
         cv.Optional(CONF_SCALE_ID): cv.use_id(TemplateNumber),
         cv.Optional(CONF_SPEED_ID): cv.use_id(TemplateNumber),
+        cv.Optional(CONF_BITMAP, default=False): cv.boolean,
         cv.Optional(CONF_ICONS): cv.All(
             cv.ensure_list(
                 {
@@ -127,11 +129,17 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
 
     if config[CONF_RANDOM]:
         cg.add_define("RANDOM_SETTINGS_IN_CYCLE_MODE")
+        logging.info("[X] Random mode")
 
     if CONF_DISPLAY in config:
         cg.add_define("MATRIX_LAMP_USE_DISPLAY")
         disp = await cg.get_variable(config[CONF_DISPLAY])
         cg.add(var.set_display(disp))
+        logging.info("[X] Display")
+
+    if CONF_DISPLAY in config and config[CONF_BITMAP]:
+        cg.add_define("MATRIX_LAMP_BITMAP_MODE")
+        logging.info("[X] Bitmap mode")
 
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)
