@@ -98,7 +98,3 @@ packages:
   button: !include ../packages/matrix_lamp_button.yaml
   power: !include ../packages/matrix_lamp_power.yaml
   random: !include ../packages/matrix_lamp_random.yaml
-
-animation:
-  - id: !extend animation_black
-    file: ../images/1pixel.gif
