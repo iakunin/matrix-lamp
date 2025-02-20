@@ -12,6 +12,7 @@ import esphome.config_validation as cv
 import requests
 from esphome import core
 from esphome.components import display
+from esphome.components.image import CONF_OPAQUE
 from esphome.components.light.effects import register_addressable_effect
 from esphome.components.light.types import AddressableLightEffect
 from esphome.components.template.number import TemplateNumber
@@ -47,7 +48,6 @@ from .const import (
     CONF_SPEED_ID,
     EFF_DNA,
     ICONHEIGHT,
-    ICONSIZE,
     ICONWIDTH,
     IS_8X8,
     MATRIX_LAMP_EFFECTS,
@@ -61,7 +61,7 @@ CODEOWNERS = ["@andrewjswan"]
 
 DEPENDENCIES = ["light"]
 
-AUTO_LOAD = ["matrix_lamp"]
+AUTO_LOAD = ["matrix_lamp", "image", "animation", "display"]
 
 logging.info("Load Matrix Lamp component https://github.com/andrewjswan/matrix-lamp")
 
@@ -251,10 +251,10 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
                 width, height = int(width * ratio), int(height * ratio)
 
             if hasattr(image, "n_frames"):
-                frames = min(image.n_frames, MAXFRAMES)
-                logging.info(" Icons: Animation %s with %s frame(s)", conf[CONF_ID], frames)
+                frame_count = min(image.n_frames, MAXFRAMES)
+                logging.info(" Icons: Animation %s with %s frame(s)", conf[CONF_ID], frame_count)
             else:
-                frames = 1
+                frame_count = 1
 
             if (width != ICONWIDTH) and (height != ICONHEIGHT):
                 logging.warning(" Icons: Icon wrong size valid 8x8: %s skipped!", conf[CONF_ID])
@@ -270,55 +270,46 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
                 yaml_string += f'"{conf[CONF_ID]}",'
                 icon_count += 1
 
-                pos = 0
-                frame_index = 0
-                data = [0 for _ in range(ICONSIZE * frames)]
-                if image.has_transparency_data:
-                    logging.debug(" Icons: icon %s has transparency!", conf[CONF_ID])
+                dither = Image.Dither.NONE
+                transparency = CONF_OPAQUE
+                invert_alpha = False
 
-                for frame_index in range(frames):
+                total_rows = height * frame_count
+                encoder = esp_image.ImageRGB565(
+                    width,
+                    total_rows,
+                    transparency,
+                    dither,
+                    invert_alpha,
+                )
+                for frame_index in range(frame_count):
                     image.seek(frame_index)
-                    frame = image.convert("RGB")
+                    pixels = encoder.convert(image.resize((width, height)), path).getdata()
+                    for row in range(height):
+                        for col in range(width):
+                            encoder.encode(pixels[row * width + col])
+                        encoder.end_row()
 
-                    if CONF_RESIZE in conf:
-                        frame = frame.resize([width, height])
+                rhs = [HexInt(x) for x in encoder.data]
+                prog_arr = cg.progmem_array(conf[CONF_RAW_DATA_ID], rhs)
 
-                    pixels = list(frame.getdata())
-
-                    i = 0
-                    for pix in pixels:
-                        R = pix[0] >> 3  # noqa: N806
-                        G = pix[1] >> 2  # noqa: N806
-                        B = pix[2] >> 3  # noqa: N806
-
-                        x = i % width
-                        y = i // width
-                        i += 1  # noqa: SIM113
-                        rgb = (R << 11) | (G << 5) | B
-
-                        data[pos] = rgb >> 8
-                        pos += 1
-                        data[pos] = rgb & 255
-                        pos += 1
-
-                rhs = [HexInt(x) for x in data]
+                image_type = esp_image.get_image_type_enum("RGB565")
+                trans_value = esp_image.get_transparency_enum(encoder.transparency)
 
                 logging.debug("Icons: icon %s %s", conf[CONF_ID], rhs)
-
-                prog_arr = cg.progmem_array(conf[CONF_RAW_DATA_ID], rhs)
 
                 cg.new_Pvariable(
                     conf[CONF_ID],
                     prog_arr,
                     width,
                     height,
-                    frames,
-                    esp_image.IMAGE_TYPE["RGB565"],
+                    frame_count,
+                    image_type,
                     str(conf[CONF_ID]),
                     conf[CONF_PINGPONG],
                     duration,
+                    trans_value,
                 )
-
                 cg.add(var.add_icon(RawExpression(str(conf[CONF_ID]))))
 
         logging.info(

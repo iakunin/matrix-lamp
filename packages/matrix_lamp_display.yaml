@@ -45,7 +45,3 @@ matrix_lamp:
       lameid: 1496
     - id: skull
       lameid: 11241
-
-animation:
-  - id: animation_black
-    file: images/1pixel.gif

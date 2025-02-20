@@ -7,7 +7,7 @@ namespace esphome {
 namespace matrix_lamp {
 
 static const char *const TAG = "matrix_lamp";
-static const char *const MATRIX_LAMP_VERSION = "2025.1.13";
+static const char *const MATRIX_LAMP_VERSION = "2025.2.13";
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
 class MatrixLamp_Icon;
@@ -107,7 +107,10 @@ class MatrixLamp_Icon : public animation::Animation
     bool counting_up;
 
   public:
-    MatrixLamp_Icon(const uint8_t *data_start, int width, int height, uint32_t animation_frame_count, esphome::image::ImageType type, std::string icon_name, bool revers, uint16_t frame_duration);
+    MatrixLamp_Icon(const uint8_t *data_start, int width, int height, 
+                    uint32_t animation_frame_count, 
+                    esphome::image::ImageType type, std::string icon_name, 
+                    bool revers, uint16_t frame_duration, esphome::image::Transparency transparency);
     PROGMEM std::string name;
     uint16_t frame_duration;
     void next_frame();
