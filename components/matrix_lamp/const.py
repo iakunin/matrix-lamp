@@ -8,6 +8,8 @@ ICONHEIGHT = 8
 
 IS_8X8 = 64
 
+DEF_TYPE = "RGB565"
+
 CONF_BITMAP = "bitmap"
 CONF_SCALE_ID = "scale_id"
 CONF_SPEED_ID = "speed_id"

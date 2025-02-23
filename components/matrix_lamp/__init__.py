@@ -12,7 +12,7 @@ import esphome.config_validation as cv
 import requests
 from esphome import core
 from esphome.components import display
-from esphome.components.image import CONF_OPAQUE
+from esphome.components.image import CONF_OPAQUE, IMAGE_TYPE
 from esphome.components.light.effects import register_addressable_effect
 from esphome.components.light.types import AddressableLightEffect
 from esphome.components.template.number import TemplateNumber
@@ -46,6 +46,7 @@ from .const import (
     CONF_RGB565ARRAY,
     CONF_SCALE_ID,
     CONF_SPEED_ID,
+    DEF_TYPE,
     EFF_DNA,
     ICONHEIGHT,
     ICONWIDTH,
@@ -275,7 +276,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
                 invert_alpha = False
 
                 total_rows = height * frame_count
-                encoder = esp_image.ImageRGB565(
+                encoder = IMAGE_TYPE[DEF_TYPE](
                     width,
                     total_rows,
                     transparency,
@@ -293,7 +294,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
                 rhs = [HexInt(x) for x in encoder.data]
                 prog_arr = cg.progmem_array(conf[CONF_RAW_DATA_ID], rhs)
 
-                image_type = esp_image.get_image_type_enum("RGB565")
+                image_type = esp_image.get_image_type_enum(DEF_TYPE)
                 trans_value = esp_image.get_transparency_enum(encoder.transparency)
 
                 logging.debug("Icons: icon %s %s", conf[CONF_ID], rhs)
