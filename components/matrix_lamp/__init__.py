@@ -12,7 +12,7 @@ import esphome.config_validation as cv
 import requests
 from esphome import core
 from esphome.components import display
-from esphome.components.image import CONF_OPAQUE, IMAGE_TYPE
+from esphome.components.image import CONF_ALPHA_CHANNEL, IMAGE_TYPE
 from esphome.components.light.effects import register_addressable_effect
 from esphome.components.light.types import AddressableLightEffect
 from esphome.components.template.number import TemplateNumber
@@ -272,7 +272,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
                 icon_count += 1
 
                 dither = Image.Dither.NONE
-                transparency = CONF_OPAQUE
+                transparency = CONF_ALPHA_CHANNEL
                 invert_alpha = False
 
                 total_rows = height * frame_count
