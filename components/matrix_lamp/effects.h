@@ -11707,5 +11707,101 @@ static void RainbowSpot() {
 }
 #endif
 
+#ifdef DEF_RAINBOW_RINGS
+// =========== Rainbow Rings ===========
+//    base code © Martin Kleppe @aemkei
+//             © SlingMaster
+//            Радужные кольца
+// =====================================
+static  float codeEff(double t, double i, double x, double y) {
+  hue = 255U; hue2 = 0U; // | CENTER_X_MAJOR
+  return sin16((t - sqrt3((x - CENTER_X_MAJOR) * (x - CENTER_X_MAJOR) + (y - CENTER_Y_MAJOR) * (y - CENTER_Y_MAJOR))) * 8192.0) / 32767.0;
+}
+
+static void drawFrame(double t, double x, double y) {
+  static uint32_t t_count;
+  static byte scaleXY = 8;
+  double i = (y * WIDTH) + x;
+  double frame = constrain(codeEff(t, i, x, y), -1, 1) * 255;
+  uint16_t tt = floor(i);
+  byte xx;
+  byte yy;
+  byte angle;
+  byte radius;
+  if (frame > 0) {
+    // white or black color
+    if (modes[currentMode].Scale > 70) {
+      if (modes[currentMode].Scale > 90) {
+        drawPixelXY(x, y, CRGB(frame / 4, frame / 2, frame / 2));
+      } else {
+        drawPixelXY(x, y, CRGB(frame / 2, frame / 2, frame / 4));
+      }
+    } else {
+      drawPixelXY(x, y, CRGB::Black);
+    }
+  } else {
+    if (frame < 0) {
+      switch (deltaHue2) {
+        case 0:
+          hue = step + y * x;
+          break;
+        case 1:
+          hue = 64 + (y + x) * abs(128 - step) / CENTER_Y_MAJOR;
+          break;
+        case 2:
+          hue = y * x + abs(y - CENTER_Y_MAJOR) * 4;
+          break;
+        case 3:
+          xx = (byte)x;
+          yy = (byte)y;
+          angle = noise3d[0][xx][yy];
+          radius = noise3d[1][xx][yy];
+          if ((xx == 0) & (yy == 0))  t_count += 8;
+          hue = (angle * scaleXY) + (radius * scaleXY) + t_count;
+          break;
+        default:
+          hue = step + y * x;
+          break;
+      }
+      drawPixelXY(x, y, CHSV( hue, frame * -1, frame * -1));
+    } else {
+      drawPixelXY(x, y, CRGB::Black);
+    }
+  }
+}
+
+static void RainbowRings() {
+  if (loadingFlag) {
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+    if (selectedSettings) {
+      //                     scale | speed
+      setModeSettings(random8(100U), random8(255U));
+    }
+    #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+
+    loadingFlag = false;
+    deltaHue = 0;
+    FPSdelay = 1;
+    deltaHue2 = modes[currentMode].Scale / 22;
+    hue = 255U; hue2 = 0U;
+    for (int8_t x = -CENTER_X_MAJOR; x < CENTER_X_MAJOR; x++) {
+      for (int8_t y = CENTER_X_MAJOR; y < HEIGHT; y++) {
+        noise3d[0][x + CENTER_X_MAJOR][y] = 128 * (atan2(y, x) / PI);
+        noise3d[1][x + CENTER_X_MAJOR][y] = hypot(x, y);                    // thanks Sutaburosu
+      }
+    }
+  }
+
+  unsigned long milli = millis();
+  double t = milli / 1000.0;
+  for ( double x = 0; x < WIDTH; x++) {
+    for (double y = 0; y < HEIGHT; y++) {
+      drawFrame(t, x, y);
+    }
+  }
+  step++;
+}
+#endif
+
 }  // namespace matrix_lamp
 }  // namespace esphome

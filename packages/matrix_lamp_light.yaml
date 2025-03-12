@@ -529,6 +529,10 @@ light:
           mode: RAINBOW_SPOT
 
       - matrix_lamp_effect:
+          name: Rainbow Rings  # Веселкові кільця
+          mode: RAINBOW_RINGS
+
+      - matrix_lamp_effect:
           name: White light  # Бeлый cвeт
           mode: WHITE_COLOR
 
