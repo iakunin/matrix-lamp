@@ -411,8 +411,11 @@ static void effectsTick()
     #ifdef DEF_RAINBOW_SPOT
     case EFF_RAINBOW_SPOT:        DYNAMIC_DELAY_TICK { effTimer = millis(); RainbowSpot();                     }  break;  // (129U) Веселкова Пляма
     #endif
+    #ifdef DEF_RAINBOW_RINGS
+    case EFF_RAINBOW_RINGS:       DYNAMIC_DELAY_TICK { effTimer = millis(); RainbowRings();                    }  break;  // (130U) Веселкові кільця
+    #endif
     #ifdef DEF_UKRAINE
-    case EFF_UKRAINE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Ukraine();                         }  break;  // (130U) Україна
+    case EFF_UKRAINE:             DYNAMIC_DELAY_TICK { effTimer = millis(); Ukraine();                         }  break;  // (131U) Україна
     #endif
   }
 }
