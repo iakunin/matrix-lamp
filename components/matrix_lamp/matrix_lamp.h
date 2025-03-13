@@ -82,8 +82,8 @@ class MatrixLamp : public Component {
 #if defined(MATRIX_LAMP_USE_DISPLAY)
     uint8_t current_icon = MAXICONS;
     uint8_t icon_count{0};
-    uint8_t brightness{0};
-    uint8_t target_brightness{0};
+    uint8_t brightness{255};
+    uint8_t target_brightness{255};
     unsigned long last_anim_time{0};
     PROGMEM MatrixLamp_Icon *icons[MAXICONS];
 

@@ -16,10 +16,11 @@ void MatrixLamp::setup() {
   loadingFlag = true;
 
   #if defined(MATRIX_LAMP_USE_DISPLAY)
-  this->current_icon = MAXICONS;
+  this->hide_icon();
+
   this->last_anim_time = 0;
-  this->brightness = 0;
-  this->target_brightness = 0;
+  this->brightness = 255;
+  this->target_brightness = 255;
 
   #ifdef MATRIX_LAMP_BITMAP_MODE
   this->bitmap = nullptr;
@@ -254,9 +255,9 @@ uint8_t MatrixLamp::find_icon(std::string name)
 
 void MatrixLamp::show_icon(std::string iconname)
 {
+  this->hide_icon();
   if (iconname == "clean_out")
   {
-    this->hide_icon();
     return;
   }
 
@@ -280,7 +281,7 @@ void MatrixLamp::show_icon_by_index(int icon)
     this->display->set_enabled(true);
     return;
   }
-  this->current_icon = MAXICONS;
+  this->hide_icon();
 }
 
 #ifdef MATRIX_LAMP_BITMAP_MODE
