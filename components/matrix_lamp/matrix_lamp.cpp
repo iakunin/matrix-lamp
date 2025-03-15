@@ -265,11 +265,9 @@ void MatrixLamp::show_icon(std::string iconname)
   if (icon == MAXICONS)
   {
     ESP_LOGD(TAG, "Icon %d/%s not found => skip!", this->current_icon, iconname.c_str());
+    return;
   }
-  else
-  {
-    this->show_icon_by_index(icon);    
-  }
+  this->show_icon_by_index(icon);    
 }
 
 void MatrixLamp::show_icon_by_index(int icon)
@@ -278,6 +276,7 @@ void MatrixLamp::show_icon_by_index(int icon)
   {
     this->current_icon = icon;
     this->icons[icon]->set_frame(0);
+    this->last_anim_time = millis();
     this->display->set_enabled(true);
     return;
   }
@@ -380,7 +379,7 @@ void MatrixLamp::Display()
   else
   {
 #endif
-  this->display->image(4, 4, this->icons[this->current_icon]);
+    this->display->image(4, 4, this->icons[this->current_icon]);
 #ifdef MATRIX_LAMP_BITMAP_MODE
   }
 #endif
