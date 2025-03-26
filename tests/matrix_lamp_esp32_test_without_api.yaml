@@ -1,0 +1,55 @@
+substitutions:
+  device: esp-matrix-lamp
+  name: ESPHome Matrix Lamp
+  pin_pullup: "false"
+  project_name: "ajs.Light - Matrix Lamp"
+  project_version: "1.1.13"
+  comment: "ESPHome Matrix Lamp"
+
+esp32:
+  board: nodemcu-32s
+
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - delay: 5s
+      - logger.log:
+          format: "${name} started, LED: ${type_leds}:${num_leds}:${pin_leds}, Effects: %d Reboot: ${reboot_timeout}"
+          args: ['id(neopixel_led)->get_effects().size()']
+          level: INFO
+          tag: start
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/andrewjswan/esphome-components
+      ref: main
+    components: [fastled_helper]
+    refresh: 60s
+  - source:
+      type: local
+      path: ../components
+    components: [matrix_lamp]
+
+fastled_helper:
+  palettes: false
+
+matrix_lamp:
+  id: matrix
+  width: 16
+  height: 16
+  random: true
+  matrix_type: 0
+  matrix_orientation: 4
+
+packages:
+  common: !include ../packages/common.yaml
+  light: !include ../packages/matrix_lamp_light.yaml
+  sunrise: !include ../packages/matrix_lamp_sunrise.yaml
+  ddp: !include ../packages/matrix_lamp_ddp.yaml
+  button: !include ../packages/matrix_lamp_button.yaml
+  power: !include ../packages/matrix_lamp_power.yaml
+  random: !include ../packages/matrix_lamp_random.yaml
+
+api: !remove
