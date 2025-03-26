@@ -88,6 +88,9 @@ light:
 
 **bitmap** (optional, boolean): if true, adds a service `show_bitmap` for displaying icons defined as an rgb565 array.
 
+**settings_function** (optional, boolean): if true, adds a services `set_effect_brightness`, `set_effect_speed`, `set_effect_scale`, `reset_effect_settings`.
+
+
 ### Icons and Animations
 
 Download and install all needed icons (.jpg/.png) and animations (.GIF) under the `matrix_lamp:` key. All icons have to be 8x8 pixels in size. If necessary, you can scale them with the option `resize: 8x8`.

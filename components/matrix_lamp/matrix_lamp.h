@@ -54,7 +54,7 @@ class MatrixLamp : public Component {
     // Set custom effect
     void SetCustomEffect(uint8_t mode);
 
-#if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
+#if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
     // Set brightness for current effect
     void set_effect_brightness(int value);
     // Set speed for current effect
@@ -63,7 +63,7 @@ class MatrixLamp : public Component {
     void set_effect_scale(int value);
     // Reset brightness, speed, scale to default for current effect
     void reset_effect_settings();
-#endif // #if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
+#endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     bool GetRandomSettings();

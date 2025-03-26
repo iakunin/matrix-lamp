@@ -45,6 +45,7 @@ from .const import (
     CONF_PINGPONG,
     CONF_RGB565ARRAY,
     CONF_SCALE_ID,
+    CONF_SETTINGS,
     CONF_SPEED_ID,
     DEF_TYPE,
     EFF_DNA,
@@ -80,6 +81,7 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
         cv.Optional(CONF_RANDOM, default=False): cv.templatable(cv.boolean),
         cv.Optional(CONF_ORIENTATION): cv.templatable(cv.int_range(min=0, max=7)),
         cv.Optional(CONF_MATRIX_TYPE): cv.templatable(cv.int_range(min=0, max=1)),
+        cv.Optional(CONF_SETTINGS, default=False): cv.boolean,
         cv.Optional(CONF_SCALE_ID): cv.use_id(TemplateNumber),
         cv.Optional(CONF_SPEED_ID): cv.use_id(TemplateNumber),
         cv.Optional(CONF_BITMAP, default=False): cv.boolean,
@@ -141,6 +143,10 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     if CONF_DISPLAY in config and config[CONF_BITMAP]:
         cg.add_define("MATRIX_LAMP_BITMAP_MODE")
         logging.info("[X] Bitmap mode")
+
+    if config.get(CONF_SETTINGS):
+        cg.add_define("MATRIX_LAMP_SETTINGS")
+        logging.info("[X] Settings function")
 
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)

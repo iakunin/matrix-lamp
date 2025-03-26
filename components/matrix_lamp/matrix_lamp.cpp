@@ -36,7 +36,7 @@ void MatrixLamp::setup() {
   #endif
   #endif
   
-  #if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
+  #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
   // Set brightness for current effect
   register_service(&MatrixLamp::set_effect_brightness, "set_effect_brightness", {"value"});
   // Set speed for current effect
@@ -45,7 +45,7 @@ void MatrixLamp::setup() {
   register_service(&MatrixLamp::set_effect_scale, "set_effect_scale", {"value"});
   // Reset brightness, speed, scale to default for current effect
   register_service(&MatrixLamp::reset_effect_settings, "reset_effect_settings");
-  #endif // #if defined(USE_API)
+  #endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
   
 }  // setup()
 
@@ -186,7 +186,7 @@ void MatrixLamp::SetRandomSettings(bool b)
 }
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-#if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
+#if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
 // Set brightness for current effect
 void MatrixLamp::set_effect_brightness(int value)
 {
@@ -219,7 +219,7 @@ void MatrixLamp::reset_effect_settings()
   modes[currentMode].Speed      = pgm_read_byte(&defaultSettings[currentMode][1]);
   modes[currentMode].Scale      = pgm_read_byte(&defaultSettings[currentMode][2]);
 }
-#endif // #if defined(USE_API)
+#endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
 
 void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, light::AddressableLight *p_it)
 {
