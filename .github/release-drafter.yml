@@ -55,5 +55,5 @@ template: |
   - 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
 
   ## Changelog
-  
+
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
