@@ -113,8 +113,8 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
 
     cg.add_library("fastled/FastLED", "3.7.8")
 
-    cg.cg.add_build_flag("-D__INT32_TYPE__=int")
-    cg.cg.add_build_flag('-D__UINT32_TYPE__="unsigned int"')
+    cg.add_build_flag("-D__INT32_TYPE__=int")
+    cg.add_build_flag('-D__UINT32_TYPE__="unsigned int"')
 
     cg.add_define("WIDTH", config[CONF_WIDTH])
     cg.add_define("HEIGHT", config[CONF_HEIGHT])
