@@ -11808,6 +11808,7 @@ static void RainbowRings() {
 // ============ Vyshyvanka =============
 //       (с) проект Aurora "Munch"
 //     adopted/updated by kostyamat
+//        updated by andrewjswan
 //          Эффект "Вышиванка" 
 // =====================================
 
