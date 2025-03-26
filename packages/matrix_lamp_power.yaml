@@ -11,6 +11,10 @@ esphome:
           level: INFO
           tag: power
 
+logger:
+  logs:
+    sensor: WARN
+
 number:
   # Power Supply
   - platform: template
