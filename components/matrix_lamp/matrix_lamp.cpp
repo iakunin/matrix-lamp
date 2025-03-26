@@ -36,7 +36,7 @@ void MatrixLamp::setup() {
   #endif
   #endif
   
-  #if defined(USE_API)
+  #if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
   // Set brightness for current effect
   register_service(&MatrixLamp::set_effect_brightness, "set_effect_brightness", {"value"});
   // Set speed for current effect
@@ -186,7 +186,7 @@ void MatrixLamp::SetRandomSettings(bool b)
 }
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-#if defined(USE_API)
+#if defined(USE_API) && !defined(USE_ESP32_VARIANT_ESP32C3)
 // Set brightness for current effect
 void MatrixLamp::set_effect_brightness(int value)
 {
