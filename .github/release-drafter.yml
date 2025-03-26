@@ -48,12 +48,12 @@ template: |
 
   $CHANGES
 
-  ## ⭐️ Contributors
-
-  $CONTRIBUTORS
-
   ## Sponsorship
 
   If you like this project, please consider supporting me:
 
   - 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+  ## Changelog
+  
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
