@@ -27,7 +27,7 @@ void MatrixLamp::setup() {
   #endif
 
   #if defined(USE_API)
-  register_service(&MatrixLamp::set_brightness, "brightness", {"value"});
+  register_service(&MatrixLamp::set_brightness, "brightness", {"int"});
   register_service(&MatrixLamp::show_icon, "show_icon", {"icon_name"});
   #ifdef MATRIX_LAMP_BITMAP_MODE
   register_service(&MatrixLamp::show_bitmap, "show_bitmap", {"bitmap"});
@@ -38,11 +38,11 @@ void MatrixLamp::setup() {
   
   #if defined(USE_API)
   // Set brightness for current effect
-  register_service(&MatrixLamp::set_effect_brightness, "set_effect_brightness", {"value"});
+  register_service(&MatrixLamp::set_effect_brightness, "set_effect_brightness", {"int"});
   // Set speed for current effect
-  register_service(&MatrixLamp::set_effect_speed, "set_effect_speed", {"value"});
+  register_service(&MatrixLamp::set_effect_speed, "set_effect_speed", {"int"});
   // Set scale for current effect
-  register_service(&MatrixLamp::set_effect_scale, "set_effect_scale", {"value"});
+  register_service(&MatrixLamp::set_effect_scale, "set_effect_scale", {"int"});
   // Reset brightness, speed, scale to default for current effect
   register_service(&MatrixLamp::reset_effect_settings, "reset_effect_settings");
   #endif // #if defined(USE_API)
