@@ -34,43 +34,55 @@ class MatrixLamp : public Component {
     void set_speed(template_::TemplateNumber *speed);
 
     // Reset the current effect, for example when changing the lamp state. 
-    void ResetCurrentEffect();
+    void reset_current_effect();
 
 #ifndef ORIENTATION
     // Set Matrix Orientation [1..8] instead of real matrix ORIENTATION [0..7]
-    bool SetMatrixOrientation(uint8_t orientation);
+    bool set_matrix_orientation(uint8_t orientation);
 #endif // #ifndef ORIENTATION
 
 #ifndef MATRIX_TYPE
     // Set Matrix Type [1..2] instead of real matrix MATRIX_TYPE [0..1]
-    bool SetMatrixType(uint8_t type);
+    bool set_matrix_type(uint8_t type);
 #endif // #ifndef MATRIX_TYPE
 
-    // Set intensity for effect
-    void SetIntensityForEffect(uint8_t mode, uint8_t intensity);
-    // Set scale for effect
-    void SetScaleForEffect(uint8_t mode, uint8_t scale);
-    // Set speed for effect
-    void SetSpeedForEffect(uint8_t mode, uint8_t speed);
-    // Set scale from Color for effect
-    void SetScaleFromColorForEffect(uint8_t mode, Color color);
-    // Set custom effect
-    void SetCustomEffect(uint8_t mode);
+    // Set / Get intensity for effect
+    void set_intensity_for_effect(uint8_t mode, uint8_t intensity);
+    uint8_t get_intensity_for_effect(uint8_t mode);
 
-#if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
-    // Set intensity for current effect
+    // Set / Get scale for effect
+    void set_scale_for_effect(uint8_t mode, uint8_t scale);
+    uint8_t get_scale_for_effect(uint8_t mode);
+
+    // Set / Get speed for effect
+    void set_speed_for_effect(uint8_t mode, uint8_t speed);
+    uint8_t get_speed_for_effect(uint8_t mode);
+
+    // Set scale from Color for effect
+    void set_scale_from_color_for_effect(uint8_t mode, Color color);
+
+    // Set custom effect mode
+    void set_custom_effect_mode(uint8_t mode);
+
+    // Set / Get intensity for current effect
     void set_effect_intensity(int value);
-    // Set speed for current effect
+    uint8_t get_effect_intensity();
+
+    // Set / Get speed for current effect
     void set_effect_speed(int value);
-    // Set scale for current effect
+    uint8_t get_effect_speed();
+
+    // Set / Get scale for current effect
     void set_effect_scale(int value);
+    uint8_t get_effect_scale();
+
     // Reset brightness, speed, scale to default for current effect
     void reset_effect_settings();
-#endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-    bool GetRandomSettings();
-    void SetRandomSettings(bool b=false);
+    // Set / Get random settings
+    bool get_random_settings();
+    void set_random_settings(bool b=false);
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
     void ShowFrame(uint8_t CurrentMode, esphome::Color current_color, light::AddressableLight *p_it);

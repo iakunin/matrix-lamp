@@ -13,14 +13,14 @@ void MatrixLampLightEffect::start() {
   
   AddressableLightEffect::start();
   if (this->matrix_lamp_) {
-    this->matrix_lamp_->ResetCurrentEffect();
+    this->matrix_lamp_->reset_current_effect();
   }
 }
 
 void MatrixLampLightEffect::stop() {
   AddressableLightEffect::stop();
   if (this->matrix_lamp_) {
-    this->matrix_lamp_->ResetCurrentEffect();
+    this->matrix_lamp_->reset_current_effect();
   }
 }
 

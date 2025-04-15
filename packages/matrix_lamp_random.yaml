@@ -5,13 +5,13 @@ switch:
     icon: mdi:shuffle
     id: random_mode
     lambda: |-
-      return id(matrix).GetRandomSettings();
+      return id(matrix).get_random_settings();
     turn_on_action:
       - lambda: |-
-          id(matrix).SetRandomSettings(true);
+          id(matrix).set_random_settings(true);
     turn_off_action:
       - lambda: |-
-          id(matrix).SetRandomSettings(false);
+          id(matrix).set_random_settings(false);
 
 interval:
   - interval: 15min

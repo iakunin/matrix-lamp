@@ -98,12 +98,12 @@ void MatrixLamp::set_speed(template_::TemplateNumber *speed) {
   this->speed = speed;
 } // set_speed()
 
-void MatrixLamp::ResetCurrentEffect()
+void MatrixLamp::reset_current_effect()
 {
   currentMode = MODE_AMOUNT;
-}
+} // reset_current_effect()
 
-void MatrixLamp::SetIntensityForEffect(uint8_t mode, uint8_t intensity)
+void MatrixLamp::set_intensity_for_effect(uint8_t mode, uint8_t intensity)
 {
   if (mode >= MODE_AMOUNT) {
     return;
@@ -113,9 +113,17 @@ void MatrixLamp::SetIntensityForEffect(uint8_t mode, uint8_t intensity)
   }
   modes[mode].Brightness = intensity;
   loadingFlag = true;
-}
+} // set_intensity_for_effect()
 
-void MatrixLamp::SetScaleForEffect(uint8_t mode, uint8_t scale)
+uint8_t MatrixLamp::get_intensity_for_effect(uint8_t mode)
+{
+  if (mode >= MODE_AMOUNT) {
+    return 0;
+  }
+  return modes[mode].Brightness;
+} // get_intensity_for_effect()
+
+void MatrixLamp::set_scale_for_effect(uint8_t mode, uint8_t scale)
 {
   if (mode >= MODE_AMOUNT) {
     return;
@@ -125,9 +133,17 @@ void MatrixLamp::SetScaleForEffect(uint8_t mode, uint8_t scale)
   }
   modes[mode].Scale = scale;
   loadingFlag = true;
-}
+} // set_scale_for_effect()
 
-void MatrixLamp::SetSpeedForEffect(uint8_t mode, uint8_t speed)
+uint8_t MatrixLamp::get_scale_for_effect(uint8_t mode)
+{
+  if (mode >= MODE_AMOUNT) {
+    return 0;
+  }
+  return modes[mode].Scale;
+} // get_scale_for_effect()
+
+void MatrixLamp::set_speed_for_effect(uint8_t mode, uint8_t speed)
 {
   if (mode >= MODE_AMOUNT) {
     return;
@@ -137,9 +153,17 @@ void MatrixLamp::SetSpeedForEffect(uint8_t mode, uint8_t speed)
   }
   modes[mode].Speed = speed;
   loadingFlag = true;
-}
+} // set_speed_for_effect()
 
-void MatrixLamp::SetScaleFromColorForEffect(uint8_t mode, Color color)
+uint8_t MatrixLamp::get_speed_for_effect(uint8_t mode)
+{
+  if (mode >= MODE_AMOUNT) {
+    return 0;
+  }
+  return modes[mode].Speed;
+} // get_speed_for_effect()
+
+void MatrixLamp::set_scale_from_color_for_effect(uint8_t mode, Color color)
 {
   if (mode >= MODE_AMOUNT) {
     return;
@@ -147,7 +171,7 @@ void MatrixLamp::SetScaleFromColorForEffect(uint8_t mode, Color color)
 
   if (color.red == 255 && color.green == 255 && color.blue == 255)
   {
-    this->SetScaleForEffect(mode, 0);
+    this->set_scale_for_effect(mode, 0);
   }
   else
   {
@@ -155,17 +179,62 @@ void MatrixLamp::SetScaleFromColorForEffect(uint8_t mode, Color color)
     float saturation, value;
     rgb_to_hsv(color.red / 255, color.green / 255, color.blue / 255, hue, saturation, value);
 
-    this->SetScaleForEffect(mode, remap(hue, 0, 360, 1, 100));
+    this->set_scale_for_effect(mode, remap(hue, 0, 360, 1, 100));
   }
-}
+} // set_scale_from_color_for_effect()
 
-void MatrixLamp::SetCustomEffect(uint8_t mode)
+void MatrixLamp::set_custom_effect_mode(uint8_t mode)
 {
   custom_eff = mode;
+} // set_custom_effect_mode()
+
+// Set / Get intensity for current effect
+void MatrixLamp::set_effect_intensity(int value)
+{
+  this->set_intensity_for_effect(currentMode, value);
+} // set_effect_intensity()
+
+uint8_t MatrixLamp::get_effect_intensity()
+{
+  return this->get_intensity_for_effect(currentMode);
+} // get_effect_intensity()
+
+// Set / Get speed for current effect
+void MatrixLamp::set_effect_speed(int value)
+{
+  this->set_speed_for_effect(currentMode, value);
+} // set_effect_speed()
+
+uint8_t MatrixLamp::get_effect_speed()
+{
+  this->get_speed_for_effect(currentMode);
+} // get_effect_speed()
+
+// Set / Get scale for current effect
+void MatrixLamp::set_effect_scale(int value)
+{
+  this->set_scale_for_effect(currentMode, value);
+} // set_effect_scale()
+
+uint8_t MatrixLamp::get_effect_scale()
+{
+  this->get_scale_for_effect(currentMode);
+} // get_effect_scale()
+
+// Reset brightness, speed, scale to default for current effect
+void MatrixLamp::reset_effect_settings()
+{
+  if (currentMode >= MODE_AMOUNT) {
+    return;
+  }
+  
+  modes[currentMode].Brightness = pgm_read_byte(&defaultSettings[currentMode][0]);
+  modes[currentMode].Speed      = pgm_read_byte(&defaultSettings[currentMode][1]);
+  modes[currentMode].Scale      = pgm_read_byte(&defaultSettings[currentMode][2]);
 }
 
 #ifndef ORIENTATION
-bool MatrixLamp::SetMatrixOrientation(uint8_t orientation)
+bool MatrixLamp::set_matrix_orientation(uint8_t orientation)
 {
   if (orientation >= 1 && orientation <= 8)
   {
@@ -177,7 +246,7 @@ bool MatrixLamp::SetMatrixOrientation(uint8_t orientation)
 #endif // #ifndef ORIENTATION
 
 #ifndef MATRIX_TYPE
-bool MatrixLamp::SetMatrixType(uint8_t type)
+bool MatrixLamp::set_matrix_type(uint8_t type)
 {
   if (type >= 1 && type <= 2)
   {
@@ -189,12 +258,14 @@ bool MatrixLamp::SetMatrixType(uint8_t type)
 #endif // #ifndef MATRIX_TYPE
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-bool MatrixLamp::GetRandomSettings()
+// Get random settings
+bool MatrixLamp::get_random_settings()
 {
   return random_settings;
 }
 
-void MatrixLamp::SetRandomSettings(bool b)
+// Set random settings
+void MatrixLamp::set_random_settings(bool b)
 {
   if (!b)
   {
@@ -208,38 +279,6 @@ void MatrixLamp::SetRandomSettings(bool b)
 }
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-#if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
-// Set intensity for current effect
-void MatrixLamp::set_effect_intensity(int value)
-{
-  this->SetIntensityForEffect(currentMode, value);
-}
-
-// Set speed for current effect
-void MatrixLamp::set_effect_speed(int value)
-{
-  this->SetSpeedForEffect(currentMode, value);
-}
-
-// Set scale for current effect
-void MatrixLamp::set_effect_scale(int value)
-{
-  this->SetScaleForEffect(currentMode, value);
-}
-
-// Reset brightness, speed, scale to default for current effect
-void MatrixLamp::reset_effect_settings()
-{
-  if (currentMode >= MODE_AMOUNT) {
-    return;
-  }
-  
-  modes[currentMode].Brightness = pgm_read_byte(&defaultSettings[currentMode][0]);
-  modes[currentMode].Speed      = pgm_read_byte(&defaultSettings[currentMode][1]);
-  modes[currentMode].Scale      = pgm_read_byte(&defaultSettings[currentMode][2]);
-}
-#endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
-
 void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, light::AddressableLight *p_it)
 {
   InitLeds(p_it->size());
@@ -251,7 +290,7 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
 
 #ifdef DEF_SCANNER
     if (currentMode == EFF_SCANNER) {
-      this->SetScaleFromColorForEffect(currentMode, current_color);
+      this->set_scale_from_color_for_effect(currentMode, current_color);
     }
 #endif
 
