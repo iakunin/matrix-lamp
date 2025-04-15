@@ -4,7 +4,7 @@
 
 ### What's Changed
 
-##❗️ Breaking Changes
+## ❗️ Breaking Changes
 
 - Breaking: Internal reorganization of methods @andrewjswan (#33)
 
