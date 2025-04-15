@@ -56,4 +56,4 @@ number:
     on_value:
       then:
         - lambda: |-
-            id(matrix).SetMatrixOrientation(x);
+            id(matrix).set_matrix_orientation(x);

@@ -106,4 +106,4 @@ binary_sensor:
           - ON for at least 3000ms
         then:
           - lambda: |-
-              ESP_LOGD("button", "Long Click");
+              id(matrix).set_effect_intensity(id(matrix).get_effect_intensity() + 5);
