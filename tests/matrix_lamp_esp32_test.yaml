@@ -43,6 +43,7 @@ matrix_lamp:
   scale_id: matrix_scale
   speed_id: matrix_speed
   matrix_type: 0
+  settings_function: true
 
 number:
   # Matrix Orientation
