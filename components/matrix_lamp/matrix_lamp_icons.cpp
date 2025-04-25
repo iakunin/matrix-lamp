@@ -4,7 +4,7 @@ namespace esphome {
 namespace matrix_lamp {
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
-MatrixLamp_Icon::MatrixLamp_Icon(const uint8_t *data_start, int width, int height, uint32_t animation_frame_count, esphome::image::ImageType type, std::string icon_name, bool revers, uint16_t frame_duration, esphome::image::Transparency transparency)
+MatrixLamp_Icon::MatrixLamp_Icon(const uint8_t *data_start, uint32_t width, uint32_t height, uint32_t animation_frame_count, esphome::image::ImageType type, std::string icon_name, bool revers, uint16_t frame_duration, esphome::image::Transparency transparency)
     : Animation(data_start, width, height, animation_frame_count, type, transparency)
 {
   this->name = icon_name;

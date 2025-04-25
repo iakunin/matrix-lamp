@@ -65,15 +65,15 @@ class MatrixLamp : public Component {
     void set_custom_effect_mode(uint8_t mode);
 
     // Set / Get intensity for current effect
-    void set_effect_intensity(int value);
+    void set_effect_intensity(int32_t value);
     uint8_t get_effect_intensity();
 
     // Set / Get speed for current effect
-    void set_effect_speed(int value);
+    void set_effect_speed(int32_t value);
     uint8_t get_effect_speed();
 
     // Set / Get scale for current effect
-    void set_effect_scale(int value);
+    void set_effect_scale(int32_t value);
     uint8_t get_effect_scale();
 
     // Reset brightness, speed, scale to default for current effect
@@ -89,10 +89,10 @@ class MatrixLamp : public Component {
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
     void set_display(addressable_light::AddressableLightDisplay *disp);
-    void set_brightness(int value);
+    void set_brightness(int32_t value);
     void add_icon(MatrixLamp_Icon *icon);
     void show_icon(std::string icon);
-    void show_icon_by_index(int icon);
+    void show_icon_by_index(int32_t icon);
     #ifdef MATRIX_LAMP_BITMAP_MODE
     void show_bitmap(std::string bitmap);
     #endif
@@ -134,7 +134,7 @@ class MatrixLamp_Icon : public animation::Animation
     bool counting_up;
 
   public:
-    MatrixLamp_Icon(const uint8_t *data_start, int width, int height, 
+    MatrixLamp_Icon(const uint8_t *data_start, uint32_t width, uint32_t height, 
                     uint32_t animation_frame_count, 
                     esphome::image::ImageType type, std::string icon_name, 
                     bool revers, uint16_t frame_duration, esphome::image::Transparency transparency);

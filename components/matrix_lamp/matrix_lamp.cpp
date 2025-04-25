@@ -189,7 +189,7 @@ void MatrixLamp::set_custom_effect_mode(uint8_t mode)
 } // set_custom_effect_mode()
 
 // Set / Get intensity for current effect
-void MatrixLamp::set_effect_intensity(int value)
+void MatrixLamp::set_effect_intensity(int32_t value)
 {
   this->set_intensity_for_effect(currentMode, value);
 } // set_effect_intensity()
@@ -200,25 +200,25 @@ uint8_t MatrixLamp::get_effect_intensity()
 } // get_effect_intensity()
 
 // Set / Get speed for current effect
-void MatrixLamp::set_effect_speed(int value)
+void MatrixLamp::set_effect_speed(int32_t value)
 {
   this->set_speed_for_effect(currentMode, value);
 } // set_effect_speed()
 
 uint8_t MatrixLamp::get_effect_speed()
 {
-  this->get_speed_for_effect(currentMode);
+  return this->get_speed_for_effect(currentMode);
 } // get_effect_speed()
 
 // Set / Get scale for current effect
-void MatrixLamp::set_effect_scale(int value)
+void MatrixLamp::set_effect_scale(int32_t value)
 {
   this->set_scale_for_effect(currentMode, value);
 } // set_effect_scale()
 
 uint8_t MatrixLamp::get_effect_scale()
 {
-  this->get_scale_for_effect(currentMode);
+  return this->get_scale_for_effect(currentMode);
 } // get_effect_scale()
 
 // Reset brightness, speed, scale to default for current effect
@@ -343,7 +343,7 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
   }
 #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-  for (int i = 0; i < p_it->size(); i++)
+  for (uint32_t i = 0; i < p_it->size(); i++)
   {
     (*p_it)[i] = Color(leds[i].r, leds[i].g, leds[i].b);
   }
@@ -403,7 +403,7 @@ void MatrixLamp::show_icon(std::string iconname)
   this->show_icon_by_index(icon);    
 }
 
-void MatrixLamp::show_icon_by_index(int icon)
+void MatrixLamp::show_icon_by_index(int32_t icon)
 {
   if (icon < this->icon_count)
   {
@@ -459,7 +459,7 @@ void MatrixLamp::hide_icon()
 #endif
 }
 
-void MatrixLamp::set_brightness(int value)
+void MatrixLamp::set_brightness(int32_t value)
 {
   if (value < 256)
   {
