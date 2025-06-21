@@ -344,7 +344,7 @@ static void rainbowRoutine() {
       uint8_t tmp = 7U+random8(50U);
       if (tmp>14) tmp += 19U;
       if (tmp>67) tmp += 6U;
-      setModeSettings(tmp , 150U+random8(86U));
+      setModeSettings(tmp, 150U+random8(86U));
     }
   #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -4469,24 +4469,29 @@ static void LavaLampRoutine(){
 
 
 #ifdef DEF_SHADOWS
-// ********************** SHADOWS ***********************
+// ---------------------- SHADOWS -----------------------
 // https://github.com/vvip-68/GyverPanelWiFi/blob/master/firmware/GyverPanelWiFi_v1.04/effects.ino
 // (c) vvip-68
+//
+
 static void shadowsRoutine() {
-  #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-  if (selectedSettings)
-  {
-    setModeSettings(1U, 1U+random8(255U));
+  if (loadingFlag) {
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+      if (selectedSettings) {
+        setModeSettings(1U, 1U+random8(255U));
+      }
+    #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+
+    loadingFlag = false;
   }
-  #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
   static uint16_t sPseudotime = 0;
   static uint16_t sLastMillis = 0;
   static uint16_t sHue16 = 0;
  
-  uint8_t sat8 = beatsin88( 87, 220, 250);
-  uint8_t brightdepth = beatsin88( 341, 96, 224);
-  uint16_t brightnessthetainc16 = beatsin88( 203, (25 * 256), (40 * 256));
+  uint8_t sat8 = beatsin88(87, 220, 250);
+  uint8_t brightdepth = beatsin88(341, 96, 224);
+  uint16_t brightnessthetainc16 = beatsin88(203, (25 * 256), (40 * 256));
   uint8_t msmultiplier = beatsin88(map(modes[currentMode].Speed, 1, 255, 100, 255), 32, map(modes[currentMode].Speed, 1, 255, 60, 255));
 
   uint16_t hue16 = sHue16;
@@ -4499,7 +4504,7 @@ static void shadowsRoutine() {
 
   sLastMillis  = ms;
   sPseudotime += deltams * msmultiplier;
-  sHue16 += deltams * beatsin88( 400, 5,9);
+  sHue16 += deltams * beatsin88(400, 5,9);
   uint16_t brightnesstheta16 = sPseudotime;
 
   for( uint16_t i = 0 ; i < NUM_LEDS; i++) {
@@ -4507,18 +4512,18 @@ static void shadowsRoutine() {
     uint8_t hue8 = hue16 / 256;
 
     brightnesstheta16  += brightnessthetainc16;
-    uint16_t b16 = sin16( brightnesstheta16  ) + 32768;
+    uint16_t b16 = sin16(brightnesstheta16) + 32768;
 
     uint16_t bri16 = (uint32_t)((uint32_t)b16 * (uint32_t)b16) / 65536;
     uint8_t bri8 = (uint32_t)(((uint32_t)bri16) * brightdepth) / 65536;
     bri8 += (255 - brightdepth);
-    
-    CRGB newcolor = CHSV( hue8, sat8, map8(bri8, map(effectBrightness, 32, 255, 32,125), map(effectBrightness, 32,255, 125,250))); 
-    
+
+    CRGB newcolor = CHSV(hue8, sat8, map8(bri8, map(effectBrightness, 32, 255, 32, 125), map(effectBrightness, 32, 255, 125, 250))); 
+
     uint16_t pixelnumber = i;
-    pixelnumber = (NUM_LEDS-1) - pixelnumber;
-    
-    nblend( leds[pixelnumber], newcolor, 64);
+    pixelnumber = (NUM_LEDS - 1) - pixelnumber;
+
+    nblend(leds[pixelnumber], newcolor, 64);
   }
 }
 #endif
