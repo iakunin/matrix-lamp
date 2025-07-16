@@ -7,6 +7,8 @@
 #include "constants.h"
 #include "utility.h"
 
+#include "esphome/components/fastled_helper/utils.h"
+
 namespace esphome {
 namespace matrix_lamp {
 
@@ -459,7 +461,7 @@ static void fillNoiseLED()
     {
       int32_t joffset = scale * j;
 
-      uint8_t data = inoise8(x + ioffset, y + joffset, z);
+      uint8_t data = fastled_helper::perlin8(x + ioffset, y + joffset, z);
 
       data = qsub8(data, 16);
       data = qadd8(data, scale8(data, 39));
@@ -516,7 +518,7 @@ static void fillnoise8()
     for (uint8_t j = 0; j < MAX_DIMENSION; j++)
     {
       int32_t joffset = scale * j;
-      noise[i][j] = inoise8(x + ioffset, y + joffset, z);
+      noise[i][j] = fastled_helper::perlin8(x + ioffset, y + joffset, z);
     }
   }
   z += speed;
