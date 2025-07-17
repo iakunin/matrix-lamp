@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.5.13.23 - 2025-07-17
+
+### What's Changed
+
+### 🚀 Features
+
+- Matrix Lamp 2025.7.1 @andrewjswan (#37)
+- ESPHome 2025.7.0
+- FastLed 3.10.1
+
+### 🐛 Bug Fixes
+
+- 2025.7.1: Base Package fix @andrewjswan (#38)
+
+### 🧰 Maintenance
+
+- Matrix Lamp 2025.7.1 @andrewjswan (#37)
+- DEP: Bump stefanzweifel/git-auto-commit-action from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) (#36)
+- DEP: Bump esphome/build-action from 6 to 7 @[dependabot[bot]](https://github.com/apps/dependabot) (#35)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.21...v1.5.13.23
+
 ## v1.6.0 - 2025-07-17
 
 ### What's Changed
