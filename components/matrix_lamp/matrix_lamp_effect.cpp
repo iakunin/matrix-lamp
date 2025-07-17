@@ -1,5 +1,6 @@
 ﻿#include "matrix_lamp.h"
 #include "matrix_lamp_effect.h"
+
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 

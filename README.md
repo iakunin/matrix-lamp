@@ -37,7 +37,10 @@ external_components:
       type: git
       url: https://github.com/andrewjswan/matrix-lamp
       ref: main
-    components: [matrix_lamp]
+    components: [fastled_helper, matrix_lamp]
+
+fastled_helper:
+  palettes: false
 
 matrix_lamp:
   id: matrix

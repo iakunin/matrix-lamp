@@ -18,7 +18,7 @@ logger:
 number:
   # Power Supply
   - platform: template
-    name: ${name} Power Supply
+    name: Power Supply
     icon: mdi:power-plug
     min_value: 0.0
     max_value: 10.0
@@ -37,7 +37,7 @@ number:
 sensor:
   # Power
   - platform: template
-    name: ${name} Power
+    name: Power
     icon: mdi:flash
     id: power
     lambda: |-
@@ -53,7 +53,7 @@ sensor:
 
   # Current
   - platform: template
-    name: ${name} Current
+    name: Current
     icon: mdi:current-ac
     id: current
     lambda: |-
@@ -96,7 +96,7 @@ sensor:
 
   # Energy
   - platform: integration
-    name: "${name} Energy"
+    name: "Energy"
     icon: mdi:lightning-bolt
     sensor: power
     time_unit: h

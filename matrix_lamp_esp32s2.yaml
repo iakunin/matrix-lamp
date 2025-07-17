@@ -1,6 +1,7 @@
 substitutions:
-  device: esp-matrix-lamp
-  name: ESPHome Matrix Lamp
+  device: "esp_matrix_lamp"
+  name: "matrix-lamp"
+  friendly_name: "ESPHome Matrix Lamp"
 
 esp32:
   board: esp32-s2-saola-1

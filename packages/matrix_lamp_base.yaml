@@ -9,24 +9,16 @@ esphome:
     then:
       - delay: 5s
       - logger.log:
-          format: "${name} started, LED: ${type_leds}:${num_leds}:${pin_leds}, Effects: %d Reboot: ${reboot_timeout}"
+          format: "${friendly_name} started, LED: ${type_leds}:${num_leds}:${pin_leds}, Effects: %d Reboot: ${reboot_timeout}"
           args: ['id(neopixel_led)->get_effects().size()']
           level: INFO
           tag: start
 
 external_components:
   - source:
-      type: git
-      url: https://github.com/andrewjswan/esphome-components
-      ref: main
-    components: [fastled_helper]
-    refresh: 60s
-  - source:
-      type: git
-      url: https://github.com/andrewjswan/matrix-lamp
-      ref: main
-    components: [matrix_lamp]
-    refresh: 60s
+      type: local
+      path: components
+    components: [fastled_helper, matrix_lamp]
 
 fastled_helper:
   palettes: false
@@ -41,7 +33,7 @@ matrix_lamp:
 number:
   # Matrix Orientation
   - platform: template
-    name: ${name} Matrix Orientation
+    name: Matrix Orientation
     icon: mdi:autorenew
     min_value: 1
     max_value: 8

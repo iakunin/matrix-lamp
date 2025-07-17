@@ -7,7 +7,7 @@ matrix_lamp:
 number:
   # Matrix Settings
   - platform: template
-    name: ${name} Effect Intensity
+    name: Effect Intensity
     icon: mdi:spotlight
     min_value: 0
     max_value: 255
@@ -19,7 +19,7 @@ number:
     entity_category: config
 
   - platform: template
-    name: ${name} Effect Speed
+    name: Effect Speed
     icon: mdi:speedometer
     min_value: 0
     max_value: 255
@@ -31,7 +31,7 @@ number:
     entity_category: config
 
   - platform: template
-    name: ${name} Effect Scale
+    name: Effect Scale
     icon: mdi:drag-variant
     min_value: 0
     max_value: 100
