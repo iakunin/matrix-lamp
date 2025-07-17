@@ -475,12 +475,12 @@ static void gradientDownTop( uint8_t bottom, CHSV bottom_color, uint8_t top, CHS
   if (ORIENTATION < 3 || ORIENTATION == 7)
   {
     // STRIP_DIRECTION to UP ========
-    fill_gradient(leds, top * WIDTH, top_color, bottom * WIDTH, bottom_color, SHORTEST_HUES);
+    fill_gradient(leds, top * WIDTH, top_color, bottom * WIDTH, bottom_color, fl::SHORTEST_HUES);
   }
   else
   {
     // STRIP_DIRECTION to DOWN ======
-    fill_gradient(leds, NUM_LEDS - bottom * WIDTH - 1, bottom_color, NUM_LEDS - top * WIDTH, top_color, SHORTEST_HUES);
+    fill_gradient(leds, NUM_LEDS - bottom * WIDTH - 1, bottom_color, NUM_LEDS - top * WIDTH, top_color, fl::SHORTEST_HUES);
   }
 }
 

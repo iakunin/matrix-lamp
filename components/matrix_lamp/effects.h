@@ -4734,31 +4734,31 @@ static void snakesRoutine(){
     trackingObjectSpeedY[i] = trackingObjectSpeedY[i] - (int)trackingObjectSpeedY[i];
     if (random8(9U) == 0U) // вероятность поворота
       if (random8(2U)){ // <- поворот налево
-        enlargedObjectTime[i] = (enlargedObjectTime[i] << 2) | B01; // младший бит = поворот
+        enlargedObjectTime[i] = (enlargedObjectTime[i] << 2) | 0b01; // младший бит = поворот
         switch (trackingObjectState[i]) {
-          case B10:
-            trackingObjectState[i] = B01;
+          case 0b10:
+            trackingObjectState[i] = 0b01;
             if (trackingObjectPosY[i] == 0U)
               trackingObjectPosY[i] = HEIGHT - 1U;
             else
               trackingObjectPosY[i]--;
             break;
-          case B11:
-            trackingObjectState[i] = B00;
+          case 0b11:
+            trackingObjectState[i] = 0b00;
             if (trackingObjectPosY[i] >= HEIGHT - 1U)
               trackingObjectPosY[i] = 0U;
             else
               trackingObjectPosY[i]++;
             break;
-          case B00:
-            trackingObjectState[i] = B10;
+          case 0b00:
+            trackingObjectState[i] = 0b10;
             if (trackingObjectPosX[i] == 0U)
               trackingObjectPosX[i] = WIDTH - 1U;
             else
               trackingObjectPosX[i]--;
             break;
-          case B01:
-            trackingObjectState[i] = B11;
+          case 0b01:
+            trackingObjectState[i] = 0b11;
             if (trackingObjectPosX[i] >= WIDTH - 1U)
               trackingObjectPosX[i] = 0U;
             else
@@ -4767,31 +4767,31 @@ static void snakesRoutine(){
         }
       }
       else{ // -> поворот направо
-        enlargedObjectTime[i] = (enlargedObjectTime[i] << 2) | B11; // младший бит = поворот, старший = направо
+        enlargedObjectTime[i] = (enlargedObjectTime[i] << 2) | 0b11; // младший бит = поворот, старший = направо
         switch (trackingObjectState[i]) {
-          case B11:
-            trackingObjectState[i] = B01;
+          case 0b11:
+            trackingObjectState[i] = 0b01;
             if (trackingObjectPosY[i] == 0U)
               trackingObjectPosY[i] = HEIGHT - 1U;
             else
               trackingObjectPosY[i]--;
             break;
-          case B10:
-            trackingObjectState[i] = B00;
+          case 0b10:
+            trackingObjectState[i] = 0b00;
             if (trackingObjectPosY[i] >= HEIGHT - 1U)
               trackingObjectPosY[i] = 0U;
             else
               trackingObjectPosY[i]++;
             break;
-          case B01:
-            trackingObjectState[i] = B10;
+          case 0b01:
+            trackingObjectState[i] = 0b10;
             if (trackingObjectPosX[i] == 0U)
               trackingObjectPosX[i] = WIDTH - 1U;
             else
               trackingObjectPosX[i]--;
             break;
-          case B00:
-            trackingObjectState[i] = B11;
+          case 0b00:
+            trackingObjectState[i] = 0b11;
             if (trackingObjectPosX[i] >= WIDTH - 1U)
               trackingObjectPosX[i] = 0U;
             else
@@ -4802,25 +4802,25 @@ static void snakesRoutine(){
     else { // двигаем без поворота
         enlargedObjectTime[i] = (enlargedObjectTime[i] << 2);
         switch (trackingObjectState[i]) {
-          case B01:
+          case 0b01:
             if (trackingObjectPosY[i] == 0U)
               trackingObjectPosY[i] = HEIGHT - 1U;
             else
               trackingObjectPosY[i]--;
             break;
-          case B00:
+          case 0b00:
             if (trackingObjectPosY[i] >= HEIGHT - 1U)
               trackingObjectPosY[i] = 0U;
             else
               trackingObjectPosY[i]++;
             break;
-          case B10:
+          case 0b10:
             if (trackingObjectPosX[i] == 0U)
               trackingObjectPosX[i] = WIDTH - 1U;
             else
               trackingObjectPosX[i]--;
             break;
-          case B11:
+          case 0b11:
             if (trackingObjectPosX[i] >= WIDTH - 1U)
               trackingObjectPosX[i] = 0U;
             else
@@ -4831,19 +4831,19 @@ static void snakesRoutine(){
    }
    
     switch (trackingObjectState[i]) {
-     case B01:
+     case 0b01:
        dy = 1;
        dx = 0;
        break;
-     case B00:
+     case 0b00:
        dy = -1;
        dx = 0;
        break;
-     case B10:
+     case 0b10:
        dy = 0;
        dx = 1;
        break;
-     case B11:
+     case 0b11:
        dy = 0;
        dx = -1;
        break;
@@ -4863,9 +4863,9 @@ static void snakesRoutine(){
       //leds[XY(x,y)] += CHSV(trackingObjectHue[i] + m*4U, 255U, 255U); // тут рисуется тело
       leds[XY(x,y)] += CHSV(trackingObjectHue[i] + (m + trackingObjectSpeedY[i])*4U, 255U, 255U); // тут рисуется тело
  
-      if (temp & B01){ // младший бит = поворот, старший = направо
+      if (temp & 0b01){ // младший бит = поворот, старший = направо
         temp = temp >> 1;
-        if (temp & B01){ // старший бит = направо
+        if (temp & 0b01){ // старший бит = направо
           if (dx == 0){
             dx = 0 - dy;
             dy = 0;
@@ -5801,19 +5801,19 @@ static void nexusReset(uint8_t i){
       //trackingObjectSpeedX[i] = (255. + random8()) / 255.;
       trackingObjectSpeedX[i] = (float)random8(5,11) / 70 + speedfactor; // делаем частицам немного разное ускорение и сразу пересчитываем под общую скорость
         switch (trackingObjectState[i]) {
-          case B01:
+          case 0b01:
               trackingObjectPosY[i] = HEIGHT;
               trackingObjectPosX[i] = random8(WIDTH);
             break;
-          case B00:
+          case 0b00:
               trackingObjectPosY[i] = -1;
               trackingObjectPosX[i] = random8(WIDTH);
             break;
-          case B10:
+          case 0b10:
               trackingObjectPosX[i] = WIDTH;
               trackingObjectPosY[i] = random8(HEIGHT);
             break;
-          case B11:
+          case 0b11:
               trackingObjectPosX[i] = -1;
               trackingObjectPosY[i] = random8(HEIGHT);
             break;
@@ -5838,7 +5838,7 @@ static void nexusRoutine(){
       trackingObjectPosY[i] = random8(HEIGHT);
       trackingObjectSpeedX[i] = (float)random8(5,11) / 70 + speedfactor; // делаем частицам немного разное ускорение и сразу пересчитываем под общую скорость
       trackingObjectHue[i] = random8();
-      trackingObjectState[i] = random8(4);//     B00           // задаем направление
+      trackingObjectState[i] = random8(4); //     B00           // задаем направление
                                            // B10     B11
                                            //     B01
     }
@@ -5849,22 +5849,22 @@ static void nexusRoutine(){
 
   for (uint8_t i = 0; i < enlargedObjectNUM; i++){
         switch (trackingObjectState[i]) {
-          case B01:
+          case 0b01:
             trackingObjectPosY[i] -= trackingObjectSpeedX[i];
             if (trackingObjectPosY[i] <= -1)
               nexusReset(i);
             break;
-          case B00:
+          case 0b00:
             trackingObjectPosY[i] += trackingObjectSpeedX[i];
             if (trackingObjectPosY[i] >= HEIGHT)
               nexusReset(i);
             break;
-          case B10:
+          case 0b10:
             trackingObjectPosX[i] -= trackingObjectSpeedX[i];
             if (trackingObjectPosX[i] <= -1)
               nexusReset(i);
             break;
-          case B11:
+          case 0b11:
             trackingObjectPosX[i] += trackingObjectSpeedX[i];
             if (trackingObjectPosX[i] >= WIDTH)
               nexusReset(i);
@@ -8672,18 +8672,18 @@ static void BotswanaRivers() {
   if (!ALT_GRADIENT) {
     if (step % 2 == 0) {
       if (random8(6) == 1) {
-        //fill_gradient(leds, NUM_LEDS - WIDTH, CHSV(96U, 255U, 200U), NUM_LEDS, CHSV(50U, 255U, 255U), SHORTEST_HUES);
+        //fill_gradient(leds, NUM_LEDS - WIDTH, CHSV(96U, 255U, 200U), NUM_LEDS, CHSV(50U, 255U, 255U), fl::SHORTEST_HUES);
         if (ORIENTATION < 3 || ORIENTATION == 7) {    // if (STRIP_DIRECTION < 2) {
-          fill_gradient(leds, 0, CHSV(96U, 255U, 190U), random8(WIDTH + random8(6)), CHSV(90U, 200U, 255U), SHORTEST_HUES);
+          fill_gradient(leds, 0, CHSV(96U, 255U, 190U), random8(WIDTH + random8(6)), CHSV(90U, 200U, 255U), fl::SHORTEST_HUES);
         } else {
-          fill_gradient(leds, NUM_LEDS - random8(WIDTH + random8(6)), CHSV(96U, 255U, 190U), NUM_LEDS, CHSV(90U, 200U, 255U), SHORTEST_HUES);
+          fill_gradient(leds, NUM_LEDS - random8(WIDTH + random8(6)), CHSV(96U, 255U, 190U), NUM_LEDS, CHSV(90U, 200U, 255U), fl::SHORTEST_HUES);
         }
       } else {
-        //fill_gradient(leds, NUM_LEDS - WIDTH, CHSV(50U, 128U, 255U), NUM_LEDS, CHSV(90U, 255U, 180U), SHORTEST_HUES);
+        //fill_gradient(leds, NUM_LEDS - WIDTH, CHSV(50U, 128U, 255U), NUM_LEDS, CHSV(90U, 255U, 180U), fl::SHORTEST_HUES);
         if (ORIENTATION < 3 || ORIENTATION == 7) {    // if (STRIP_DIRECTION < 2) {
-          fill_gradient(leds, 0, CHSV(85U, 128U, 255U), random8(WIDTH), CHSV(90U, 255U, 180U), SHORTEST_HUES);
+          fill_gradient(leds, 0, CHSV(85U, 128U, 255U), random8(WIDTH), CHSV(90U, 255U, 180U), fl::SHORTEST_HUES);
         } else {
-          fill_gradient(leds, NUM_LEDS - random8(WIDTH), CHSV(85U, 128U, 255U), NUM_LEDS, CHSV(90U, 255U, 180U), SHORTEST_HUES);
+          fill_gradient(leds, NUM_LEDS - random8(WIDTH), CHSV(85U, 128U, 255U), NUM_LEDS, CHSV(90U, 255U, 180U), fl::SHORTEST_HUES);
         }
       }
     }

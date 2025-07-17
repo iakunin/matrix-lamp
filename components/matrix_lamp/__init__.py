@@ -62,7 +62,7 @@ _LOGGER = logging.getLogger(__name__)
 
 CODEOWNERS = ["@andrewjswan"]
 
-DEPENDENCIES = ["light"]
+DEPENDENCIES = ["light", "fastled_helper"]
 
 AUTO_LOAD = ["matrix_lamp", "image", "animation", "display"]
 
@@ -115,7 +115,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     """Code generation entry point."""
     var = cg.new_Pvariable(config[CONF_ID])
 
-    cg.add_library("fastled/FastLED", "3.7.8")
+    cg.add_library("fastled/FastLED", "3.10.1")
 
     cg.add_define("WIDTH", config[CONF_WIDTH])
     cg.add_define("HEIGHT", config[CONF_HEIGHT])
@@ -156,7 +156,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)
 
-        from PIL import Image
+        from PIL import Image  # noqa: PLC0415
 
         def rgb565_888(v565):  # noqa: ANN001 ANN202
             """RGB 565 to 888."""

@@ -1,7 +1,7 @@
 switch:
   # Random Mode Settings
   - platform: template
-    name: ${name} Random Mode
+    name: Random Mode
     icon: mdi:shuffle
     id: random_mode
     lambda: |-

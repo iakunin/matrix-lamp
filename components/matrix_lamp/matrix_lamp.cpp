@@ -424,8 +424,7 @@ void MatrixLamp::show_bitmap(std::string bitmap)
     this->bitmap = new Color[256];
   }
 
-  const size_t CAPACITY = JSON_ARRAY_SIZE(256);
-  StaticJsonDocument<CAPACITY> doc;
+  JsonDocument doc;
   deserializeJson(doc, bitmap);
   JsonArray array = doc.as<JsonArray>();
   // extract the values

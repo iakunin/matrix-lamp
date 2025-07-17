@@ -4,7 +4,7 @@ substitutions:
 
 binary_sensor:
   - platform: gpio
-    name: ${name} Button
+    name: Button
     internal: true
     pin:
       number: ${pin_button}

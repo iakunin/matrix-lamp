@@ -1,6 +1,7 @@
 substitutions:
-  device: esp-matrix-lamp
-  name: ESPHome Matrix Lamp
+  device: "esp_matrix_lamp"
+  name: "matrix-lamp"
+  friendly_name: "ESPHome Matrix Lamp"
   pin_pullup: "false"
   project_name: "ajs.Light - Matrix Lamp"
   project_version: "1.1.13"
