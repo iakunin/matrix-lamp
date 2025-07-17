@@ -2,6 +2,7 @@ substitutions:
   device: "esp_matrix_lamp"
   name: "matrix-lamp"
   friendly_name: "ESPHome Matrix Lamp"
+  pin_pullup: "false"
 
 esp32:
   board: nodemcu-32s
