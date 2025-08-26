@@ -1,5 +1,3 @@
-## API 
-
 ### Home Assistant services
 
 There are services and parameters to use.
