@@ -78,7 +78,6 @@ nav:
       - Component: matrix-lamp-component.md
       - Icons and Animations: icons-and-animations.md
       - API: api.md
-      - Lambda: lambda.md
   - Additionals:
       - Packages: https://github.com/andrewjswan/matrix-lamp/tree/main/packages
       - Examples: https://github.com/andrewjswan/matrix-lamp/tree/main/examples
