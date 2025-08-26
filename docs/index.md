@@ -18,4 +18,4 @@ You can install the firmware using [ESPHome](https://esphome.io/) using one of t
 
 GUI Dark                   |  GUI Light
 :-------------------------:|:-------------------------:
-![](/img/black.png)         |  ![](/img/white.png)
+![](img/black.png)         |  ![](img/white.png)
