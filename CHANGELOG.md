@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.5.13.27 - 2025-08-26
+
+### What's Changed
+
+- Documentation @andrewjswan (#48)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.25...v1.5.13.27
+
 ## v1.5.13.25 - 2025-08-26
 
 ### What's Changed
