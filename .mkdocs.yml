@@ -1,0 +1,92 @@
+# Project information
+site_name: ESPHome Matrix Lamp by Andrew J.Swan
+site_url: https://andrewjswan.github.io/matrix-lamp
+site_author: Andrew J.Swan
+site_description: >-
+  A compilation of firmware adaptations based on the original idea of Gyver Lamp, for ESPHome.
+
+# Repository
+repo_name: andrewjswan/matrix-lamp
+repo_url: https://github.com/andrewjswan/matrix-lamp
+remote_branch: documentation
+
+# Copyright
+copyright: Copyright &copy; Andrew J.Swan
+
+# Configuration
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.features
+    - navigation.path
+    - navigation.top
+    - toc.integrate
+    - search.suggest
+    - search.hightlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+  font:
+    text: Roboto
+    code: Roboto Mono
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+      primary: indigo
+      accent: indigo
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+      primary: indigo
+      accent: indigo
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+      primary: indigo
+      accent: indigo
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - admonition
+
+nav:
+  - Home: index.md
+  - Hardware:
+      - Pin scheme: pin-scheme.md
+      - Settings override: settings-override.md
+  - Matrix Lamp:
+      - Component: matrix-lamp-component.md
+      - Icons and Animations: icons-and-animations.md
+      - API: api.md
+  - Additionals:
+      - Packages: https://github.com/andrewjswan/matrix-lamp/tree/main/packages
+      - Examples: https://github.com/andrewjswan/matrix-lamp/tree/main/examples
+      - ESPHome configurations: https://github.com/andrewjswan/esphome-config
+      - ESPHome components: https://andrewjswan.github.io/esphome-components
+  - Firmware:
+      - MatrixLamp - ESP Web Tools: firmware.html
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/andrewjswan
