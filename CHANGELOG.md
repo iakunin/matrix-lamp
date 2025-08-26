@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.5.13.25 - 2025-08-26
+
+### What's Changed
+
+### 🚀 Features
+
+- Add RMT Light package @andrewjswan (#46)
+
+### 🧰 Maintenance
+
+- DEP: Bump actions/upload-pages-artifact from 3 to 4 @[dependabot[bot]](https://github.com/apps/dependabot) (#45)
+- DEP: Bump actions/first-interaction from 2 to 3 @[dependabot[bot]](https://github.com/apps/dependabot) (#44)
+- DEP: Bump actions/download-artifact from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#42)
+- DEP: Bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#43)
+- DEP: Bump actions/first-interaction from 1 to 2 @[dependabot[bot]](https://github.com/apps/dependabot) (#41)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.23..v1.5.13.25
+
 ## v1.5.13.23 - 2025-07-17
 
 ### What's Changed
