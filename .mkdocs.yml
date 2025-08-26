@@ -78,11 +78,7 @@ nav:
       - Component: matrix-lamp-component.md
       - Icons and Animations: icons-and-animations.md
       - API: api.md
-  - Additionals:
-      - Packages: https://github.com/andrewjswan/matrix-lamp/tree/main/packages
-      - Examples: https://github.com/andrewjswan/matrix-lamp/tree/main/examples
-      - ESPHome configurations: https://github.com/andrewjswan/esphome-config
-      - ESPHome components: https://andrewjswan.github.io/esphome-components
+  - Additionals: additionals.md
   - Firmware:
       - MatrixLamp - ESP Web Tools: firmware.html
 
