@@ -1,15 +1,5 @@
-## Packages:
-
-[Matrix Lamp Packages](https://github.com/andrewjswan/matrix-lamp/tree/main/packages)
-
-## Examples
-
-[Matrix Lamp Examples](https://github.com/andrewjswan/matrix-lamp/tree/main/examples)
-
-## ESPHome configurations
-
-[ESPHome Configurations](https://github.com/andrewjswan/esphome-config)
-
-## ESPHome components
-
-[ESPHome Components](https://andrewjswan.github.io/esphome-components)
+* [Matrix Lamp Packages](https://github.com/andrewjswan/matrix-lamp/tree/main/packages)
+* [Matrix Lamp Examples](https://github.com/andrewjswan/matrix-lamp/tree/main/examples)
+* [ESPHome Configurations](https://github.com/andrewjswan/esphome-config)
+* [ESPHome Components](https://andrewjswan.github.io/esphome-components)
+* [Home Assistant Add-ons](https://github.com/andrewjswan/home-assistant-addons)
