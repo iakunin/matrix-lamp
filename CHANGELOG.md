@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.5.13.29 - 2025-09-03
+
+### What's Changed
+
+### 🚀 Features
+
+- Add Incremental Drift effect @andrewjswan (#51)
+- Add Effects to Documentation @andrewjswan (#52)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.27...v1.5.13.29
+
 ## v1.5.13.27 - 2025-08-26
 
 ### What's Changed
