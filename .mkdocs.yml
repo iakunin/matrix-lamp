@@ -60,6 +60,11 @@ theme:
       accent: indigo
 
 markdown_extensions:
+  - admonition
+  - attr_list
+  - codehilite
+  - footnotes
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -68,10 +73,6 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.details
   - pymdownx.superfences
-  - admonition
-  - attr_list
-  - codehilite
-  - md_in_html
 
 nav:
   - Home: index.md
@@ -91,3 +92,6 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/andrewjswan
+
+extra_css:
+  - stylesheets/table.css

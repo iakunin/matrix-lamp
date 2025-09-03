@@ -38,15 +38,24 @@ All other solutions provide ready-made icons, especially **Lametric** has a big 
 
 ## Parameters reference
 
-The ID of the icons is used later to icon display. So, you should name them wisely. If you like to group icons, you should prefix them, e.g., with `weather_`.
+The ID of the icons is used later to icon display. So, you should name them wisely. 
+
+!!! tip
+    If you like to group icons, you should prefix them, e.g., with `weather_`.
 
 There are some more advanced parameters:
-- **frame_duration** (optional, ms): in the case of a GIF-file, the component tries to read the default interval for each frame. The default/fallback interval is 192 ms. In case you need to override the default value, set the duration per icon.
-- **pingpong** (optional, boolean): in the case of a GIF-file, you can reverse the frames instead of starting from the first frame.
-- **file** (Exclusive, filename): a local filename
-- **url** (Exclusive, url): a URL to download the icon
-- **lameid** (Exclusive, number): the ID from the **LaMetric** [icon](https://developer.lametric.com/icons) database
-- **resize** (Optional, "8x8" or "16x16"): If the source file hasn't the right dimensions.
+
+- **frame_duration** (optional, `ms`): in the case of a GIF-file, the component tries to read the default interval for each frame. The default/fallback interval is 192 ms. In case you need to override the default value, set the duration per icon.
+
+- **pingpong** (optional, `boolean`): in the case of a GIF-file, you can reverse the frames instead of starting from the first frame.
+
+- **file** (Exclusive, `filename`): a local filename
+
+- **url** (Exclusive, `url`): a URL to download the icon
+
+- **lameid** (Exclusive, `number`): the ID from the **LaMetric** [icon](https://developer.lametric.com/icons) database
+
+- **resize** (Optional, `8x8` or `16x16`): If the source file hasn't the right dimensions.
 
 !!! example annotate "Icons resize"
 
