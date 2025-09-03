@@ -22,7 +22,7 @@ You can call this from, e.g., the developer tools service.
 
 You can use the above functions also in [lambdas](https://esphome.io/automations/actions#lambda-action) in your esphome YAML.
 
-```c
+```cpp
   void set_brightness(int value);
   void show_icon(std::string icon);
   void show_icon_by_index(int icon);
