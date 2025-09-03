@@ -1,42 +1,43 @@
 ## Matrix Lamp Component
 
-``` { .yaml .copy .annotate }
-external_components:
-  - source:
-      type: git
-      url: https://github.com/andrewjswan/matrix-lamp
-      ref: main
-    components: [fastled_helper, matrix_lamp]
+!!! example annotate "Matrix Lamp Component"
 
-fastled_helper:
-  palettes: false
+    ``` { .yaml .copy .annotate }
+    external_components:
+      - source:
+          type: git
+          url: https://github.com/andrewjswan/matrix-lamp
+          ref: main
+        components: [fastled_helper, matrix_lamp]
 
-matrix_lamp:
-  id: matrix
-  width: 16                       # Matrix width
-  height: 16                      # Matrix height
-  random: true                    # The effects will be turned on at random (but successful) Speed ​nd Scale settings
-  intensity_id: matrix_intensity  # Template number identifier for intensity control
-  scale_id: matrix_scale          # Template number identifier for scale control
-  speed_id: matrix_speed          # Template number identifier for speed control
-  matrix_orientation: 5           # Matrix orientation [0..7] If not specified, it will be possible to change it on the fly using the SetMatrixOrientation function
-  matrix_type: 0                  # Matrix type [0..1] If not specified, it will be possible to change it on the fly using the SetMatrixType function
+    fastled_helper:
+      palettes: false
+
+    matrix_lamp:
+      id: matrix
+      width: 16                       # Matrix width
+      height: 16                      # Matrix height
+      random: true                    # The effects will be turned on at random (but successful) Speed ​nd Scale settings
+      intensity_id: matrix_intensity  # Template number identifier for intensity control
+      scale_id: matrix_scale          # Template number identifier for scale control
+      speed_id: matrix_speed          # Template number identifier for speed control
+      matrix_orientation: 5           # Matrix orientation [0..7] If not specified, it will be possible to change it on the fly using the SetMatrixOrientation function
+      matrix_type: 0                  # Matrix type [0..1] If not specified, it will be possible to change it on the fly using the SetMatrixType function
 
 
-light:
-  - platform: ...
-    effects:
-...
-      - matrix_lamp_effect:
-          name: Peacock
-          mode: RAINBOW_STRIPE (1)
+    light:
+      - platform: ...
+        effects:
+    ...
+          - matrix_lamp_effect:
+              name: Peacock
+              mode: RAINBOW_STRIPE (1)
 
-      - matrix_lamp_effect:
-          name: Fire 2021
-          mode: FIRE_2021 (1)
-...
-```
-
+          - matrix_lamp_effect:
+              name: Fire 2021
+              mode: FIRE_2021 (1)
+    ...
+    ```
 1.  See the list of all possible [modes](effects.md) and their values
 
 ## Parameters reference
