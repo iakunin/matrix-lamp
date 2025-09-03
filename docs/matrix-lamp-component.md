@@ -35,10 +35,11 @@
 
           - matrix_lamp_effect:
               name: Fire 2021
-              mode: FIRE_2021 (1)
+              mode: FIRE_2021 (2)
     ...
     ```
 1.  See the list of all possible [modes](effects.md) and their values
+2.  See the list of all possible [modes](effects.md) and their values
 
 ## Parameters reference
 
