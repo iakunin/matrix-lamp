@@ -11969,7 +11969,6 @@ static void IncrementalDriftRoutine() {
       setModeSettings(1U + random8(100U), 140U + random8(100U));
     }
     #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-    loadingFlag = false;
 
     if ((modes[currentMode].scale >= 0) && (modes[currentMode].scale < 20)) { 
       currentPalette = RainbowColors_p;
@@ -11982,6 +11981,8 @@ static void IncrementalDriftRoutine() {
     } else if ((modes[currentMode].scale >= 80) && (modes[currentMode].scale <= 100)) {
       currentPalette = ForestColors_p;
     }
+
+    loadingFlag = false;
   }
 
   uint8_t dim = beatsin8(2, 170, 250);
@@ -11993,15 +11994,15 @@ static void IncrementalDriftRoutine() {
     uint8_t x = 0;
     uint8_t y = 0;
 
-    if (i < CENTER_X_MAJOR) {
-      x = beatcos8((i + 1) * 2, i, WIDTH - i);
-      y = beatsin8((i + 1) * 2, i, HEIGHT - i);
+    if (i < WIDTH / 2) {
+      x = beatcos8((i - 1) * 2, i, WIDTH - i - 1);
+      y = beatsin8((i - 1) * 2, i, HEIGHT - i - 1);
       color = ColorFromPalette(currentPalette, i * 14);
     }
     else 
     {
-      x = beatsin8((WIDTH  - i) * 2, WIDTH - i, i + 1);
-      y = beatcos8((HEIGHT - i) * 2, HEIGHT - i, i + 1);
+      x = beatsin8((WIDTH  - i) * 2, WIDTH - i - 1, i);
+      y = beatcos8((HEIGHT - i) * 2, HEIGHT - i - 1, i);
       color = ColorFromPalette(currentPalette, (31 - i) * 14);
     }
     drawPixelXY(x, y, color);
@@ -12011,4 +12012,5 @@ static void IncrementalDriftRoutine() {
 
 }  // namespace matrix_lamp
 }  // namespace esphome
+
 
