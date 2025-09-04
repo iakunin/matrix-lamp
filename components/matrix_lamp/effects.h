@@ -60,11 +60,13 @@ static unsigned liquidLampTR[enlargedOBJECT_MAX_COUNT];
 
 static uint8_t custom_eff = 0;
 
-//константы размера матрицы вычисляется только здесь и не меняется в эффектах
+// Константы размера матрицы вычисляется только здесь и не меняется в эффектах
 static const uint8_t CENTER_X_MINOR =  (WIDTH / 2) - ((WIDTH  - 1) & 0x01); // центр матрицы по ИКСУ, сдвинутый в меньшую сторону, если ширина чётная
 static const uint8_t CENTER_Y_MINOR = (HEIGHT / 2) - ((HEIGHT - 1) & 0x01); // центр матрицы по ИГРЕКУ, сдвинутый в меньшую сторону, если высота чётная
 static const uint8_t CENTER_X_MAJOR =   WIDTH / 2  + (WIDTH  % 2);          // центр матрицы по ИКСУ, сдвинутый в большую сторону, если ширина чётная
 static const uint8_t CENTER_Y_MAJOR =  HEIGHT / 2  + (HEIGHT % 2);          // центр матрицы по ИГРЕКУ, сдвинутый в большую сторону, если высота чётная
+static const uint8_t CENTER_X =  WIDTH / 2;
+static const uint8_t CENTER_Y = HEIGHT / 2;
 
 // --------------------------------------------------------------------------------------
 
@@ -199,7 +201,7 @@ static void fireRoutine(bool isColored)
     memset(matrixValue, 0, sizeof(matrixValue));          // это массив для эффекта Огонь. странно, что его нужно залить нулями
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(30U) ? 1U+random8(100U) : 100U, 200U+random8(35U));
+        setModeSettings(random8(30U) ? 1U + random8(100U) : 100U, 200U + random8(35U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -417,7 +419,7 @@ static void pulseRoutine(uint8_t PMode) {
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings) {
-        setModeSettings(1U+random8(100U), 170U+random8(62U));
+        setModeSettings(1U + random8(100U), 170U+random8(62U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -429,7 +431,7 @@ static void pulseRoutine(uint8_t PMode) {
     uint8_t _sat;
     if (step <= pcnt) {
       for (uint8_t i = 0; i < step; i++ ) {
-        uint8_t _dark = qmul8( 2U, cos8 (128U / (step + 1U) * (i + 1U))) ;
+        uint8_t _dark = qmul8( 2U, cos8_t(128U / (step + 1U) * (i + 1U))) ;
         switch (PMode) {
           case 1U:                    // 1 - случайные диски
             deltaHue = hue;
@@ -448,22 +450,22 @@ static void pulseRoutine(uint8_t PMode) {
             _pulse_color = CHSV(deltaHue, 255U, _dark);
             break;
           case 5U:                    // 51...67 - пузыри цветы
-            _sat =  qsub8( 255U, cos8 (128U / (step + 1U) * (i + 1U))) ;
+            _sat =  qsub8( 255U, cos8_t(128U / (step + 1U) * (i + 1U))) ;
             deltaHue += modes[currentMode].Scale;
             _pulse_color = CHSV(deltaHue, _sat, _dark);
             break;
           case 6U:                    // 68...83 - выбор цвета пузырей
-            _sat =  qsub8( 255U, cos8 (128U / (step + 1U) * (i + 1U))) ;
+            _sat =  qsub8( 255U, cos8_t(128U / (step + 1U) * (i + 1U))) ;
             deltaHue = modes[currentMode].Scale * 2.55;
             _pulse_color = CHSV(deltaHue, _sat, _dark);
             break;
           case 7U:                    // 84...99 - перелив цвета пузырей
-            _sat =  qsub8( 255U, cos8 (128U / (step + 1U) * (i + 1U))) ;
+            _sat =  qsub8( 255U, cos8_t(128U / (step + 1U) * (i + 1U))) ;
             deltaHue2 = modes[currentMode].Scale;
             _pulse_color = CHSV(hue2, _sat, _dark);
             break;
           case 8U:                    // 100 - случайные пузыри
-            _sat =  qsub8( 255U, cos8 (128U / (step + 1U) * (i + 1U))) ;
+            _sat =  qsub8( 255U, cos8_t(128U / (step + 1U) * (i + 1U))) ;
             deltaHue2 = modes[currentMode].Scale;
             _pulse_color = CHSV(hue2, _sat, _dark);
             break;
@@ -509,7 +511,7 @@ static void poolRoutine()
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(47U+random8(28U), 201U+random8(38U));
+        setModeSettings(47U+random8(28U), 201U + random8(38U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -563,7 +565,7 @@ static void colorsRoutine2()
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(255U), 210U+random8(46U));
+        setModeSettings(1U + random8(255U), 210U+random8(46U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -716,7 +718,7 @@ static void matrixRoutine()
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(90U), 165U+random8(66U));
+        setModeSettings(1U + random8(90U), 165U+random8(66U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -796,7 +798,7 @@ static void butterflysRoutine(bool isColored)
           setModeSettings((tmp & 0x01) ? 65U+random8(36U) : 15U+random8(26U), tmp);
         }
         else
-          setModeSettings(random8(21U) ? (random8(3U) ? 2U+random8(98U) : 1U) : 100U, 20U+random8(155U));
+          setModeSettings(random8(21U) ? (random8(3U) ? 2U + random8(98U) : 1U) : 100U, 20U+random8(155U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -1058,7 +1060,7 @@ static void ballsRoutine()
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
-      setModeSettings(1U+random8(100U) , 190U+random8(31U));
+      setModeSettings(1U + random8(100U) , 190U+random8(31U));
     }
     #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -1131,7 +1133,7 @@ static void lightBallsRoutine()
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(100U) , 230U+random8(16U));
+        setModeSettings(1U + random8(100U) , 230U+random8(16U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -1140,15 +1142,15 @@ static void lightBallsRoutine()
   // Note that we never actually clear the matrix, we just constantly
   // blur it repeatedly. Since the blurring is 'lossy', there's
   // an automatic trend toward black -- by design.
-  // uint8_t blurAmount = dim8_raw(beatsin8(3, 64, 100));
+  // uint8_t blurAmount = dim8_raw(beatsin8_t(3, 64, 100));
   // blur2d(leds, WIDTH, HEIGHT, blurAmount);
-  blurScreen(dim8_raw(beatsin8(3, 64, 100)));
+  blurScreen(dim8_raw(beatsin8_t(3, 64, 100)));
 
   // Use two out-of-sync sine waves
-  uint16_t i = beatsin16( 79, 0, 255); //91
-  uint16_t j = beatsin16( 67, 0, 255); //109
-  uint16_t k = beatsin16( 53, 0, 255); //73
-  uint16_t m = beatsin16( 97, 0, 255); //123
+  uint16_t i = beatsin16_t( 79, 0, 255); //91
+  uint16_t j = beatsin16_t( 67, 0, 255); //109
+  uint16_t k = beatsin16_t( 53, 0, 255); //73
+  uint16_t m = beatsin16_t( 97, 0, 255); //123
 
   // The color of each point shifts over time, each at a different speed.
   uint32_t ms = millis() / (modes[currentMode].Scale / 4 + 1);
@@ -1170,7 +1172,7 @@ static void whiteColorStripeRoutine()
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(11U+random8(83U), 1U + random8(255U / WIDTH + 1U) * WIDTH);
+        setModeSettings(11U + random8(83U), 1U + random8(255U / WIDTH + 1U) * WIDTH);
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -1358,7 +1360,7 @@ static void MultipleStream() { // 2 comets
       if (selectedSettings){
         hue = random8();
         hue2 = hue + 85U;
-        setModeSettings(1U+random8(25U), 185U+random8(36U));
+        setModeSettings(1U + random8(25U), 185U+random8(36U));
       }
       else{
         hue = 0U;   // 0xFF0000
@@ -1384,14 +1386,14 @@ static void MultipleStream() { // 2 comets
   dimAll(255U - modes[currentMode].Scale * 2);
 
   // gelb im Kreis
-  byte xx = trackingObjectState[0] + sin8( millis() / 10) / trackingObjectShift[0]; // / 22;
-  byte yy = trackingObjectState[1] + cos8( millis() / 10) / trackingObjectShift[1]; // / 22;
+  byte xx = trackingObjectState[0] + sin8_t( millis() / 10) / trackingObjectShift[0]; // / 22;
+  byte yy = trackingObjectState[1] + cos8_t( millis() / 10) / trackingObjectShift[1]; // / 22;
   if (xx < WIDTH && yy < HEIGHT)
     leds[XY( xx, yy)] = CHSV(hue2 , 255, 255);                                      // 0xFFFF00;
 
   // rot in einer Acht
-  xx = trackingObjectState[2] + sin8( millis() / 46) / trackingObjectShift[2];      // / 32;
-  yy = trackingObjectState[3] + cos8( millis() / 15) / trackingObjectShift[3];      // / 32;
+  xx = trackingObjectState[2] + sin8_t( millis() / 46) / trackingObjectShift[2];      // / 32;
+  yy = trackingObjectState[3] + cos8_t( millis() / 15) / trackingObjectShift[3];      // / 32;
   if (xx < WIDTH && yy < HEIGHT)
     leds[XY( xx, yy)] = CHSV(hue , 255, 255);                                       // 0xFF0000;
 
@@ -1417,7 +1419,7 @@ static void MultipleStream2() { // 3 comets
         hue = random8();
         hue2 = hue + 85U;
         deltaHue = hue2 + 85U;
-        setModeSettings(1U+random8(25U), 185U+random8(36U));
+        setModeSettings(1U + random8(25U), 185U+random8(36U));
       }
       else{
         hue = 0U;                                                                   // 0xFF0000
@@ -1443,18 +1445,18 @@ static void MultipleStream2() { // 3 comets
     //dimAll(220); // < -- затухание эффекта для последующего кадрв
   dimAll(255U - modes[currentMode].Scale * 2);
 
-  //byte xx = 2 + sin8( millis() / 10) / 22;
-  //byte yy = 2 + cos8( millis() / 9) / 22;
-  byte xx = trackingObjectState[0] + sin8( millis() / 10) / trackingObjectShift[0]; // / 22;
-  byte yy = trackingObjectState[1] + cos8( millis() / 9) / trackingObjectShift[1];  // / 22;
+  //byte xx = 2 + sin8_t( millis() / 10) / 22;
+  //byte yy = 2 + cos8_t( millis() / 9) / 22;
+  byte xx = trackingObjectState[0] + sin8_t( millis() / 10) / trackingObjectShift[0]; // / 22;
+  byte yy = trackingObjectState[1] + cos8_t( millis() / 9) / trackingObjectShift[1];  // / 22;
 
   if (xx < WIDTH && yy < HEIGHT)
     leds[XY( xx, yy)] += CHSV(deltaHue , 255, 255);//0x0000FF;
 
-  //xx = 4 + sin8( millis() / 10) / 32;
-  //yy = 4 + cos8( millis() / 7) / 32;
-  xx = trackingObjectState[2] + sin8( millis() / 10) / trackingObjectShift[2];     // / 32;
-  yy = trackingObjectState[3] + cos8( millis() / 7) / trackingObjectShift[3];      // / 32;
+  //xx = 4 + sin8_t( millis() / 10) / 32;
+  //yy = 4 + cos8_t( millis() / 7) / 32;
+  xx = trackingObjectState[2] + sin8_t( millis() / 10) / trackingObjectShift[2];     // / 32;
+  yy = trackingObjectState[3] + cos8_t( millis() / 7) / trackingObjectShift[3];      // / 32;
   if (xx < WIDTH && yy < HEIGHT)
     leds[XY( xx, yy)] += CHSV(hue , 255, 255);                                     // 0xFF0000;
   leds[XY( CENTER_X_MINOR, CENTER_Y_MINOR)] += CHSV(hue2 , 255, 255);              // 0xFFFF00;
@@ -1477,7 +1479,7 @@ static void MultipleStream3() { // Fireline
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(26U), 180U+random8(45U));
+        setModeSettings(1U + random8(26U), 180U+random8(45U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -1507,7 +1509,7 @@ static void MultipleStream5() { // Fractorial Fire
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings) {
-        setModeSettings(1U+random8(26U), 180U+random8(45U));
+        setModeSettings(1U + random8(26U), 180U+random8(45U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -1560,7 +1562,7 @@ static void MultipleStream8() { // Windows ))
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings) {
-        setModeSettings(random8(2U) ? 1U : 2U+random8(99U), 155U+random8(76U));
+        setModeSettings(random8(2U) ? 1U : 2U + random8(99U), 155U+random8(76U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -1641,7 +1643,7 @@ static void ColorCometRoutine() {
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(20U) ? 1U+random8(99U) : 100U, 185U+random8(51U));
+        setModeSettings(random8(20U) ? 1U + random8(99U) : 100U, 185U+random8(51U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -1795,16 +1797,16 @@ static boolean spiroincrement = false;
 
 static boolean spirohandledChange = false;
 
-static uint8_t mapsin8(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
-  uint8_t beatsin = sin8(theta);
+static uint8_t mapsin8_t(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
+  uint8_t beatsin = sin8_t(theta);
   uint8_t rangewidth = highest - lowest;
   uint8_t scaledbeat = scale8(beatsin, rangewidth);
   uint8_t result = lowest + scaledbeat;
   return result;
 }
 
-static uint8_t mapcos8(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
-  uint8_t beatcos = cos8(theta);
+static uint8_t mapcos8_t(uint8_t theta, uint8_t lowest = 0, uint8_t highest = 255) {
+  uint8_t beatcos = cos8_t(theta);
   uint8_t rangewidth = highest - lowest;
   uint8_t scaledbeat = scale8(beatcos, rangewidth);
   uint8_t result = lowest + scaledbeat;
@@ -1819,7 +1821,7 @@ static void spiroRoutine() {
           uint8_t rnd = random8(6U);
           if (rnd > 1U) rnd++;
           if (rnd > 3U) rnd++;
-          setModeSettings(rnd*11U+3U, random8(10U) ? 2U+random8(26U) : 255U);
+          setModeSettings(rnd*11U+3U, random8(10U) ? 2U + random8(26U) : 255U);
         }
       #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -1833,11 +1835,11 @@ static void spiroRoutine() {
       boolean change = false;
       
       for (uint8_t i = 0; i < spirocount; i++) {
-        uint8_t x = mapsin8(spirotheta1 + i * spirooffset, spirominx, spiromaxx);
-        uint8_t y = mapcos8(spirotheta1 + i * spirooffset, spirominy, spiromaxy);
+        uint8_t x = mapsin8_t(spirotheta1 + i * spirooffset, spirominx, spiromaxx);
+        uint8_t y = mapcos8_t(spirotheta1 + i * spirooffset, spirominy, spiromaxy);
 
-        uint8_t x2 = mapsin8(spirotheta2 + i * spirooffset, x - spiroradiusx, x + spiroradiusx);
-        uint8_t y2 = mapcos8(spirotheta2 + i * spirooffset, y - spiroradiusy, y + spiroradiusy);
+        uint8_t x2 = mapsin8_t(spirotheta2 + i * spirooffset, x - spiroradiusx, x + spiroradiusx);
+        uint8_t y2 = mapcos8_t(spirotheta2 + i * spirooffset, y - spiroradiusy, y + spiroradiusy);
 
 
        //CRGB color = ColorFromPalette(PartyColors_p, (hue + i * spirooffset), 128U); // вообще-то палитра должна постоянно меняться, но до адаптации этого руки уже не дошли
@@ -1893,19 +1895,19 @@ static void spiroRoutine() {
   https://www.gamedev.net/articles/programming/graphics/exploring-metaballs-and-isosurfaces-in-2d-r2556
 */
 static void MetaBallsRoutine() {
-    if (loadingFlag)
-    {
-      #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
-        if (selectedSettings){
-          setModeSettings(random8(8U)*11U+1U+random8(11U), 50U+random8(121U));
-        }
-      #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+  if (loadingFlag)
+  {
+    #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
+      if (selectedSettings){
+        setModeSettings(random8(8U)*11U+1U + random8(11U), 50U+random8(121U));
+      }
+    #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-      loadingFlag = false;
-      setCurrentPalette();
+    loadingFlag = false;
+    setCurrentPalette();
 
-      speedfactor = modes[currentMode].Speed / 127.0;
-    }
+    speedfactor = modes[currentMode].Speed / 127.0;
+  }
 
   // get some 2 random moving points
   uint16_t param1 = millis() * speedfactor;
@@ -1916,8 +1918,8 @@ static void MetaBallsRoutine() {
   uint8_t y3 = fastled_helper::perlin8(param1, 25355, 22685 ) / HEIGHT;
 
   // and one Lissajou function
-  uint8_t x1 = beatsin8(23 * speedfactor, 0, WIDTH - 1U);
-  uint8_t y1 = beatsin8(28 * speedfactor, 0, HEIGHT - 1U);
+  uint8_t x1 = beatsin8_t(23 * speedfactor, 0, WIDTH - 1U);
+  uint8_t y1 = beatsin8_t(28 * speedfactor, 0, HEIGHT - 1U);
 
   for (uint8_t y = 0; y < HEIGHT; y++) {
     for (uint8_t x = 0; x < WIDTH; x++) {
@@ -2008,12 +2010,12 @@ static void Sinusoid3Routine()
 
   CRGB color;
 
-  float center1x = float(e_s3_size * sin16(speedfactor * 72.0874 * time_shift)) / 0x7FFF - emitterX;
-  float center1y = float(e_s3_size * cos16(speedfactor * 98.301  * time_shift)) / 0x7FFF - emitterY;
-  float center2x = float(e_s3_size * sin16(speedfactor * 68.8107 * time_shift)) / 0x7FFF - emitterX;
-  float center2y = float(e_s3_size * cos16(speedfactor * 65.534  * time_shift)) / 0x7FFF - emitterY;
-  float center3x = float(e_s3_size * sin16(speedfactor * 134.3447 * time_shift)) / 0x7FFF - emitterX;
-  float center3y = float(e_s3_size * cos16(speedfactor * 170.3884 * time_shift)) / 0x7FFF - emitterY;
+  float center1x = float(e_s3_size * sin16_t(speedfactor * 72.0874 * time_shift)) / 0x7FFF - emitterX;
+  float center1y = float(e_s3_size * cos16_t(speedfactor * 98.301  * time_shift)) / 0x7FFF - emitterY;
+  float center2x = float(e_s3_size * sin16_t(speedfactor * 68.8107 * time_shift)) / 0x7FFF - emitterX;
+  float center2y = float(e_s3_size * cos16_t(speedfactor * 65.534  * time_shift)) / 0x7FFF - emitterY;
+  float center3x = float(e_s3_size * sin16_t(speedfactor * 134.3447 * time_shift)) / 0x7FFF - emitterX;
+  float center3y = float(e_s3_size * cos16_t(speedfactor * 170.3884 * time_shift)) / 0x7FFF - emitterY;
   
   switch (deltaValue) {
     case 0:// Sinusoid I
@@ -2021,11 +2023,11 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          int8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.r = v;
           cx = x + center3x;
           cy = y + center3y;
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.b = v;
           drawPixelXY(x, y, color);
         }
@@ -2036,14 +2038,14 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          //int8_t v = 127 * (0.001 * time_shift * speedfactor + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 32767.0);
-          uint8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          //int8_t v = 127 * (0.001 * time_shift * speedfactor + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 32767.0);
+          uint8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.r = v;
           
           cx = x + center2x;
           cy = y + center2y;
-          //v = 127 * (float(0.001 * time_shift * speedfactor) + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 32767.0);
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          //v = 127 * (float(0.001 * time_shift * speedfactor) + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 32767.0);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           //color.g = (uint8_t)v >> 1;
           color.g = (v - (min(v, color.r) >> 1)) >> 1;
           //color.b = (uint8_t)v >> 2;
@@ -2058,17 +2060,17 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          int8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.r = v;
 
           cx = x + center2x;
           cy = y + center2y;
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.b = v;
 
           cx = x + center3x;
           cy = y + center3y;
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.g = v;
           drawPixelXY(x, y, color);
         }
@@ -2079,17 +2081,17 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
+          int8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
           color.r = ~v;
 
           cx = x + center2x;
           cy = y + center2y;
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
           color.g = ~v;
 
           cx = x + center3x;
           cy = y + center3y;
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 100)) / 0x7FFF);
           color.b = ~v;
           drawPixelXY(x, y, color);
         }
@@ -2101,13 +2103,13 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);// + time_shift * speedfactor)) / 0x7FFF);
+          int8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);// + time_shift * speedfactor)) / 0x7FFF);
           color.r = ~v;
 
-          v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 10)) / 0x7FFF); 
+          v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 10)) / 0x7FFF); 
           color.b = ~v;
 
-          //same v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 10)) / 0x7FFF);
+          //same v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 10)) / 0x7FFF);
           color.g = ~v;
           drawPixelXY(x, y, color);
         }
@@ -2119,17 +2121,17 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * (beatsin16(2,1000,1750)/2550.) * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);// + time_shift * speedfactor * 5 // mass colors plus by SottNick
+          int8_t v = 127 * (1 + float(sin16_t(_scale * (beatsin16_t(2,1000,1750)/2550.) * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);// + time_shift * speedfactor * 5 // mass colors plus by SottNick
           color.r = v;
 
-          //v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 7)) / 0x7FFF);
+          //v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 7)) / 0x7FFF);
           //v = 127 * (1 + sinf (_scale2 * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 0.001 * time_shift * speedfactor));
-          v = 127 * (1 + float(sin16(_scale * (beatsin16(1,570,1050)/2250.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 13 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.41
+          v = 127 * (1 + float(sin16_t(_scale * (beatsin16_t(1,570,1050)/2250.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 13 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.41
           color.b = v;
 
-          //v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 19)) / 0x7FFF);
+          //v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 19)) / 0x7FFF);
           //v = 127 * (1 + sinf (_scale2 * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 0.0025 * time_shift * speedfactor));
-          v = 127 * (1 + float(cos16(_scale * (beatsin16(3,1900,2550)/2550.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 41 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.53
+          v = 127 * (1 + float(cos16_t(_scale * (beatsin16_t(3,1900,2550)/2550.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 41 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.53
           color.g = v;
           drawPixelXY(x, y, color);
         }
@@ -2140,16 +2142,16 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          int8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 5)) / 0x7FFF);
+          int8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 5)) / 0x7FFF);
           color.g = ~v;
 
-          //v = 127 * (1 + float(sin16(_scale * x) + 0.01 * time_shift * speedfactor) / 0x7FFF);
-          v = 127 * (1 + float(sin16(_scale * (x + 0.005 * time_shift * speedfactor))) / 0x7FFF); // proper by SottNick
+          //v = 127 * (1 + float(sin16_t(_scale * x) + 0.01 * time_shift * speedfactor) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * (x + 0.005 * time_shift * speedfactor))) / 0x7FFF); // proper by SottNick
           
           color.b = ~v;
 
-          //v = 127 * (1 + float(sin16(_scale * y * 127 + float(0.011 * time_shift * speedfactor))) / 0x7FFF);
-          v = 127 * (1 + float(sin16(_scale * (y + 0.0055 * time_shift * speedfactor))) / 0x7FFF); // proper by SottNick
+          //v = 127 * (1 + float(sin16_t(_scale * y * 127 + float(0.011 * time_shift * speedfactor))) / 0x7FFF);
+          v = 127 * (1 + float(sin16_t(_scale * (y + 0.0055 * time_shift * speedfactor))) / 0x7FFF); // proper by SottNick
           color.r = ~v;
           drawPixelXY(x, y, color);
         }
@@ -2160,9 +2162,9 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          //uint8_t v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //uint8_t v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
           uint8_t v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          //uint8_t v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          //uint8_t v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали - proper by SottNick
           float d = SQRT_VARIANT(cx * cx + cy * cy) / 10.; // 10 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2173,9 +2175,9 @@ static void Sinusoid3Routine()
 
           cx = x + center2x;
           cy = y + center2y;
-          //v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
           v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          //v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          //v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали
           d = SQRT_VARIANT(cx * cx + cy * cy) / 10.; // 10 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2186,9 +2188,9 @@ static void Sinusoid3Routine()
 
           cx = x + center3x;
           cy = y + center3y;
-          //v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
           //v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали
           d = SQRT_VARIANT(cx * cx + cy * cy) / 10.; // 10 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2205,10 +2207,10 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          //uint8_t v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
-          //uint8_t v = 127 * (1 + float(sin16(3* atan2(cy, cx) + _scale *  hypot(cy, cx) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //uint8_t v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //uint8_t v = 127 * (1 + float(sin16_t(3* atan2(cy, cx) + _scale *  hypot(cy, cx) + time_shift * speedfactor * 5)) / 0x7FFF);
           //uint8_t v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          uint8_t v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          uint8_t v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали
           float d = SQRT_VARIANT(cx * cx + cy * cy) / 10.; // 10 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2220,7 +2222,7 @@ static void Sinusoid3Routine()
           cx = x + center3x;
           cy = y + center3y;
           //v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали
           d = SQRT_VARIANT(cx * cx + cy * cy) / 10.; // 10 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2239,17 +2241,17 @@ static void Sinusoid3Routine()
         for (uint8_t x = 0; x < WIDTH; x++) {
           float cx = x + center1x;
           float cy = y + center1y;
-          //uint8_t v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //uint8_t v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
           //uint8_t v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          //uint8_t v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
-          uint8_t v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
+          //uint8_t v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          uint8_t v = 127 * (1 + float(sin16_t(_scale * SQRT_VARIANT(cx * cx + cy * cy))) / 0x7FFF);
           color.g = v;
 
           cx = x + center2x;
           cy = y + center2y;
-          //v = 127 * (1 + float(sin16(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
+          //v = 127 * (1 + float(sin16_t(_scale * (2 * atan2(cy, cx) + hypot(cy, cx)) + time_shift * speedfactor * 5)) / 0x7FFF);
           //v = 127 * (1 + sinf (3* atan2(cy, cx)  + _scale2 *  hypot(cy, cx))); // proper by SottNick
-          v = 127 * (1 + float(sin16(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
+          v = 127 * (1 + float(sin16_t(atan2(cy, cx) * 31255  + _scale3 *  hypot(cy, cx))) / 0x7FFF); // proper by SottNick
           //вырезаем центр спирали
           float d = SQRT_VARIANT(cx * cx + cy * cy) / 16.; // 16 - это радиус вырезаемого центра в каких-то условных величинах. 10 = 1 пиксель, 20 = 2 пикселя. как-то так
           if (d < 0.06) d = 0.06;
@@ -2351,7 +2353,7 @@ static void PrismataRoutine() {
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(100U), 35U+random8(100U));
+        setModeSettings(1U + random8(100U), 35U+random8(100U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -2367,10 +2369,10 @@ static void PrismataRoutine() {
 
   for (uint8_t x = 0; x < WIDTH; x++)
   {
-    //uint8_t y = beatsin8(x + 1, 0, HEIGHT-1); // это я попытался распотрошить данную функцию до исходного кода и вставить в неё регулятор скорости
+    //uint8_t y = beatsin8_t(x + 1, 0, HEIGHT-1); // это я попытался распотрошить данную функцию до исходного кода и вставить в неё регулятор скорости
     // вместо 28 в оригинале было 280, умножения на .Speed не было, а вместо >>17 было (<<8)>>24. короче, оригинальная скорость достигается при бегунке .Speed=20
     uint8_t beat = (GET_MILLIS() * (accum88(x + 1)) * 28 * modes[currentMode].Speed) >> 17;
-    uint8_t y = scale8(sin8(beat), HEIGHT-1);
+    uint8_t y = scale8(sin8_t(beat), HEIGHT-1);
     //и получилось!!!
     
     drawPixelXY(x, y, ColorFromPalette(*curPalette, x * 7 + hue));
@@ -2840,10 +2842,10 @@ static void flockRoutine(bool predatorIs) {
     {
       #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
         if (selectedSettings){
-          //setModeSettings(random8(8U)*11U+1U+random8(11U), 1U+random8(255U));
+          //setModeSettings(random8(8U)*11U+1U + random8(11U), 1U + random8(255U));
           uint8_t tmp = random8(5U);// 0, 1, 5, 6, 7 - остальные 4 палитры с чёрным цветом - стая будет исчезать периодически (2, 3, 4, 8)
           if (tmp > 1U) tmp += 3U;
-          setModeSettings(tmp*11U+2U+random8(10U), 1U+random8(255U));
+          setModeSettings(tmp*11U+2U + random8(10U), 1U + random8(255U));
         }
       #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -2944,11 +2946,11 @@ static void whirlRoutine(bool oneColor) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
         if (oneColor)
-          setModeSettings(random8(30U) ? 1U+random8(99U) : 100U, 221U+random8(32U));
+          setModeSettings(random8(30U) ? 1U + random8(99U) : 100U, 221U + random8(32U));
         else{
           uint8_t tmp = random8(5U);
           if (tmp > 1U) tmp += 3U;
-          setModeSettings(tmp*11U+3U, 221U+random8(32U));
+          setModeSettings(tmp*11U+3U, 221U + random8(32U));
         }
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
@@ -2963,7 +2965,8 @@ static void whirlRoutine(bool oneColor) {
     for (uint8_t i = 0; i < AVAILABLE_BOID_COUNT; i++) {
       boids[i] = Boid(random8(WIDTH), 0);
     }
-  } 
+  }
+
   dimAll(240);
 
   for (uint8_t i = 0; i < AVAILABLE_BOID_COUNT; i++) {
@@ -2974,8 +2977,8 @@ static void whirlRoutine(bool oneColor) {
 
     byte angle = fastled_helper::perlin8(ff_x + ioffset, ff_y + joffset, ff_z);
 
-    boid->velocity.x = (float) sin8(angle) * 0.0078125 - 1.0;
-    boid->velocity.y = -((float)cos8(angle) * 0.0078125 - 1.0);
+    boid->velocity.x = (float) sin8_t(angle) * 0.0078125 - 1.0;
+    boid->velocity.y = -((float)cos8_t(angle) * 0.0078125 - 1.0);
     boid->update();
   
     if (oneColor)
@@ -3026,7 +3029,7 @@ static void WaveRoutine() {
         if (selectedSettings){
           uint8_t tmp = random8(5U);// 0, 1, 5, 6, 7 - остальные 4 палитры с чёрным цветом - будет мерцать (2, 3, 4, 8)
           if (tmp > 1U) tmp += 3U;
-          setModeSettings(tmp*11U+1U+random8(4U), 220U+random8(17U)*2U);
+          setModeSettings(tmp*11U+1U + random8(4U), 220U+random8(17U)*2U);
         }
       #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -3131,7 +3134,7 @@ static void Fire2018_2() {
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(50U), 195U+random8(44U));
+        setModeSettings(1U + random8(50U), 195U+random8(44U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -3484,7 +3487,7 @@ static void simpleRain()
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
-      setModeSettings(random8(2U) ? 2U+random8(7U) : 9U+random8(70U), 220U+random8(22U));
+      setModeSettings(random8(2U) ? 2U + random8(7U) : 9U+random8(70U), 220U+random8(22U));
     }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -3500,7 +3503,7 @@ static void stormyRain()
     loadingFlag = false;
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings){
-      setModeSettings(random8(2U) ? 2U+random8(15U) : 17U+random8(64U), 220U+random8(22U));
+      setModeSettings(random8(2U) ? 2U + random8(15U) : 17U+random8(64U), 220U+random8(22U));
     }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   }
@@ -3519,12 +3522,11 @@ static void stormyRain()
 #define TWINKLES_SPEEDS 4     // всего 4 варианта скоростей мерцания
 #define TWINKLES_MULTIPLIER 6 // слишком медленно, если на самой медленной просто по единичке к яркости добавлять
 
-static void twinklesRoutine(){
-    if (loadingFlag)
-    {
+static void twinklesRoutine() {
+    if (loadingFlag) {
       #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
         if (selectedSettings){
-          setModeSettings(random8(8U)*11U+2U+random8(9U) , 180U+random8(69U));
+          setModeSettings(random8(8U)*11U+2U + random8(9U) , 180U+random8(69U));
         }
       #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -3543,6 +3545,7 @@ static void twinklesRoutine(){
           ledsbuff[idx] = 0;                                    // всё выкл
       }
     }
+
     for (uint32_t idx=0; idx < NUM_LEDS; idx++) {
       if (ledsbuff[idx].b == 0){
         if (random8(deltaValue) == 0 && hue > 0){                                        // если пиксель ещё не горит, зажигаем каждый ХЗй
@@ -3612,7 +3615,8 @@ static void bounceRoutine()
       boids[i] = boid;
     }
   }
-  blurScreen(beatsin8(5U, 1U, 5U));
+
+  blurScreen(beatsin8_t(5U, 1U, 5U));
   dimAll(255U - modes[currentMode].Speed);
   for (uint8_t i = 0; i < enlargedObjectNUM; i++)
   {
@@ -3689,8 +3693,8 @@ static void ringsRoutine(){
         //} while (step < WIDTH / 5U || step > 255U - WIDTH / 5U);
         deltaValue = random8(deltaHue);
       }
-      
     }
+
     for (uint8_t i = 0; i < deltaHue; i++)
     {
       if (i != deltaValue) // если это не активное кольцо
@@ -3781,7 +3785,7 @@ static void cube2dRoutine(){
     {
       #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
         if (selectedSettings){
-          uint8_t tmp = random8(9U)*11U+random8(8U); // масштаб 1-7, палитры все 9 
+          uint8_t tmp = random8(9U)*11U + random8(8U); // масштаб 1-7, палитры все 9 
           if (tmp == 45U) tmp = 100U; //+ белый цвет
           setModeSettings(tmp, 175U+random8(66U));
         }
@@ -4070,7 +4074,7 @@ static void MultipleStreamSmoke(bool isColored){
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
         uint8_t tmp = random8(9U);
-        setModeSettings(isColored ? 1U+tmp*tmp : (random8(10U) ? 1U+random8(99U) : 100U), 145U+random8(56U));
+        setModeSettings(isColored ? 1U+tmp*tmp : (random8(10U) ? 1U + random8(99U) : 100U), 145U+random8(56U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -4191,9 +4195,9 @@ static void PicassoGenerate(bool reset){
       trackingObjectShift[i] += trackingObjectShift[i] > 0 ? minSpeed : -minSpeed;
 
       trackingObjectState[i] = trackingObjectHue[i];
-
     }
   }
+
   for (uint8_t i = 0 ; i < enlargedObjectNUM ; i++) {
       if (reset) {
         trackingObjectState[i] = random8();
@@ -4474,7 +4478,7 @@ static void LavaLampRoutine(){
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     if (selectedSettings)
     {
-      setModeSettings(random8(30U) ? (random8(3U) ? 2U+random8(98U) : 1U) : 100U, 50U+random8(196U));
+      setModeSettings(random8(30U) ? (random8(3U) ? 2U + random8(98U) : 1U) : 100U, 50U+random8(196U));
     }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     
@@ -4539,7 +4543,7 @@ static void shadowsRoutine() {
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings) {
-        setModeSettings(1U, 1U+random8(255U));
+        setModeSettings(1U, 1U + random8(255U));
       }
     #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -4550,13 +4554,13 @@ static void shadowsRoutine() {
   static uint16_t sLastMillis = 0;
   static uint16_t sHue16 = 0;
  
-  uint8_t sat8 = beatsin88(87, 220, 250);
-  uint8_t brightdepth = beatsin88(341, 96, 224);
-  uint16_t brightnessthetainc16 = beatsin88(203, (25 * 256), (40 * 256));
-  uint8_t msmultiplier = beatsin88(map(modes[currentMode].Speed, 1, 255, 100, 255), 32, map(modes[currentMode].Speed, 1, 255, 60, 255));
+  uint8_t sat8 = beatsin88_t(87, 220, 250);
+  uint8_t brightdepth = beatsin88_t(341, 96, 224);
+  uint16_t brightnessthetainc16 = beatsin88_t(203, (25 * 256), (40 * 256));
+  uint8_t msmultiplier = beatsin88_t(map(modes[currentMode].Speed, 1, 255, 100, 255), 32, map(modes[currentMode].Speed, 1, 255, 60, 255));
 
   uint16_t hue16 = sHue16;
-  uint16_t hueinc16 = beatsin88(113, 1, 3000);
+  uint16_t hueinc16 = beatsin88_t(113, 1, 3000);
   
   uint16_t ms = millis();
   uint16_t deltams = ms - sLastMillis ;
@@ -4565,7 +4569,7 @@ static void shadowsRoutine() {
 
   sLastMillis  = ms;
   sPseudotime += deltams * msmultiplier;
-  sHue16 += deltams * beatsin88(400, 5,9);
+  sHue16 += deltams * beatsin88_t(400, 5,9);
   uint16_t brightnesstheta16 = sPseudotime;
 
   for( uint16_t i = 0 ; i < NUM_LEDS; i++) {
@@ -4573,7 +4577,7 @@ static void shadowsRoutine() {
     uint8_t hue8 = hue16 / 256;
 
     brightnesstheta16  += brightnessthetainc16;
-    uint16_t b16 = sin16(brightnesstheta16) + 32768;
+    uint16_t b16 = sin16_t(brightnesstheta16) + 32768;
 
     uint16_t bri16 = (uint32_t)((uint32_t)b16 * (uint32_t)b16) / 65536;
     uint8_t bri8 = (uint32_t)(((uint32_t)bri16) * brightdepth) / 65536;
@@ -4627,7 +4631,7 @@ static void DNARoutine()
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(100U), 1U+random8(200U));
+        setModeSettings(1U + random8(100U), 1U + random8(200U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -4649,24 +4653,24 @@ static void DNARoutine()
   if (deltaHue)
     for (uint8_t i = 0; i < WIDTH; i++)
     {
-      uint32_t x = beatsin16(step, 0, (HEIGHT - 1) * 256, 0, i * freq);
+      uint32_t x = beatsin16_t(step, 0, (HEIGHT - 1) * 256, 0, i * freq);
       uint32_t y = i * 256;
-      uint32_t x1 = beatsin16(step, 0, (HEIGHT - 1) * 256, 0, i * freq + 32768);
+      uint32_t x1 = beatsin16_t(step, 0, (HEIGHT - 1) * 256, 0, i * freq + 32768);
   
-      CRGB col = CHSV(ms / 29 + i * 255 / (WIDTH - 1), 255, qadd8(hue, beatsin8(step, 60, 255U, 0, i * mn)));
-      CRGB col1 = CHSV(ms / 29 + i * 255 / (WIDTH - 1) + 128, 255, qadd8(hue, beatsin8(step, 60, 255U, 0, i * mn + 128)));
+      CRGB col = CHSV(ms / 29 + i * 255 / (WIDTH - 1), 255, qadd8(hue, beatsin8_t(step, 60, 255U, 0, i * mn)));
+      CRGB col1 = CHSV(ms / 29 + i * 255 / (WIDTH - 1) + 128, 255, qadd8(hue, beatsin8_t(step, 60, 255U, 0, i * mn + 128)));
       wu_pixel (y , x, &col);
       wu_pixel (y , x1, &col1);
     }
   else
     for (uint8_t i = 0; i < HEIGHT; i++)
     {
-      uint32_t x = beatsin16(step, 0, (WIDTH - 1) * 256, 0, i * freq);
+      uint32_t x = beatsin16_t(step, 0, (WIDTH - 1) * 256, 0, i * freq);
       uint32_t y = i * 256;
-      uint32_t x1 = beatsin16(step, 0, (WIDTH - 1) * 256, 0, i * freq + 32768);
+      uint32_t x1 = beatsin16_t(step, 0, (WIDTH - 1) * 256, 0, i * freq + 32768);
   
-      CRGB col = CHSV(ms / 29 + i * 255 / (HEIGHT - 1), 255, qadd8(hue, beatsin8(step, 60, 255U, 0, i * mn)));
-      CRGB col1 = CHSV(ms / 29 + i * 255 / (HEIGHT - 1) + 128, 255, qadd8(hue, beatsin8(step, 60, 255U, 0, i * mn + 128)));
+      CRGB col = CHSV(ms / 29 + i * 255 / (HEIGHT - 1), 255, qadd8(hue, beatsin8_t(step, 60, 255U, 0, i * mn)));
+      CRGB col1 = CHSV(ms / 29 + i * 255 / (HEIGHT - 1) + 128, 255, qadd8(hue, beatsin8_t(step, 60, 255U, 0, i * mn + 128)));
       wu_pixel (x , y, &col);
       wu_pixel (x1 , y, &col1);
     }
@@ -5207,6 +5211,7 @@ static void popcornRoutine() {
       trackingObjectHue[r] = random8();
     }
   }
+
   float popcornGravity = 0.1 * speedfactor;
   //if (modes[currentMode].Speed & 0x01) // теперь чётностью скорости определяется белый/цветной попкорн, а чётностью яркости больше ничего
     fadeToBlackBy(leds, NUM_LEDS, 60);
@@ -5347,8 +5352,7 @@ static void oscillatingRoutine() {
       curPalette = palette_arr[(uint8_t)(modes[currentMode].Scale/50.0F * ((sizeof(palette_arr)/sizeof(TProgmemRGBPalette16 *))-0.01F))];
     //else
       //curPalette = firePalettes[(uint8_t)((modes[currentMode].Scale - 50)/50.0F * ((sizeof(firePalettes)/sizeof(TProgmemRGBPalette16 *))-0.01F))];
-    
-    
+
     //случайное заполнение
     for (uint8_t i = 0; i < WIDTH; i++) {
       for (uint8_t j = 0; j < HEIGHT; j++) {
@@ -5478,7 +5482,7 @@ static void fire2020Routine2(){
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(100U), 195U+random8(40U));
+        setModeSettings(1U + random8(100U), 195U+random8(40U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -5620,7 +5624,8 @@ static void attractRoutine() {
       //boids[i].maxspeed = 0.380 * modes[currentMode].Speed /63.5+0.380;
       //boids[i].maxforce = 0.015 * modes[currentMode].Speed /63.5+0.015;
     }
-  } 
+  }
+
   dimAll(220);
   //ledsClear(); // esphome: FastLED.clear();
 
@@ -5663,7 +5668,7 @@ static void newMatrixRoutine()
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(30U) ? (random8(40U) ? 2U+random8(99U) : 1U) : 100U, 12U+random8(68U));
+        setModeSettings(random8(30U) ? (random8(40U) ? 2U + random8(99U) : 1U) : 100U, 12U + random8(68U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
    
@@ -5684,7 +5689,8 @@ static void newMatrixRoutine()
       //trackingObjectHue[i] = hue; не похоже, что цвет используется
     }
    hue = modes[currentMode].Scale * 2.55;
-  } 
+  }
+
   //dimAll(map(modes[currentMode].Speed, 1, 255, 250, 240));
   dimAll(246); // для фиксированной скорости
   
@@ -5735,7 +5741,7 @@ static void smokeballsRoutine(){
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(9U)*11U+3U+random8(9U), 1U+random8(255U));
+        setModeSettings(random8(9U)*11U+3U+random8(9U), 1U + random8(255U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -5754,7 +5760,7 @@ static void smokeballsRoutine(){
       trackingObjectPosX[j] = trackingObjectShift[j];
     }
   }
-  
+
   //shiftUp();
   for (byte x = 0; x < WIDTH; x++) {
     for (float y = (float)HEIGHT; y > 0.; y-= speedfactor) {
@@ -5766,7 +5772,7 @@ static void smokeballsRoutine(){
   if (modes[currentMode].Speed & 0x01)
     blurScreen(20);
   for (byte j = 0; j < enlargedObjectNUM; j++) {
-    trackingObjectPosX[j] = beatsin16((uint8_t)(trackingObjectSpeedX[j] * (speedfactor * 5.)), trackingObjectShift[j], trackingObjectState[j] + trackingObjectShift[j], trackingObjectHue[j]*256, trackingObjectHue[j]*8);
+    trackingObjectPosX[j] = beatsin16_t((uint8_t)(trackingObjectSpeedX[j] * (speedfactor * 5.)), trackingObjectShift[j], trackingObjectState[j] + trackingObjectShift[j], trackingObjectHue[j]*256, trackingObjectHue[j]*8);
     drawPixelXYF(trackingObjectPosX[j] / 10., 0.05, ColorFromPalette(*curPalette, trackingObjectHue[j]));
   }
 
@@ -5825,7 +5831,7 @@ static void nexusRoutine(){
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(2U) ? 11U+random8(15U) : 26U+random8(55U), 1U+random8(161U));
+        setModeSettings(random8(2U) ? 11U + random8(15U) : 26U+random8(55U), 1U + random8(161U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     loadingFlag = false;
@@ -5893,10 +5899,10 @@ static void pacifica_one_layer(CRGB *leds, const TProgmemRGBPalette16& p, uint16
   uint16_t wavescale_half = (wavescale / 2) + 20;
   for( uint16_t i = 0; i < NUM_LEDS; i++) {
     waveangle += 250;
-    uint16_t s16 = sin16(waveangle) + 32768;
+    uint16_t s16 = sin16_t(waveangle) + 32768;
     uint16_t cs  = scale16(s16 , wavescale_half) + wavescale_half;
     ci += cs;
-    uint16_t sindex16 = sin16(ci) + 32768;
+    uint16_t sindex16 = sin16_t(ci) + 32768;
     uint8_t  sindex8  = scale16(sindex16, 240);
     CRGB c = ColorFromPalette(p, sindex8, bri, LINEARBLEND);
     leds[i] += c;
@@ -5906,11 +5912,11 @@ static void pacifica_one_layer(CRGB *leds, const TProgmemRGBPalette16& p, uint16
 // Add extra 'white' to areas where the four layers of light have lined up brightly
 static void pacifica_add_whitecaps(CRGB *leds)
 {
-  uint8_t basethreshold = beatsin8( 9, 55, 65);
+  uint8_t basethreshold = beatsin8_t( 9, 55, 65);
   uint8_t wave = beat8( 7 );
 
   for( uint16_t i = 0; i < NUM_LEDS; i++) {
-    uint8_t threshold = scale8( sin8( wave), 20) + basethreshold;
+    uint8_t threshold = scale8( sin8_t( wave), 20) + basethreshold;
     wave += 7;
     uint8_t l = leds[i].getAverageLight();
     if( l > threshold) {
@@ -5935,7 +5941,7 @@ static void pacificRoutine()
 {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(100U, 1U+random8(255U));
+        setModeSettings(100U, 1U + random8(255U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -5946,24 +5952,24 @@ static void pacificRoutine()
   uint32_t ms = GET_MILLIS();
   uint32_t deltams = ms - sLastms;
   sLastms = ms;
-  uint16_t speedfactor1 = beatsin16(3, 179, 269);
-  uint16_t speedfactor2 = beatsin16(4, 179, 269);
+  uint16_t speedfactor1 = beatsin16_t(3, 179, 269);
+  uint16_t speedfactor2 = beatsin16_t(4, 179, 269);
   uint32_t deltams1 = (deltams * speedfactor1) / map(modes[currentMode].Speed, 1, 255, 620, 60);
   uint32_t deltams2 = (deltams * speedfactor2) / map(modes[currentMode].Speed, 1, 255, 620, 60);
   uint32_t deltams21 = (deltams1 + deltams2) / 2;
-  sCIStart1 += (deltams1 * beatsin88(1011,10,13));
-  sCIStart2 -= (deltams21 * beatsin88(777,8,11));
-  sCIStart3 -= (deltams1 * beatsin88(501,5,7));
-  sCIStart4 -= (deltams2 * beatsin88(257,4,6));
+  sCIStart1 += (deltams1 * beatsin88_t(1011,10,13));
+  sCIStart2 -= (deltams21 * beatsin88_t(777,8,11));
+  sCIStart3 -= (deltams1 * beatsin88_t(501,5,7));
+  sCIStart4 -= (deltams2 * beatsin88_t(257,4,6));
 
   // Clear out the LED array to a dim background blue-green
   fill_solid( leds, NUM_LEDS, CRGB( 2, 6, 10));
 
   // Render each of four layers, with different scales and speeds, that vary over time
-  pacifica_one_layer(&*leds, pacifica_palette_1, sCIStart1, beatsin16( 3, 11 * 256, 14 * 256), beatsin8( 10, 70, 130), 0-beat16( 301) );
-  pacifica_one_layer(&*leds, pacifica_palette_2, sCIStart2, beatsin16( 4,  6 * 256,  9 * 256), beatsin8( 17, 40,  80), beat16( 401) );
-  pacifica_one_layer(&*leds, pacifica_palette_3, sCIStart3, 6 * 256, beatsin8( 9, 10,38), 0-beat16(503));
-  pacifica_one_layer(&*leds, pacifica_palette_3, sCIStart4, 5 * 256, beatsin8( 8, 10,28), beat16(601));
+  pacifica_one_layer(&*leds, pacifica_palette_1, sCIStart1, beatsin16_t( 3, 11 * 256, 14 * 256), beatsin8_t( 10, 70, 130), 0-beat16( 301) );
+  pacifica_one_layer(&*leds, pacifica_palette_2, sCIStart2, beatsin16_t( 4,  6 * 256,  9 * 256), beatsin8_t( 17, 40,  80), beat16( 401) );
+  pacifica_one_layer(&*leds, pacifica_palette_3, sCIStart3, 6 * 256, beatsin8_t( 9, 10,38), 0-beat16(503));
+  pacifica_one_layer(&*leds, pacifica_palette_3, sCIStart4, 5 * 256, beatsin8_t( 8, 10,28), beat16(601));
 
   // Add brighter 'whitecaps' where the waves lines up more
   pacifica_add_whitecaps(&*leds);
@@ -6228,7 +6234,7 @@ static void sandRoutine(){
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(100U) , 140U+random8(100U));
+        setModeSettings(1U + random8(100U) , 140U+random8(100U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -6306,7 +6312,7 @@ static void spiderRoutine() {
      if (selectedSettings){
        uint8_t tmp = random8(5U);
        if (tmp > 1U) tmp += 3U;
-       setModeSettings(tmp*11U+3U+random8(7U), 1U+random8(180U));
+       setModeSettings(tmp*11U+3U+random8(7U), 1U + random8(180U));
      }
    #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
    
@@ -6316,13 +6322,14 @@ static void spiderRoutine() {
    pcnt = (modes[currentMode].Scale - 1U) % 11U + 1U; // количество линий от 1 до 11 для каждой из 9 палитр
    speedfactor = fmap(modes[currentMode].Speed, 1, 255, 20., 2.); 
  }
+
  if (hue2++ & 0x01 && deltaHue++ & 0x01 && deltaHue2++ & 0x01) hue++; // хз. как с 60ю кадрами в секунду скорость замедлять...
  dimAll(205);
  float time_shift = millis() & 0x7FFFFF; // overflow protection proper by SottNick
  time_shift /= speedfactor;
  for (uint8_t c = 0; c < pcnt; c++) {
-   float xx = 2. + sin8(time_shift + 6000 * c) / 12.;
-   float yy = 2. + cos8(time_shift + 9000 * c) / 12.;
+   float xx = 2. + sin8_t(time_shift + 6000 * c) / 12.;
+   float yy = 2. + cos8_t(time_shift + 9000 * c) / 12.;
    //DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, CHSV(c * (256 / pcnt), 200, 255)); // так было в оригинале
    //if (modes[currentMode].Speed & 0x01)
    //DrawLineF(xx, yy, (float)WIDTH - xx - 1, (float)HEIGHT - yy - 1, ColorFromPalette(*curPalette, hue + c * (255 / pcnt)).nscale8(200)); // кажется, это не работает, хотя и компилируется
@@ -6393,7 +6400,7 @@ static void polarRoutine() {
   if (loadingFlag) {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(3U) ? 1U+random8(99U) : 100U, 1U+random8(170U));
+        setModeSettings(random8(3U) ? 1U + random8(99U) : 100U, 1U + random8(170U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -6417,7 +6424,7 @@ static void polarRoutine() {
       fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + hue, modes[currentMode].Scale & 0x01);
   }
   else
-    fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + AURORA_COLOR_RANGE - beatsin8(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE+AURORA_COLOR_RANGE), modes[currentMode].Scale & 0x01);
+    fillMyPal16_2((uint8_t)((modes[currentMode].Scale - 1U) * 2.55) + AURORA_COLOR_RANGE - beatsin8_t(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE+AURORA_COLOR_RANGE), modes[currentMode].Scale & 0x01);
 
   for (byte x = 0; x < WIDTH; x++) {
     for (byte y = 0; y < HEIGHT; y++) {
@@ -6477,7 +6484,7 @@ static void spheresRoutine() {
   {
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(random8(8U)*11U+6U+random8(6U), 1U+random8(255U));
+        setModeSettings(random8(8U)*11U+6U+random8(6U), 1U + random8(255U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -6579,7 +6586,7 @@ static void magmaRoutine(){
         //палитры 0,1,5,6,7
         uint8_t tmp = random8(6U);
         if (tmp>1U) tmp+=3U;
-        setModeSettings(tmp*11U+2U+random8(7U) , 185U+random8(48U));
+        setModeSettings(tmp*11U+2U + random8(7U) , 185U+random8(48U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -6693,7 +6700,7 @@ static void execStringsFlame(){ // внимание! эффект заточен
   if (loadingFlag){ 
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        setModeSettings(1U+random8(255U), 20U+random8(236U)); // на свякий случай пусть будет от 1 до 255, а не от нуля
+        setModeSettings(1U + random8(255U), 20U+random8(236U)); // на свякий случай пусть будет от 1 до 255, а не от нуля
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -6794,9 +6801,9 @@ static void Fire2021Routine(){
   if (loadingFlag){ 
     #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
       if (selectedSettings){
-        uint8_t tmp = 1U+random8(89U); // пропускаем белую палитру
+        uint8_t tmp = 1U + random8(89U); // пропускаем белую палитру
         if (tmp > 44U) tmp += 11U;
-        setModeSettings(tmp, 42U+random8(155U));
+        setModeSettings(tmp, 42U + random8(155U));
       }
     #endif //#if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
@@ -7166,7 +7173,7 @@ static void ColorFrizzles() {
   }
    //LOG.printf_P(PSTR("| deltaValue • %03d | fps %03d\n"), deltaValue, FPSdelay);
   for (byte i = 8; i--;) {
-    leds[XY(beatsin8(12 + i, 0, WIDTH - 1), beatsin8(15 - i, 0, HEIGHT - 1))] = CHSV(beatsin8(12, 0, 255), 255, (255 - FPSdelay * 2));
+    leds[XY(beatsin8_t(12 + i, 0, WIDTH - 1), beatsin8_t(15 - i, 0, HEIGHT - 1))] = CHSV(beatsin8_t(12, 0, 255), 255, (255 - FPSdelay * 2));
   }
 }
 #endif
@@ -7192,17 +7199,21 @@ static void Colored_Python() {
       loadingFlag = false;
       step = 0;
   }
+
   uint16_t  t = millis() / (128 - (modes[currentMode].Speed / 2));
   uint8_t palette_number = modes[currentMode].Scale / 10;
   uint8_t thickness;
-  if (palette_number < 9)
-      step = palette_number;
-  else
-      if (millis()- color_timer > 30000){
-        color_timer = millis();
-        step++;
-        if(step > 8) step = 0;
-      }
+
+  if (palette_number < 9) {
+    step = palette_number;
+  } else {
+    if (millis()- color_timer > 30000) {
+      color_timer = millis();
+      step++;
+      if(step > 8) step = 0;
+    }
+  }
+
   switch (step) {
       case 0: currentPalette = CloudColors_p; break;
       case 1: currentPalette = AlcoholFireColors_p; break;
@@ -7213,17 +7224,20 @@ static void Colored_Python() {
       case 6: currentPalette = HeatColors_p; break;
       case 7: currentPalette = LavaColors_p; break;
       case 8: currentPalette = PartyColors_p;
-    }
-  switch (modes[currentMode].Scale % 5){
+  }
+
+  switch (modes[currentMode].Scale % 5) {
       case 0: thickness = 5; break;
       case 1: thickness = 10; break;
       case 2: thickness = 20; break;
       case 3: thickness = 30; break;
       case 4: thickness = 40; break;
   }
-  for(byte x =0; x < WIDTH; x++){
-    for(byte y =0; y < HEIGHT; y++){
-      leds[XY(x,y)]=ColorFromPalette(currentPalette,((sin8((x*thickness)+sin8(y*5+t*5))+cos8(y*10))+1)+t*(modes[currentMode].Speed%10)); // HeatColors_p -палитра, t*scale/10 -меняет скорость движения вверх, sin8(x*20) -меняет ширину рисунка
+
+  for(byte x =0; x < WIDTH; x++) {
+    for(byte y =0; y < HEIGHT; y++) {
+      // HeatColors_p -палитра, t*scale/10 -меняет скорость движения вверх, sin8_t(x*20) -меняет ширину рисунка
+      leds[XY(x,y)]=ColorFromPalette(currentPalette, ((sin8_t((x * thickness) + sin8_t(y * 5 + t * 5)) + cos8_t(y * 10)) + 1) + t * (modes[currentMode].Speed % 10));
     }
   }
 }
@@ -7258,9 +7272,9 @@ static void Contacts() {
   for (int x = 0; x < WIDTH; x++) {
     for (int y = 0; y < HEIGHT; y++) {
       int index = XY(x, y);
-      uint8_t color1 = pgm_read_byte(&exp_gamma[sin8(cos8((x * 7 +a/5)) - cos8((y * 10) +a/3)/4+a )]);
-      uint8_t color2 = pgm_read_byte(&exp_gamma[(sin8(x * 16 + a / 3) + cos8(y * 8 + a / 2)) / 2]);
-      uint8_t color3 = pgm_read_byte(&exp_gamma[sin8(cos8(x * 8 + a / 3) + sin8(y * 8 + a / 4) + a)]);
+      uint8_t color1 = pgm_read_byte(&exp_gamma[sin8_t(cos8_t((x * 7 +a/5)) - cos8_t((y * 10) +a/3)/4+a )]);
+      uint8_t color2 = pgm_read_byte(&exp_gamma[(sin8_t(x * 16 + a / 3) + cos8_t(y * 8 + a / 2)) / 2]);
+      uint8_t color3 = pgm_read_byte(&exp_gamma[sin8_t(cos8_t(x * 8 + a / 3) + sin8_t(y * 8 + a / 4) + a)]);
       if (hue == 0) {
         leds[index].b = color3 >> 2;
         leds[index].g = color2;
@@ -7616,7 +7630,7 @@ static void Firework() {
   }
 
   if (step > DOT_EXPLOSION ) {
-    blurScreen(beatsin8(3, 64, 80));
+    blurScreen(beatsin8_t(3, 64, 80));
   }
   if (step == DOT_EXPLOSION - 1) {
     /* включаем фазу затухания */
@@ -7951,7 +7965,7 @@ static void fireworksRoutine()
   }
 
   //random16_add_entropy(analogRead(A0));
-  pcnt = beatsin8(100, 20, 100);
+  pcnt = beatsin8_t(100, 20, 100);
   if (hue++ % 10 == 0U){//  EVERY_N_MILLIS(EFFECTS_RUN_TIMER * 10) {
     deltaValue = random8(25, 50);
   }
@@ -8101,7 +8115,7 @@ static void FlowerRuta() {
     for (uint8_t y = 0; y < HEIGHT; y++) {
       byte angle = noise3d[0][x][y];
       byte radius = noise3d[1][x][y];
-      leds[XY(x, y)] = CHSV(color_speed + radius * (255 / WIDTH), 255, sin8(sin8(scale + angle * Petals + ( radius * (255 / WIDTH))) + scale * 4 + sin8(scale * 4 - radius * (255 / WIDTH)) + angle * Petals));
+      leds[XY(x, y)] = CHSV(color_speed + radius * (255 / WIDTH), 255, sin8_t(sin8_t(scale + angle * Petals + ( radius * (255 / WIDTH))) + scale * 4 + sin8_t(scale * 4 - radius * (255 / WIDTH)) + angle * Petals));
     }
   }
 }
@@ -8272,7 +8286,7 @@ static void Octopus() {
     for (uint8_t y = 0; y < HEIGHT; y++) {
       byte angle = noise3d[0][x][y];
       byte radius = noise3d[1][x][y];
-      leds[XY(x, y)] = CHSV(color_speed - radius * (255 / WIDTH), 255, sin8(sin8((angle * 4 - (radius * (255 / WIDTH))) / 4 + scale) + radius * (255 / WIDTH) - scale * 2 + angle * legs));
+      leds[XY(x, y)] = CHSV(color_speed - radius * (255 / WIDTH), 255, sin8_t(sin8_t((angle * 4 - (radius * (255 / WIDTH))) / 4 + scale) + radius * (255 / WIDTH) - scale * 2 + angle * legs));
     }
   }
 }
@@ -8301,7 +8315,7 @@ static void OilPaints() {
 
     loadingFlag = false;
     ledsClear(); // esphome: FastLED.clear();
-    // blurScreen(beatsin8(5U, 50U, 5U));
+    // blurScreen(beatsin8_t(5U, 50U, 5U));
     deltaValue = 255U - modes[currentMode].Speed + 1U;
     step = deltaValue;                    // чтообы при старте эффекта сразу покрасить лампу
     hue = floor(21.25 * (random8(11) + 1)); // next color
@@ -8410,16 +8424,16 @@ static void Plasma_Waves() {
   FPSdelay = 1;//64 - modes[currentMode].Speed / 4;
 
   frameCount++;
-  uint8_t t1 = cos8((42 * frameCount) / (132 - modes[currentMode].Speed / 2));
-  uint8_t t2 = cos8((35 * frameCount) / (132 - modes[currentMode].Speed / 2));
-  uint8_t t3 = cos8((38 * frameCount) / (132 - modes[currentMode].Speed / 2));
+  uint8_t t1 = cos8_t((42 * frameCount) / (132 - modes[currentMode].Speed / 2));
+  uint8_t t2 = cos8_t((35 * frameCount) / (132 - modes[currentMode].Speed / 2));
+  uint8_t t3 = cos8_t((38 * frameCount) / (132 - modes[currentMode].Speed / 2));
 
   for (uint16_t y = 0; y < HEIGHT; y++) {
     for (uint16_t x = 0; x < WIDTH; x++) {
       // Calculate 3 seperate plasma waves, one for each color channel
-      uint8_t r = cos8((x << 3) + (t1 >> 1) + cos8(t2 + (y << 3) + modes[currentMode].Scale));
-      uint8_t g = cos8((y << 3) + t1 + cos8((t3 >> 2) + (x << 3)) +modes[currentMode].Scale);
-      uint8_t b = cos8((y << 3) + t2 + cos8(t1 + x + (g >> 2) + modes[currentMode].Scale));
+      uint8_t r = cos8_t((x << 3) + (t1 >> 1) + cos8_t(t2 + (y << 3) + modes[currentMode].Scale));
+      uint8_t g = cos8_t((y << 3) + t1 + cos8_t((t3 >> 2) + (x << 3)) +modes[currentMode].Scale);
+      uint8_t b = cos8_t((y << 3) + t2 + cos8_t(t1 + x + (g >> 2) + modes[currentMode].Scale));
 
       switch (hue) {
           case 0:
@@ -8512,7 +8526,7 @@ static void RadialWave() {
     for (uint8_t y = 0; y < HEIGHT; y++) {
       byte angle = noise3d[0][x][y];
       byte radius = noise3d[1][x][y];
-      leds[XY(x, y)] = CHSV(color_speed + radius * (255 / WIDTH), 255, sin8(scale * 4 + sin8(scale * 4 - radius * (255 / WIDTH)) + angle * legs));
+      leds[XY(x, y)] = CHSV(color_speed + radius * (255 / WIDTH), 255, sin8_t(scale * 4 + sin8_t(scale * 4 - radius * (255 / WIDTH)) + angle * legs));
     }
   }
 }
@@ -8694,7 +8708,7 @@ static void BotswanaRivers() {
   animeBobbles();
   if (custom_eff == 1) {
     blurRows(WIDTH, 3U, 10U);
-    // blurScreen(beatsin8(0U, 5U, 0U));
+    // blurScreen(beatsin8_t(0U, 5U, 0U));
   }
   step++;
 }
@@ -8731,7 +8745,7 @@ static void  Spectrum() {
     fillMyPal16_2(customHue + hue, modes[currentMode].Scale & 0x01);
   } else {
     color = customHue;
-    fillMyPal16_2(customHue + AURORA_COLOR_RANGE - beatsin8(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE * 2), modes[currentMode].Scale & 0x01);
+    fillMyPal16_2(customHue + AURORA_COLOR_RANGE - beatsin8_t(AURORA_COLOR_PERIOD, 0U, AURORA_COLOR_RANGE * 2), modes[currentMode].Scale & 0x01);
   }
 
   for (byte x = 0; x < WIDTH; x++) {
@@ -8786,7 +8800,7 @@ static void StrobeAndDiffusion() {
   STEP = floor((255 - modes[currentMode].Speed) / 64) + 1U; // for strob
   if (modes[currentMode].Scale > 50) {
     // diffusion ---
-    blurScreen(beatsin8(3, 64, 80));
+    blurScreen(beatsin8_t(3, 64, 80));
     FPSdelay = LOW_DELAY;
     STEP = 1U;
     if (modes[currentMode].Scale < 75) {
@@ -9170,7 +9184,7 @@ static void Watercolor() {
   //  if (custom_eff == 1) {
   // dimAll(DIMSPEED);
   if (step % 2 == 0) {
-    blurScreen(beatsin8(1U, 1U, 6U));
+    blurScreen(beatsin8_t(1U, 1U, 6U));
     // blurRows(WIDTH, 3U, 10U);
   }
   //  }
@@ -9510,7 +9524,7 @@ static void Ukraine() {
 
   if ((ff_x > timeout - 10) && (ff_x < timeout)) { // таймаут блокировки отрисовки флага
     if (ff_x < timeout - 5) {                      // размытие тризуба
-      blurScreen(beatsin8(5U, 60U, 5U));
+      blurScreen(beatsin8_t(5U, 60U, 5U));
     } else {
       blurScreen(210U - ff_x);
     }
@@ -9537,12 +9551,12 @@ static void Ukraine() {
       step = 0U;
       hue2 = random8(WIDTH - 2);               // случайное смещение мазка по оси Y
       hue = random8(5);                        // flag color
-      // blurScreen(dim8_raw(beatsin8(3, 64, 100)));
-      // blurScreen(beatsin8(5U, 60U, 5U));
+      // blurScreen(dim8_raw(beatsin8_t(3, 64, 100)));
+      // blurScreen(beatsin8_t(5U, 60U, 5U));
       // dimAll(200U);
     }
     if (step % 8 == 0 && modes[currentMode].Speed > 230) {
-      blurScreen(beatsin8(5U, 5U, 72U));
+      blurScreen(beatsin8_t(5U, 5U, 72U));
     }
     hue2++;                                    // x
     deltaHue2++;                               // y
@@ -9762,8 +9776,8 @@ static void ballRoutine() {
 static void drawStar(float xlocl, float ylocl, float biggy, float little, int16_t points, float dangle, uint8_t koler) { // random multipoint star
   float radius2 = 255.0 / points;
   for (int i = 0; i < points; i++) {
-    DrawLine(xlocl + ((little * (sin8(i * radius2 + radius2 / 2 - dangle) - 128.0)) / 128), ylocl + ((little * (cos8(i * radius2 + radius2 / 2 - dangle) - 128.0)) / 128), xlocl + ((biggy * (sin8(i * radius2 - dangle) - 128.0)) / 128), ylocl + ((biggy * (cos8(i * radius2 - dangle) - 128.0)) / 128), ColorFromPalette(*curPalette, koler));
-    DrawLine(xlocl + ((little * (sin8(i * radius2 - radius2 / 2 - dangle) - 128.0)) / 128), ylocl + ((little * (cos8(i * radius2 - radius2 / 2 - dangle) - 128.0)) / 128), xlocl + ((biggy * (sin8(i * radius2 - dangle) - 128.0)) / 128), ylocl + ((biggy * (cos8(i * radius2 - dangle) - 128.0)) / 128), ColorFromPalette(*curPalette, koler));
+    DrawLine(xlocl + ((little * (sin8_t(i * radius2 + radius2 / 2 - dangle) - 128.0)) / 128), ylocl + ((little * (cos8_t(i * radius2 + radius2 / 2 - dangle) - 128.0)) / 128), xlocl + ((biggy * (sin8_t(i * radius2 - dangle) - 128.0)) / 128), ylocl + ((biggy * (cos8_t(i * radius2 - dangle) - 128.0)) / 128), ColorFromPalette(*curPalette, koler));
+    DrawLine(xlocl + ((little * (sin8_t(i * radius2 - radius2 / 2 - dangle) - 128.0)) / 128), ylocl + ((little * (cos8_t(i * radius2 - radius2 / 2 - dangle) - 128.0)) / 128), xlocl + ((biggy * (sin8_t(i * radius2 - dangle) - 128.0)) / 128), ylocl + ((biggy * (cos8_t(i * radius2 - dangle) - 128.0)) / 128), ColorFromPalette(*curPalette, koler));
 
   }
 }
@@ -9798,8 +9812,8 @@ static void EffectStars() {
     driftx = (float)WIDTH / 2.0;
     drifty = (float)HEIGHT / 2.0;
 
-    cangle = (float)(sin8(random8(25, 220)) - 128.0f) / 128.0f; //angle of movement for the center of animation gives a float value between -1 and 1
-    sangle = (float)(sin8(random8(25, 220)) - 128.0f) / 128.0f; //angle of movement for the center of animation in the y direction gives a float value between -1 and 1
+    cangle = (float)(sin8_t(random8(25, 220)) - 128.0f) / 128.0f; //angle of movement for the center of animation gives a float value between -1 and 1
+    sangle = (float)(sin8_t(random8(25, 220)) - 128.0f) / 128.0f; //angle of movement for the center of animation in the y direction gives a float value between -1 and 1
     spd = modes[currentMode].Speed;
     blur = modes[currentMode].Scale / 2;
     stars_count = WIDTH / 2U;
@@ -9938,40 +9952,40 @@ static float code(double t, double i, double x, double y) {
     /** © Motus Art @motus_art */
     case 1: /* Plasma */
       hue = 96U; hue2 = 224U;
-      return (sin16((x + t) * 8192.0) * 0.5 + sin16((y + t) * 8192.0) * 0.5 + sin16((x + y + t) * 8192.0) * 0.3333333333333333) / 32767.0;
+      return (sin16_t((x + t) * 8192.0) * 0.5 + sin16_t((y + t) * 8192.0) * 0.5 + sin16_t((x + y + t) * 8192.0) * 0.3333333333333333) / 32767.0;
       break;
 
     case 2: /* Up&Down */
       //return sin(cos(x) * y / 8 + t);
       hue = 255U; hue2 = 160U;
-      return sin16((cos16(x * 8192.0) / 32767.0 * y / (HEIGHT / 2.0) + t) * 8192.0) / 32767.0;
+      return sin16_t((cos16_t(x * 8192.0) / 32767.0 * y / (HEIGHT / 2.0) + t) * 8192.0) / 32767.0;
       break;
 
     case 3:
       hue = 255U; hue2 = 96U;
-      return sin16((atan_fast(y / x) + t) * 8192.0) / 32767.0;
+      return sin16_t((atan_fast(y / x) + t) * 8192.0) / 32767.0;
       break;
 
     /** © tixy.land website */
     case 4: /* Emitting rings */
       hue = 255U; hue2 = 0U;
-      return sin16((t - sqrt3((x - (WIDTH / 2)) * (x - (WIDTH / 2)) + (y - (HEIGHT / 2)) * (y - (HEIGHT / 2)))) * 8192.0) / 32767.0;
+      return sin16_t((t - sqrt3((x - (WIDTH / 2)) * (x - (WIDTH / 2)) + (y - (HEIGHT / 2)) * (y - (HEIGHT / 2)))) * 8192.0) / 32767.0;
       break;
 
     case 5: /* Rotation  */
       hue = 136U; hue2 = 48U;
-      return sin16((PI * 2.5 * atan_fast((y - (HEIGHT / 2)) / (x - (WIDTH / 2))) + 5 * t) * 8192.0) / 32767.0;
+      return sin16_t((PI * 2.5 * atan_fast((y - (HEIGHT / 2)) / (x - (WIDTH / 2))) + 5 * t) * 8192.0) / 32767.0;
       break;
 
     case 6: /* Vertical fade */
       hue = 160U; hue2 = 0U;
-      return sin16((y / 8 + t) * 8192.0) / 32767.0;
+      return sin16_t((y / 8 + t) * 8192.0) / 32767.0;
       break;
 
     case 7: /* Waves */
       //return sin(x / 2) - sin(x - t) - y + 6;
       hue = 48U; hue2 = 160U;
-      return (sin16(x * 4096.0) - sin16((x - t) * 8192.0)) / 32767.0 - y + (HEIGHT / 2);
+      return (sin16_t(x * 4096.0) - sin16_t((x - t) * 8192.0)) / 32767.0 - y + (HEIGHT / 2);
       break;
 
     case 8: /* Drop */
@@ -9981,33 +9995,33 @@ static float code(double t, double i, double x, double y) {
 
     case 9: /* Ripples @thespite */
       hue = 96U; hue2 = 224U;
-      return sin16((t - sqrt3(x * x + y * y)) * 8192.0) / 32767.0;
+      return sin16_t((t - sqrt3(x * x + y * y)) * 8192.0) / 32767.0;
       break;
 
     case 10: /* Bloop bloop bloop @v21 */
       hue = 136U; hue2 = 160U;
-      return (x - (WIDTH / 2)) * (y - (HEIGHT / 2)) - sin16(t * 4096.0) / 512.0;
+      return (x - (WIDTH / 2)) * (y - (HEIGHT / 2)) - sin16_t(t * 4096.0) / 512.0;
       break;
 
     case 11: /* SN0WFAKER */
       // https://www.reddit.com/r/programming/comments/jpqbux/minimal_16x16_dots_coding_environment/gbgk7c0/
       hue = 96U; hue2 = 160U;
-      return sin16((atan_fast((y - (HEIGHT / 2)) / (x - (WIDTH / 2))) + t) * 8192.0) / 32767.0;
+      return sin16_t((atan_fast((y - (HEIGHT / 2)) / (x - (WIDTH / 2))) + t) * 8192.0) / 32767.0;
       break;
     case 12: /* detunized */
       // https://www.reddit.com/r/programming/comments/jpqbux/minimal_16x16_dots_coding_environment/gbgk30l/
       hue = 136U; hue2 = 160U;
-      return sin16((y / (HEIGHT / 2) + t * 0.5) * 8192.0) / 32767.0 + x / 16 - 0.5;
+      return sin16_t((y / (HEIGHT / 2) + t * 0.5) * 8192.0) / 32767.0 + x / 16 - 0.5;
       break;
 
     /** © @akella | https://twitter.com/akella/status/1323549082552619008 */
     case 13:
       hue = 255U; hue2 = 0U;
-      return sin16((6 * atan2_fast(y - (HEIGHT / 2), x) + t) * 8192.0) / 32767.0;
+      return sin16_t((6 * atan2_fast(y - (HEIGHT / 2), x) + t) * 8192.0) / 32767.0;
       break;
     case 14:
       hue = 32U; hue2 = 160U;
-      return sin16((i / 5 + t) * 16384.0) / 32767.0;
+      return sin16_t((i / 5 + t) * 16384.0) / 32767.0;
       break;
 
     /** © Paul Malin | https://twitter.com/P_Malin/ */
@@ -10043,7 +10057,7 @@ static float code(double t, double i, double x, double y) {
 
     case 16: /* Rays */
       hue = 255U; hue2 = 0U;
-      return sin16((atan2_fast(x, y) * 5 + t * 2) * 8192.0) / 32767.0;
+      return sin16_t((atan2_fast(x, y) * 5 + t * 2) * 8192.0) / 32767.0;
       break;
 
     case 17: /* Starfield */
@@ -10059,27 +10073,27 @@ static float code(double t, double i, double x, double y) {
 
     case 18:
       hue = 255U; hue2 = 0U;
-      return sin16((3.5 * atan2_fast(y - (HEIGHT / 2) + sin16(t * 8192.0) * 0.00006, x - (WIDTH / 2) + sin16(t * 8192.0) * 0.00006) + t * 1.5 + 5) * 8192.0) / 32767.0;
+      return sin16_t((3.5 * atan2_fast(y - (HEIGHT / 2) + sin16_t(t * 8192.0) * 0.00006, x - (WIDTH / 2) + sin16_t(t * 8192.0) * 0.00006) + t * 1.5 + 5) * 8192.0) / 32767.0;
       break;
 
     case 19:
       hue = 255U; hue2 = 224U;
-      return (y - 8) / 3 - tan2pi_fast((x / 6 + 1.87) / PI * 2) * sin16(t * 16834.0) / 32767.0;
+      return (y - 8) / 3 - tan2pi_fast((x / 6 + 1.87) / PI * 2) * sin16_t(t * 16834.0) / 32767.0;
       break;
 
     case 20:
       hue = 136U; hue2 = 160U;
-      return (y - 8) / 3 - (sin16((x / 4 + t * 2) * 8192.0) / 32767.0);
+      return (y - 8) / 3 - (sin16_t((x / 4 + t * 2) * 8192.0) / 32767.0);
       break;
 
     case 21:
       hue = 72U; hue2 = 96U;
-      return cos(sin16(x * t * 819.2) / 32767.0 * PI) + cos16((sin16((y * t / 10 + (sqrt3(abs(cos16(x * t * 8192.0) / 32767.0)))) * 8192.0) / 32767.0 * PI) * 8192.0) / 32767.0;
+      return cos(sin16_t(x * t * 819.2) / 32767.0 * PI) + cos16_t((sin16_t((y * t / 10 + (sqrt3(abs(cos16_t(x * t * 8192.0) / 32767.0)))) * 8192.0) / 32767.0 * PI) * 8192.0) / 32767.0;
       break;
 
     case 22: /* bambuk */
       hue = 96U; hue2 = 80U;
-      return sin16(x / 3 * sin16(t * 2730.666666666667) / 2.0) / 32767.0 + cos16(y / 4 * sin16(t * 4096.0) / 2.0) / 32767.0;
+      return sin16_t(x / 3 * sin16_t(t * 2730.666666666667) / 2.0) / 32767.0 + cos16_t(y / 4 * sin16_t(t * 4096.0) / 2.0) / 32767.0;
       break;
 
     case 23:
@@ -10093,12 +10107,12 @@ static float code(double t, double i, double x, double y) {
 
     case 24: /* honey */
       hue = 255U; hue2 = 40U;
-      return sin16(y * t * 2048.0) / 32767.0 * cos16(x * t * 2048.0) / 32767.0;
+      return sin16_t(y * t * 2048.0) / 32767.0 * cos16_t(x * t * 2048.0) / 32767.0;
       break;
 
     case 25:
       hue = 96U; hue2 = 160U;
-      return atan_fast((x - (WIDTH / 2)) * (y - (HEIGHT / 2))) - 2.5 * sin16(t * 8192.0) / 32767.0;
+      return atan_fast((x - (WIDTH / 2)) * (y - (HEIGHT / 2))) - 2.5 * sin16_t(t * 8192.0) / 32767.0;
       break;
 
     default:
@@ -10107,7 +10121,7 @@ static float code(double t, double i, double x, double y) {
       }
       pcnt = 1;
       hue = 96U; hue2 = 0U;
-      return sin16(t * 8192.0) / 32767.0;
+      return sin16_t(t * 8192.0) / 32767.0;
       break;
   }
 }
@@ -10302,7 +10316,7 @@ class Circle {
     }
 
     float radius() {
-      float radius = beatsin16(modes[currentMode].Speed / 2.5, 0, 500, offset) / 100.0;
+      float radius = beatsin16_t(modes[currentMode].Speed / 2.5, 0, 500, offset) / 100.0;
       return radius;
     }
 };
@@ -10422,7 +10436,7 @@ static void Serpentine() {
   // -----------------
   for (uint16_t y = 0; y < HEIGHT; y++) {
     uint32_t yy = y * 256;
-    uint32_t x1 = beatsin16(step1, WIDTH, (HEIGHT - 1) * 256, WIDTH, y * freq + 32768) / 2;
+    uint32_t x1 = beatsin16_t(step1, WIDTH, (HEIGHT - 1) * 256, WIDTH, y * freq + 32768) / 2;
 
     // change color --------
     CRGB col1 = CHSV(ms / 29 + y * 256 / (HEIGHT - 1) + 128, 255, 255 - (HEIGHT - y) * BR_INTERWAL);
@@ -10988,7 +11002,7 @@ static void Avrora() {
   // -----------------
   for (uint16_t y = 0; y < HEIGHT; y++) {
     uint32_t yy = y * 256;
-    uint32_t x1 = beatsin16(step1, WIDTH, (HEIGHT - 1) * 256, WIDTH, y * freq + 32768) / 1.5;
+    uint32_t x1 = beatsin16_t(step1, WIDTH, (HEIGHT - 1) * 256, WIDTH, y * freq + 32768) / 1.5;
 
     /* change color -------- */
     byte cur_color = ms / 29 + y * 256 / HEIGHT;
@@ -11506,12 +11520,12 @@ static void Mirage() {
   }
 
   blur();
-  float x1 = (float)beatsin88(15 * modes[currentMode].Speed, divider, WIDTH * divider) / divider;
-  float y1 = (float)beatsin88(20 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
-  float x2 = (float)beatsin88(16 * modes[currentMode].Speed, divider, (WIDTH - 1) * divider) / divider;
-  float y2 = (float)beatsin88(14 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
-  float x3 = (float)beatsin88(12 * modes[currentMode].Speed, divider, (WIDTH - 1) * divider) / divider;
-  float y3 = (float)beatsin88(16 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
+  float x1 = (float)beatsin88_t(15 * modes[currentMode].Speed, divider, WIDTH * divider) / divider;
+  float y1 = (float)beatsin88_t(20 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
+  float x2 = (float)beatsin88_t(16 * modes[currentMode].Speed, divider, (WIDTH - 1) * divider) / divider;
+  float y2 = (float)beatsin88_t(14 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
+  float x3 = (float)beatsin88_t(12 * modes[currentMode].Speed, divider, (WIDTH - 1) * divider) / divider;
+  float y3 = (float)beatsin88_t(16 * modes[currentMode].Speed, divider, HEIGHT * divider) / divider;
 
   drawDot(x1 , y1, val);
   drawDot(x1 + 1, y1, val);
@@ -11560,7 +11574,7 @@ static void HandFan() {
   }
 
   for (int i = 0; i < HEIGHT; i++) {
-    int tmp = sin8(i + (millis() >> 4));
+    int tmp = sin8_t(i + (millis() >> 4));
     tmp = map8(tmp, 2, WIDTH - 2);
 
     leds[XY(WIDTH - tmp, i)]     = CHSV(hue, V_STEP * i + 32, 205U);
@@ -11612,9 +11626,9 @@ static void LightFilter() {
   pcnt++;
   // }
 
-  uint8_t t1 = cos8((42 * frameCount) / 30);
-  uint8_t t2 = cos8((35 * frameCount) / 30);
-  uint8_t t3 = cos8((38 * frameCount) / 30);
+  uint8_t t1 = cos8_t((42 * frameCount) / 30);
+  uint8_t t2 = cos8_t((35 * frameCount) / 30);
+  uint8_t t3 = cos8_t((38 * frameCount) / 30);
   uint8_t r = 0;
   uint8_t g = 0;
   uint8_t b = 0;
@@ -11647,9 +11661,9 @@ static void LightFilter() {
   for (uint16_t y = 0; y < HEIGHT; y++) {
     for (uint16_t x = 0; x < WIDTH; x++) {
       if (x != END - dX) {
-        r = cos8((y << 3) + (t1 >> 1) + cos8(t2 + (x << 3)));
-        g = cos8((y << 3) + t1 + cos8((t3 >> 2) + (x << 3)));
-        b = cos8((y << 3) + t2 + cos8(t1 + x + (g >> 2)));
+        r = cos8_t((y << 3) + (t1 >> 1) + cos8_t(t2 + (x << 3)));
+        g = cos8_t((y << 3) + t1 + cos8_t((t3 >> 2) + (x << 3)));
+        b = cos8_t((y << 3) + t2 + cos8_t(t1 + x + (g >> 2)));
 
       } else {
         // line gold -------
@@ -11795,7 +11809,7 @@ static void RainbowSpot() {
 // =====================================
 static float codeEff(double t, double i, double x, double y) {
   hue = 255U; hue2 = 0U; // | CENTER_X_MAJOR
-  return sin16((t - sqrt3((x - CENTER_X_MAJOR) * (x - CENTER_X_MAJOR) + (y - CENTER_Y_MAJOR) * (y - CENTER_Y_MAJOR))) * 8192.0) / 32767.0;
+  return sin16_t((t - sqrt3((x - CENTER_X_MAJOR) * (x - CENTER_X_MAJOR) + (y - CENTER_Y_MAJOR) * (y - CENTER_Y_MAJOR))) * 8192.0) / 32767.0;
 }
 
 static void drawFrame(double t, double x, double y) {
@@ -11970,7 +11984,7 @@ static void IncrementalDriftRoutine() {
     }
     #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-    if ((modes[currentMode].scale >= 0) && (modes[currentMode].scale < 20)) { 
+    if ((modes[currentMode].scale >= 0)         && (modes[currentMode].scale < 20)) { 
       currentPalette = RainbowColors_p;
     } else if ((modes[currentMode].scale >= 20) && (modes[currentMode].scale < 40)) { 
       currentPalette  =  PartyColors_p;
@@ -11985,7 +11999,7 @@ static void IncrementalDriftRoutine() {
     loadingFlag = false;
   }
 
-  uint8_t dim = beatsin8(2, 170, 250);
+  uint8_t dim = beatsin8_t(2, 170, 250);
   dimAll(dim);
 
   for (uint8_t i = 0; i < WIDTH; i++)
@@ -11994,17 +12008,18 @@ static void IncrementalDriftRoutine() {
     uint8_t x = 0;
     uint8_t y = 0;
 
-    if (i < WIDTH / 2) {
-      x = beatcos8((i - 1) * 2, i, WIDTH - i - 1);
-      y = beatsin8((i - 1) * 2, i, HEIGHT - i - 1);
+    if (i < CENTER_X) {
+      x = beatcos8_t((i - 1) * 2, i,  WIDTH - i - 1);
+      y = beatsin8_t((i - 1) * 2, i, HEIGHT - i - 1);
       color = ColorFromPalette(currentPalette, i * 14);
     }
     else 
     {
-      x = beatsin8((WIDTH  - i) * 2, WIDTH - i - 1, i);
-      y = beatcos8((HEIGHT - i) * 2, HEIGHT - i - 1, i);
+      x = beatsin8_t((WIDTH  - i) * 2,  WIDTH - i - 1, i);
+      y = beatcos8_t((HEIGHT - i) * 2, HEIGHT - i - 1, i);
       color = ColorFromPalette(currentPalette, (31 - i) * 14);
     }
+
     drawPixelXY(x, y, color);
     drawPixelXY(WIDTH - x, HEIGHT - y, color);
   }

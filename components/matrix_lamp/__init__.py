@@ -351,4 +351,5 @@ async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLigh
     cg.add(effect.set_mode(MATRIX_LAMP_EFFECTS.index(config[CONF_MODE])))
     cg.add_define("DEF_" + config[CONF_MODE])
     cg.add(effect.set_matrix_lamp(parent))
+    logging.debug("Effect: %s [%d]", config[CONF_MODE], MATRIX_LAMP_EFFECTS.index(config[CONF_MODE]))
     return effect

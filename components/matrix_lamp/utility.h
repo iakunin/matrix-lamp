@@ -81,22 +81,6 @@ static uint8_t SpeedFactor(uint8_t spd)
 
 
 // ------------------------------------------------
-// неточный, зато более быстрый квадратный корень
-static float sqrt3(const float x)
-{
-  union
-  {
-    int i;
-    float x;
-  } u;
-
-  u.x = x;
-  u.i = (1<<29) + (u.i >> 1) - (1<<22);
-  return u.x;
-}
-
-
-// ------------------------------------------------
 // функция отрисовки точки по координатам X Y
 #if (WIDTH > 127) || (HEIGHT > 127)
 static void drawPixelXY(int16_t x, int16_t y, CRGB color)
@@ -105,11 +89,6 @@ static void drawPixelXY(int8_t x, int8_t y, CRGB color)
 #endif
 {
   if (x < 0 || x > (WIDTH - 1) || y < 0 || y > (HEIGHT - 1)) return;
-  //uint32_t thisPixel = XY((uint8_t)x, (uint8_t)y) * SEGMENTS;
-  //for (uint8_t i = 0; i < SEGMENTS; i++)
-  //{
-  //  leds[thisPixel + i] = color;
-  //}
   leds[XY(x, y)] = color;
 }
 
@@ -130,6 +109,21 @@ static uint32_t getPixColorXY(uint8_t x, uint8_t y)
   return getPixColor(XY(x, y));
 }
 
+
+// ------------------------------------------------
+// неточный, зато более быстрый квадратный корень
+static float sqrt3(const float x)
+{
+  union
+  {
+    int i;
+    float x;
+  } u;
+
+  u.x = x;
+  u.i = (1 << 29) + (u.i >> 1) - (1 << 22);
+  return u.x;
+}
 
 // blur1d: one-dimensional blur filter. Spreads light to 2 line neighbors.
 // blur2d: two-dimensional blur filter. Spreads light to 8 XY neighbors.
@@ -174,7 +168,7 @@ static void blurRows(uint8_t width, uint8_t height, fract8 blur_amount)
             part.nscale8( seep);
             cur.nscale8( keep);
             cur += carryover;
-            if( i) leds[XY(i-1,row)] += part;
+            if(i) leds[XY(i-1,row)] += part;
             leds[XY(i,row)] = cur;
             carryover = part;
         }
@@ -195,7 +189,7 @@ static void blurColumns(uint8_t width, uint8_t height, fract8 blur_amount)
             part.nscale8( seep);
             cur.nscale8( keep);
             cur += carryover;
-            if( i) leds[XY(col,i-1)] += part;
+            if(i) leds[XY(col,i-1)] += part;
             leds[XY(col,i)] = cur;
             carryover = part;
         }
@@ -208,13 +202,13 @@ static void blur2d(uint8_t width, uint8_t height, fract8 blur_amount)
     blurColumns(width, height, blur_amount);
 }
 
-
 // ------------------------------------------------
 // залить все
 static void fillAll(CRGB color)
 {
-  for (uint16_t i = 0; i < NUM_LEDS; i++)
+  for (uint16_t i = 0; i < NUM_LEDS; i++) {
     leds[i] = color;
+  }
 }
 
 static void ledsClear()
