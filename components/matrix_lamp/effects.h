@@ -12006,11 +12006,13 @@ static void IncrementalDriftRoutine() {
       color = ColorFromPalette(currentPalette, (31 - i) * 14);
     }
     drawPixelXY(x, y, color);
+    drawPixelXY(WIDTH - x, HEIGHT - y, color);
   }
 }
 #endif
 
 }  // namespace matrix_lamp
 }  // namespace esphome
+
 
 
