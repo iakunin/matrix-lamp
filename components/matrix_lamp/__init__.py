@@ -342,7 +342,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
         cv.Optional(CONF_MODE, default=EFF_DNA): cv.one_of(*MATRIX_LAMP_EFFECTS, upper=True),
     },
 )
-async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLightEffect:  # noqa: ANN001
+async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLightEffect:
     """Effect registration entry point."""
     parent = await cg.get_variable(config[CONF_MATRIX_ID])
 
@@ -351,5 +351,7 @@ async def matrix_lamp_light_effect_to_code(config, effect_id) -> AddressableLigh
     cg.add(effect.set_mode(MATRIX_LAMP_EFFECTS.index(config[CONF_MODE])))
     cg.add_define("DEF_" + config[CONF_MODE])
     cg.add(effect.set_matrix_lamp(parent))
-    logging.debug("Effect: %s [%d]", config[CONF_MODE], MATRIX_LAMP_EFFECTS.index(config[CONF_MODE]))
+    logging.debug(
+        "Effect: %s [%d]", config[CONF_MODE], MATRIX_LAMP_EFFECTS.index(config[CONF_MODE])
+    )
     return effect
