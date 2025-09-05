@@ -2011,11 +2011,11 @@ static void Sinusoid3Routine()
   CRGB color;
 
   float center1x = float(e_s3_size * sin16(speedfactor * 72.0874 * time_shift)) / 0x7FFF - emitterX;
-  float center1y = float(e_s3_size * cos16_t(speedfactor * 98.301  * time_shift)) / 0x7FFF - emitterY;
+  float center1y = float(e_s3_size * cos16(speedfactor * 98.301  * time_shift)) / 0x7FFF - emitterY;
   float center2x = float(e_s3_size * sin16(speedfactor * 68.8107 * time_shift)) / 0x7FFF - emitterX;
-  float center2y = float(e_s3_size * cos16_t(speedfactor * 65.534  * time_shift)) / 0x7FFF - emitterY;
+  float center2y = float(e_s3_size * cos16(speedfactor * 65.534  * time_shift)) / 0x7FFF - emitterY;
   float center3x = float(e_s3_size * sin16(speedfactor * 134.3447 * time_shift)) / 0x7FFF - emitterX;
-  float center3y = float(e_s3_size * cos16_t(speedfactor * 170.3884 * time_shift)) / 0x7FFF - emitterY;
+  float center3y = float(e_s3_size * cos16(speedfactor * 170.3884 * time_shift)) / 0x7FFF - emitterY;
   
   switch (deltaValue) {
     case 0:// Sinusoid I
@@ -2131,7 +2131,7 @@ static void Sinusoid3Routine()
 
           //v = 127 * (1 + float(sin16(_scale * SQRT_VARIANT(cx * cx + cy * cy) + time_shift * speedfactor * 19)) / 0x7FFF);
           //v = 127 * (1 + sinf (_scale2 * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 0.0025 * time_shift * speedfactor));
-          v = 127 * (1 + float(cos16_t(_scale * (beatsin16(3,1900,2550)/2550.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 41 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.53
+          v = 127 * (1 + float(cos16(_scale * (beatsin16(3,1900,2550)/2550.) * SQRT_VARIANT(((cx * cx) + (cy * cy)))  + 41 * time_shift * speedfactor)) / 0x7FFF); // вместо beatsin сперва ставил просто * 0.53
           color.g = v;
           drawPixelXY(x, y, color);
         }
@@ -3386,7 +3386,10 @@ static void rain(byte backgroundDepth, byte maxBrightness, byte spawnFreq, byte 
       // uint8_t lightning[WIDTH][HEIGHT];
       // ESP32 does not like static arrays  https://github.com/espressif/arduino-esp32/issues/2567
       uint8_t *lightning = (uint8_t *) malloc(WIDTH * HEIGHT);
-      while (lightning == NULL) { ESP_LOGD("EFF", "Lightning malloc failed"); }
+      if (lightning == NULL) {
+        ESP_LOGD("EFF", "Lightning malloc failed"); 
+        return;
+      }
 
       if (random16() < 72) {    // Odds of a lightning bolt
         lightning[scale8(random8(), WIDTH-1) + (HEIGHT-1) * WIDTH] = 255;  // Random starting location
@@ -3419,6 +3422,7 @@ static void rain(byte backgroundDepth, byte maxBrightness, byte spawnFreq, byte 
           }
         }
       }
+
       free(lightning);
     }
 
@@ -3431,15 +3435,17 @@ static void rain(byte backgroundDepth, byte maxBrightness, byte spawnFreq, byte 
       // This is the array that we keep our computed noise values in
       //static uint8_t noise[WIDTH][cloudHeight];
       static uint8_t *noise = (uint8_t *) malloc(WIDTH * cloudHeight);
-      
-      while (noise == NULL) { ESP_LOGD("EFF", "Noise malloc failed"); }
-      int xoffset = noiseScale * x + hue;
+      if (noise == NULL) {
+        ESP_LOGD("EFF", "Noise malloc failed");
+        return;
+      }
 
+      int xoffset = noiseScale * x + hue;
       for(uint8_t z = 0; z < cloudHeight; z++) {
         int yoffset = noiseScale * z - hue;
         uint8_t dataSmoothing = 192;
         uint8_t noiseData = qsub8(fastled_helper::perlin8(ff_x + xoffset,ff_y + yoffset,ff_z),16);
-        noiseData = qadd8(noiseData,scale8(noiseData,39));
+        noiseData = qadd8(noiseData, scale8(noiseData,39));
         noise[x * cloudHeight + z] = scale8( noise[x * cloudHeight + z], dataSmoothing) + scale8( noiseData, 256 - dataSmoothing);
         nblend(leds[XY(x,HEIGHT-z-1)], ColorFromPalette(rainClouds_p, noise[x * cloudHeight + z]), (cloudHeight-z)*(250/cloudHeight));
       }
@@ -9958,7 +9964,7 @@ static float code(double t, double i, double x, double y) {
     case 2: /* Up&Down */
       //return sin(cos(x) * y / 8 + t);
       hue = 255U; hue2 = 160U;
-      return sin16((cos16_t(x * 8192.0) / 32767.0 * y / (HEIGHT / 2.0) + t) * 8192.0) / 32767.0;
+      return sin16((cos16(x * 8192.0) / 32767.0 * y / (HEIGHT / 2.0) + t) * 8192.0) / 32767.0;
       break;
 
     case 3:
@@ -10088,12 +10094,12 @@ static float code(double t, double i, double x, double y) {
 
     case 21:
       hue = 72U; hue2 = 96U;
-      return cos(sin16(x * t * 819.2) / 32767.0 * PI) + cos16_t((sin16((y * t / 10 + (sqrt3(abs(cos16_t(x * t * 8192.0) / 32767.0)))) * 8192.0) / 32767.0 * PI) * 8192.0) / 32767.0;
+      return cos(sin16(x * t * 819.2) / 32767.0 * PI) + cos16((sin16((y * t / 10 + (sqrt3(abs(cos16(x * t * 8192.0) / 32767.0)))) * 8192.0) / 32767.0 * PI) * 8192.0) / 32767.0;
       break;
 
     case 22: /* bambuk */
       hue = 96U; hue2 = 80U;
-      return sin16(x / 3 * sin16(t * 2730.666666666667) / 2.0) / 32767.0 + cos16_t(y / 4 * sin16(t * 4096.0) / 2.0) / 32767.0;
+      return sin16(x / 3 * sin16(t * 2730.666666666667) / 2.0) / 32767.0 + cos16(y / 4 * sin16(t * 4096.0) / 2.0) / 32767.0;
       break;
 
     case 23:
@@ -10107,7 +10113,7 @@ static float code(double t, double i, double x, double y) {
 
     case 24: /* honey */
       hue = 255U; hue2 = 40U;
-      return sin16(y * t * 2048.0) / 32767.0 * cos16_t(x * t * 2048.0) / 32767.0;
+      return sin16(y * t * 2048.0) / 32767.0 * cos16(x * t * 2048.0) / 32767.0;
       break;
 
     case 25:
@@ -11857,7 +11863,7 @@ static void drawFrame(double t, double x, double y) {
           hue = step + y * x;
           break;
       }
-      drawPixelXY(x, y, CHSV( hue, frame * -1, frame * -1));
+      drawPixelXY(x, y, CHSV(hue, frame * -1, frame * -1));
     } else {
       drawPixelXY(x, y, CRGB::Black);
     }
@@ -11965,7 +11971,7 @@ static void munchRoutine() {
 }
 #endif
 
-#ifdef DEF_INCREMENTALDRIFT
+#ifdef DEF_INCREMENTAL_DRIFT
 // ============ Incremental Drift =============
 // The name "Incremental Drift" was coined by the 
 // late computer animation pioneer John Whitney, 
@@ -11984,15 +11990,15 @@ static void IncrementalDriftRoutine() {
     }
     #endif // #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
 
-    if ((modes[currentMode].scale >= 0)         && (modes[currentMode].scale < 20)) { 
+    if ((modes[currentMode].Scale >= 0)         && (modes[currentMode].Scale < 20)) { 
       currentPalette = RainbowColors_p;
-    } else if ((modes[currentMode].scale >= 20) && (modes[currentMode].scale < 40)) { 
+    } else if ((modes[currentMode].Scale >= 20) && (modes[currentMode].Scale < 40)) { 
       currentPalette  =  PartyColors_p;
-    } else if ((modes[currentMode].scale >= 40) && (modes[currentMode].scale < 60)) {
+    } else if ((modes[currentMode].Scale >= 40) && (modes[currentMode].Scale < 60)) {
       currentPalette  =  CloudColors_p;
-    } else if ((modes[currentMode].scale >= 60) && (modes[currentMode].scale < 80)) {
+    } else if ((modes[currentMode].Scale >= 60) && (modes[currentMode].Scale < 80)) {
       currentPalette  =  LavaColors_p;
-    } else if ((modes[currentMode].scale >= 80) && (modes[currentMode].scale <= 100)) {
+    } else if ((modes[currentMode].Scale >= 80) && (modes[currentMode].Scale <= 100)) {
       currentPalette = ForestColors_p;
     }
 
