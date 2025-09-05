@@ -12027,7 +12027,9 @@ static void IncrementalDriftRoutine() {
     }
 
     drawPixelXY(x, y, color);
-    drawPixelXY(WIDTH - x, HEIGHT - y, color);
+    if (modes[currentMode].Brightness > 128) {
+      drawPixelXY(WIDTH - x, HEIGHT - y, color);
+    }
   }
 }
 #endif
