@@ -1,5 +1,28 @@
 # Changelog
 
+## v1.5.13.31 - 2025-09-05
+
+### What's Changed
+
+### 🚀 Features
+
+- Effect: Incremental Drift reborn @andrewjswan (#56)
+- Effects: Incremental Drift tune @andrewjswan (#57)
+
+### 🐛 Bug Fixes
+
+- Effect: Incremental Drift reborn @andrewjswan (#56)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.29...v1.5.13.31
+
 ## v1.5.13.29 - 2025-09-03
 
 ### What's Changed
