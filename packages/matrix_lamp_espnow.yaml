@@ -1,0 +1,46 @@
+espnow:
+  on_broadcast:
+    - logger.log:
+        format: "ESPNow Broadcast from: %s = '%s' RSSI: %d"
+        args:
+          - format_mac_address_pretty(info.src_addr).c_str()
+          - format_hex_pretty(data, size).c_str()
+          - info.rx_ctrl->rssi
+    - lambda: |-
+        if (size != 4) {
+          return;
+        }
+
+        auto effects = id(neopixel_led)->get_effects();
+        if (data[0] > effects.size()) {
+          return;
+        }
+
+        // Set parameters
+        id(matrix).set_effect_intensity(data[1]);
+        id(matrix).set_effect_speed(data[2]);
+        id(matrix).set_effect_scale(data[3]);
+
+        // Turn on effect
+        auto call = id(neopixel_led)->turn_on();
+        call.set_effect(data[0]);
+        call.perform();
+
+matrix_lamp:
+  id: matrix
+  on_effect_start:
+    - logger.log:
+        format: "${friendly_name} Effect start, %d %d %d %d"
+        args:
+          - effect
+          - intensity
+          - speed
+          - scale
+    - espnow.broadcast:
+        data: !lambda "return {effect, intensity, speed, scale};"
+        wait_for_sent: true
+        on_sent:
+          - logger.log: "ESPNow broadcast message sent successfully"
+        on_error:
+          - logger.log: "ESPNow broadcast  message failed to send"
+        continue_on_error: true

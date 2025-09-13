@@ -24,7 +24,8 @@ CONF_RGB565ARRAY = "str565"
 CONF_FRAMEDURATION = "frame_duration"
 CONF_FRAMEINTERVAL = "frame_interval"
 CONF_PINGPONG = "pingpong"
-CONF_SETTINGS = "settings_function"
+
+CONF_ON_EFFECT_START = "on_effect_start"
 
 EFF_WHITE_COLOR = "WHITE_COLOR"
 EFF_COLORS = "COLORS"

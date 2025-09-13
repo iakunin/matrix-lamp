@@ -54,4 +54,4 @@
 1. To use home assistant services and icons, they must be enabled and added to the Matrix Lamp configuration.
 
 !!! note
-    To use home assistant services and icons, they must be enabled and added to the Matrix Lamp configuration.
+    To use Home Assistant [services](matrix-lamp-component.md#custom-services) and icons, they must be enabled and added to the Matrix Lamp configuration.

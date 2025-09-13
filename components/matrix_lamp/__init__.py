@@ -10,7 +10,7 @@ import esphome.codegen as cg
 import esphome.components.image as esp_image
 import esphome.config_validation as cv
 import requests
-from esphome import core
+from esphome import automation, core
 from esphome.components import display
 from esphome.components.image import CONF_ALPHA_CHANNEL, IMAGE_TYPE
 from esphome.components.light.effects import register_addressable_effect
@@ -26,6 +26,7 @@ from esphome.const import (
     CONF_RANDOM,
     CONF_RAW_DATA_ID,
     CONF_RESIZE,
+    CONF_TRIGGER_ID,
     CONF_URL,
     CONF_WIDTH,
 )
@@ -42,11 +43,11 @@ from .const import (
     CONF_LAMEID,
     CONF_MATRIX_ID,
     CONF_MATRIX_TYPE,
+    CONF_ON_EFFECT_START,
     CONF_ORIENTATION,
     CONF_PINGPONG,
     CONF_RGB565ARRAY,
     CONF_SCALE_ID,
-    CONF_SETTINGS,
     CONF_SPEED_ID,
     DEF_TYPE,
     EFF_DNA,
@@ -73,6 +74,11 @@ MATRIX_LAMP = matrix_lamp_ns.class_("MatrixLamp", cg.Component)
 MATRIX_EFECT = matrix_lamp_ns.class_("MatrixLampLightEffect", AddressableLightEffect)
 MATRIX_ICONS = matrix_lamp_ns.class_("MatrixLamp_Icon")
 
+EffectStartTrigger = matrix_lamp_ns.class_(
+    "MatrixLampEffectStartTrigger",
+    automation.Trigger.template(cg.std_string),
+)
+
 MATRIX_LAMP_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_ID): cv.declare_id(MATRIX_LAMP),
@@ -82,7 +88,6 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
         cv.Optional(CONF_RANDOM, default=False): cv.templatable(cv.boolean),
         cv.Optional(CONF_ORIENTATION): cv.templatable(cv.int_range(min=0, max=7)),
         cv.Optional(CONF_MATRIX_TYPE): cv.templatable(cv.int_range(min=0, max=1)),
-        cv.Optional(CONF_SETTINGS, default=False): cv.boolean,
         cv.Optional(CONF_INTENSITY_ID): cv.use_id(TemplateNumber),
         cv.Optional(CONF_SCALE_ID): cv.use_id(TemplateNumber),
         cv.Optional(CONF_SPEED_ID): cv.use_id(TemplateNumber),
@@ -105,6 +110,11 @@ MATRIX_LAMP_SCHEMA = cv.Schema(
         ),
         cv.Optional(CONF_CACHE, default=False): cv.templatable(cv.boolean),
         cv.Optional(CONF_FRAMEINTERVAL, default="192"): cv.templatable(cv.positive_int),
+        cv.Optional(CONF_ON_EFFECT_START): automation.validate_automation(
+            {
+                cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(EffectStartTrigger),
+            },
+        ),
     },
 )
 
@@ -148,10 +158,6 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     if CONF_DISPLAY in config and config[CONF_BITMAP]:
         cg.add_define("MATRIX_LAMP_BITMAP_MODE")
         logging.info("[X] Bitmap mode")
-
-    if config.get(CONF_SETTINGS):
-        cg.add_define("MATRIX_LAMP_SETTINGS")
-        logging.info("[X] Settings function")
 
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)
@@ -329,6 +335,22 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
             icon_count,
             yaml_string,
         )
+
+    if config.get(CONF_ON_EFFECT_START, []):
+        cg.add_define("MATRIX_LAMP_TRIGGERS")
+        logging.info("[X] On Effect Start trigger")
+        for conf in config.get(CONF_ON_EFFECT_START, []):
+            trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
+            await automation.build_automation(
+                trigger,
+                [
+                    (cg.uint8, "effect"),
+                    (cg.uint8, "intensity"),
+                    (cg.uint8, "speed"),
+                    (cg.uint8, "scale"),
+                ],
+                conf,
+            )
 
     await cg.register_component(var, config)
 

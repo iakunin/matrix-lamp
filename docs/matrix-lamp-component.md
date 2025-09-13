@@ -49,33 +49,31 @@
 9.  See the list of all possible [modes](effects.md) and their values
 10.  See the list of all possible [modes](effects.md) and their values
 
-## Parameters reference
+### Parameters reference
 
-**id** (optional, ID): Manually specify the identifier used for code generation and in service definitions.
+- **id** (optional, ID): Manually specify the identifier used for code generation and in service definitions.
 
-**width** (optional, int): Matrix width
+- **width** (optional, int): Matrix width
 
-**height** (optional, int):  Matrix height
+- **height** (optional, int):  Matrix height
 
-**random** (optional, boolean): The effects will be turned on at random (but successful) `Speed` and `Scale` settings
+- **random** (optional, boolean): The effects will be turned on at random (but successful) `Speed` and `Scale` settings
 
-**intensity_id** (optional, ID): Template number identifier for `intensity`[^1] control
+- **intensity_id** (optional, ID): Template number identifier for `intensity`[^1] control
 
-**scale_id** (optional, ID): Template number identifier for `scale`[^1] control
+- **scale_id** (optional, ID): Template number identifier for `scale`[^1] control
 
-**speed_id** (optional, ID): Template number identifier for `speed`[^1] control
+- **speed_id** (optional, ID): Template number identifier for `speed`[^1] control
 
-**display** (optional, ID): Display component identifier for Icons show
+- **display** (optional, ID): Display component identifier for Icons show
 
-**matrix_orientation** (optional, int): Matrix orientation `[0..7]` If not specified, it will be possible to change it on the fly using the `SetMatrixOrientation` function
+- **matrix_orientation** (optional, int): Matrix orientation `[0..7]` If not specified, it will be possible to change it on the fly using the `SetMatrixOrientation` function
 
-**matrix_type** (optional, int): Matrix type `[0..1]` If not specified, it will be possible to change it on the fly using the `SetMatrixType` function
+- **matrix_type** (optional, int): Matrix type `[0..1]` If not specified, it will be possible to change it on the fly using the `SetMatrixType` function
 
-**iconscache** (optional, boolean): If true, it caches icons in the `.cache\icons` folder and if it finds the specified icons in the cache, it uses them instead of trying to download them again from the Internet. (default = `false`)
+- **iconscache** (optional, boolean): If true, it caches icons in the `.cache\icons` folder and if it finds the specified icons in the cache, it uses them instead of trying to download them again from the Internet. (default = `false`)
 
-**bitmap** (optional, boolean): if true, adds a service `show_bitmap` for displaying icons defined as an rgb565 array.
-
-**settings_function** (optional, boolean): if true, adds a services `set_effect_intensity`, `set_effect_speed`, `set_effect_scale`, `reset_effect_settings`.
+- **bitmap** (optional, boolean): if true, adds a service `show_bitmap` for displaying icons defined as an rgb565 array.
 
 [^1]: Not all effects support changing this parameter.
 
@@ -105,3 +103,45 @@
 1. The `set_matrix_orientation` function accepts orientation values in the range `[1..8]`, although the component itself uses `[0..7]`.
 2. The `set_matrix_orientation` function accepts orientation values in the range `[1..8]`, although the component itself uses `[0..7]`.
 3. The `set_matrix_orientation` function accepts orientation values in the range `[1..8]`, although the component itself uses `[0..7]`.
+
+## Custom Services
+
+!!! note "Custom Services"
+    The `set_effect_intensity`, `set_effect_speed`, `set_effect_scale`, `reset_effect_settings` services in Home Assistant will be available when the [`custom_services`](https://esphome.io/components/api/) option is enabled, which enables the compilation of custom API services for external components that use the C++ `CustomAPIDevice` class.
+
+## Local triggers
+
+#### on_effect_start
+
+This trigger is called whenever one of the component's Matrix Lamp effects is turned on. In lambda's you can use local variables:
+
+- **effect** (effect number, uint8_t): Effect number in Matrix Lamp component.
+
+- **intensity** (intensity, uint8_t): Intensity of effect.
+
+- **speed** (speed uint8_t): Speed of effect.
+
+- **scale** (scale uint8_t): Scale of effect.
+
+!!! example annotate "On effect start trigger"
+
+    ``` { .yaml .copy .annotate }
+    matrix_lamp:
+      id: matrix
+      on_effect_start:
+        - logger.log:
+            format: "${friendly_name} Effect start, %d %d %d %d"
+            args: 
+              - effect
+              - intensity
+              - speed
+              - scale
+        - espnow.broadcast:
+            data: !lambda "return {effect, intensity, speed, scale};"
+            wait_for_sent: true
+            on_sent:
+              - logger.log: "ESPNow broadcast message sent successfully"
+            on_error:
+              - logger.log: "ESPNow broadcast  message failed to send"
+            continue_on_error: true
+    ```
