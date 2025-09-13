@@ -36,7 +36,7 @@ void MatrixLamp::setup() {
   #endif
   #endif
   
-  #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
+  #ifdef USE_API_SERVICES
   // Set brightness for current effect
   register_service(&MatrixLamp::set_effect_intensity, "set_effect_intensity", {"value"});
   // Set speed for current effect
@@ -45,7 +45,7 @@ void MatrixLamp::setup() {
   register_service(&MatrixLamp::set_effect_scale, "set_effect_scale", {"value"});
   // Reset brightness, speed, scale to default for current effect
   register_service(&MatrixLamp::reset_effect_settings, "reset_effect_settings");
-  #endif // #if defined(USE_API) && defined(MATRIX_LAMP_SETTINGS)
+  #endif // #ifdef USE_API_SERVICES
   
 }  // setup()
 
@@ -283,10 +283,16 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
 {
   InitLeds(p_it->size());
 
+#if defined(MATRIX_LAMP_TRIGGERS)
+  bool trigger = false;
+#endif
   if (currentMode != CurrentMode)
   {
     currentMode = CurrentMode;
     loadingFlag = true;
+#if defined(MATRIX_LAMP_TRIGGERS)
+    trigger = true;
+#endif
 
 #ifdef DEF_SCANNER
     if (currentMode == EFF_SCANNER) {
@@ -318,6 +324,15 @@ void MatrixLamp::ShowFrame(uint8_t CurrentMode, esphome::Color current_color, li
   }
 
   effectsTick();
+
+#if defined(MATRIX_LAMP_TRIGGERS)
+  if (trigger) {
+    trigger = false;
+    for (auto *t : on_effect_start_triggers_) {
+      t->process((uint8_t)currentMode, (uint8_t)modes[currentMode].Brightness, (uint8_t)modes[currentMode].Speed, (uint8_t)modes[currentMode].Scale);
+    }
+ }
+#endif
 
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
   if (random_settings)
@@ -518,6 +533,13 @@ void MatrixLamp::Display()
   this->update_screen();
 }
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
+
+#if defined(MATRIX_LAMP_TRIGGERS)
+void MatrixLampEffectStartTrigger::process(uint8_t effect, uint8_t intensity, uint8_t speed, uint8_t scale)
+{
+  this->trigger(effect, intensity, speed, scale);
+}
+#endif
 
 }  // namespace matrix_lamp
 }  // namespace esphome

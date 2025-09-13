@@ -7,7 +7,11 @@ namespace esphome {
 namespace matrix_lamp {
 
 static const char *const TAG = "matrix_lamp";
-static const char *const MATRIX_LAMP_VERSION = "2025.7.1";
+static const char *const MATRIX_LAMP_VERSION = "2025.9.1";
+
+#if defined(MATRIX_LAMP_TRIGGERS)
+class MatrixLampEffectStartTrigger;
+#endif
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
 class MatrixLamp_Icon;
@@ -100,6 +104,10 @@ class MatrixLamp : public Component {
     void Display();
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
 
+#if defined(MATRIX_LAMP_TRIGGERS)
+    void add_on_effect_start_trigger(MatrixLampEffectStartTrigger *t) { this->on_effect_start_triggers_.push_back(t); }
+#endif
+
   protected:
 #if defined(RANDOM_SETTINGS_IN_CYCLE_MODE)
     bool random_settings = false;
@@ -125,6 +133,10 @@ class MatrixLamp : public Component {
     esphome::template_::TemplateNumber *intensity{nullptr};
     esphome::template_::TemplateNumber *scale{nullptr};
     esphome::template_::TemplateNumber *speed{nullptr};
+
+#if defined(MATRIX_LAMP_TRIGGERS)
+    std::vector<MatrixLampEffectStartTrigger *> on_effect_start_triggers_;
+#endif
 }; // class MatrixLamp
 
 #if defined(MATRIX_LAMP_USE_DISPLAY)
@@ -144,6 +156,15 @@ class MatrixLamp_Icon : public animation::Animation
     bool reverse;
 }; // class MatrixLamp_Icon
 #endif // #if defined(MATRIX_LAMP_USE_DISPLAY)
+
+#if defined(MATRIX_LAMP_TRIGGERS)
+class MatrixLampEffectStartTrigger : public Trigger<uint8_t, uint8_t, uint8_t, uint8_t>
+{
+  public:
+    explicit MatrixLampEffectStartTrigger(MatrixLamp *parent) { parent->add_on_effect_start_trigger(this); }
+    void process(uint8_t, uint8_t, uint8_t, uint8_t);
+}; // class 
+#endif
 
 }  // namespace matrix_lamp
 }  // namespace esphome
