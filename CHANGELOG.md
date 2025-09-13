@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.5.13.35 - 2025-09-13
+
+### What's Changed
+
+- Triggers @andrewjswan (#62)
+
+### 🧰 Maintenance
+
+- DEP: Bump actions/setup-python from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) (#61)
+
+### Sponsorship
+
+If you like this project, please consider supporting me:
+
+- 💖 [Sponsor on GitHub](https://github.com/sponsors/andrewjswan)
+
+### Changelog
+
+**Full Changelog**: https://github.com/andrewjswan/matrix-lamp/compare/v1.5.13.33...v1.5.13.35
+
 ## v1.5.13.33 - 2025-09-06
 
 ### What's Changed
