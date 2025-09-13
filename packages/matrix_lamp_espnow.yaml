@@ -31,7 +31,7 @@ matrix_lamp:
   on_effect_start:
     - logger.log:
         format: "${friendly_name} Effect start, %d %d %d %d"
-        args: 
+        args:
           - effect
           - intensity
           - speed

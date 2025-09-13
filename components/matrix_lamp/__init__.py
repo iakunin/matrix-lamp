@@ -162,7 +162,7 @@ async def to_code(config) -> None:  # noqa: ANN001 C901 PLR0912 PLR0915
     if CONF_DISPLAY in config:
         cg.add_define("MAXICONS", MAXICONS)
 
-        from PIL import Image
+        from PIL import Image  # noqa: PLC0415
 
         def rgb565_888(v565):  # noqa: ANN001 ANN202
             """RGB 565 to 888."""
