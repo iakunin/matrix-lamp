@@ -23,7 +23,7 @@ external_components:
     refresh: 60s
   - source:
       type: git
-      url: https://github.com/andrewjswan/matrix-lamp
+      url: https://github.com/iakunin/matrix-lamp
       ref: main
     components: [matrix_lamp]
     refresh: 60s
